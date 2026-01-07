@@ -8,9 +8,13 @@ document.addEventListener('DOMContentLoaded', function() {
     hamburger.addEventListener('click', function() {
         navMenu.classList.toggle('active');
         
+        // Update aria-expanded attribute
+        const isExpanded = navMenu.classList.contains('active');
+        hamburger.setAttribute('aria-expanded', isExpanded);
+        
         // Animate hamburger icon
         const spans = hamburger.querySelectorAll('span');
-        if (navMenu.classList.contains('active')) {
+        if (isExpanded) {
             spans[0].style.transform = 'rotate(-45deg) translate(-5px, 6px)';
             spans[1].style.opacity = '0';
             spans[2].style.transform = 'rotate(45deg) translate(-5px, -6px)';
@@ -21,10 +25,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Add keyboard support for hamburger menu
+    hamburger.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            hamburger.click();
+        }
+    });
+
     // Close mobile menu when clicking on a link
     navLinks.forEach(link => {
         link.addEventListener('click', function() {
             navMenu.classList.remove('active');
+            hamburger.setAttribute('aria-expanded', 'false');
             const spans = hamburger.querySelectorAll('span');
             spans[0].style.transform = 'none';
             spans[1].style.opacity = '1';

@@ -3,7 +3,7 @@
 Welcome to my personal portfolio website! This site showcases my professional experience, hobbies, and provides ways to connect with me.
 
 ## 🌐 Live Website
-Visit my website at: **http://www.bruceche.com/**
+Visit my website at: **https://www.bruceche.com/**
 
 ## 📋 About This Website
 
@@ -90,7 +90,7 @@ To customize this website for your own use:
 - **Email**: bruce@example.com
 - **GitHub**: [@bruceche-cmu-F25](https://github.com/bruceche-cmu-F25)
 - **LinkedIn**: [linkedin.com/in/bruce](https://linkedin.com/in/bruce)
-- **Website**: [www.bruceche.com](http://www.bruceche.com/)
+- **Website**: [www.bruceche.com](https://www.bruceche.com/)
 
 ## 📄 License
 

@@ -1,6 +1,6 @@
 # Deployment Instructions
 
-This website is deployed to GitHub Pages with a custom domain: http://www.bruceche.com/
+This website is deployed to GitHub Pages with a custom domain: https://www.bruceche.com/
 
 ## Setup Instructions
 
