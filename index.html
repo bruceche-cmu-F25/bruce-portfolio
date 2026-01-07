@@ -6,6 +6,7 @@
     <meta name="description" content="Bruce's Personal Portfolio - Learn more about my experiences, hobbies, and professional background">
     <title>Bruce's Portfolio</title>
     <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -32,7 +33,7 @@
         <div class="container">
             <div class="hero-content">
                 <div class="hero-image">
-                    <img src="images/profile.svg" alt="Bruce's profile picture">
+                    <img src="images/profile.jpg" alt="Bruce's profile picture">
                 </div>
                 <div class="hero-text">
                     <h1>Hi, I'm Bruce</h1>
@@ -56,70 +57,37 @@
             <h2 class="section-title">Experience</h2>
             <div class="experience-grid">
                 <div class="experience-card">
-                    <div class="experience-icon">💼</div>
-                    <h3>Software Engineer</h3>
-                    <p class="experience-company">Tech Company</p>
-                    <p class="experience-duration">2022 - Present</p>
+                    <div class="experience-icon">
+                        <img src="images/HelportLogo.jpg" alt="Helport AI Logo">
+                    </div>
+                    <h3>AI Product Developer/Product Manager</h3>
+                    <p class="experience-company">Helport AI</p>
+                    <p class="experience-duration">Sep 2024 - Jun 2025</p>
                     <p class="experience-description">
-                        Developing scalable web applications and leading technical initiatives to improve system performance and user experience.
+                        Led product strategy for an AI-driven call assistant, reducing average handling time by 35% and cutting intent matching costs sixfold. Migrated from Google Dialogflow to Transformer + ID with Gemini 2.0, reducing costs from $0.002 to $0.00031 per match. Promoted from internship to full-time in March 2025.
                     </p>
                 </div>
                 <div class="experience-card">
-                    <div class="experience-icon">🎓</div>
+                    <div class="experience-icon">
+                        <img src="images/convoloo_logo.jpeg" alt="Convoloo Logo">
+                    </div>
+                    <h3>Software Development Engineer Intern</h3>
+                    <p class="experience-company">Convoloo</p>
+                    <p class="experience-duration">Jul 2024 - Sep 2024</p>
+                    <p class="experience-description">
+                        Developed a web-based AI medical chatbot using FastAPI, LangChain, React, and Google Gemini, enabling accurate identification of 50+ common diseases. Reduced average response time from 2.5s to 1.5s and enabled 50+ bookings during pilot testing.
+                    </p>
+                </div>
+                <div class="experience-card">
+                    <div class="experience-icon">
+                        <img src="images/CMULogo.jpg" alt="Carnegie Mellon University Logo">
+                    </div>
                     <h3>Graduate Student</h3>
-                    <p class="experience-company">Carnegie Mellon University</p>
-                    <p class="experience-duration">2024 - Present</p>
+                    <p class="experience-company">Carnegie Mellon University, Silicon Valley</p>
+                    <p class="experience-duration">Aug 2025 - Dec 2026</p>
                     <p class="experience-description">
-                        Pursuing advanced studies in computer science with focus on software engineering and system design.
+                        Pursuing Master of Science in Software Engineering (GPA: 3.5). Coursework: Software Engineering, Foundation of Computer System, Functional Programming, AI in Industry.
                     </p>
-                </div>
-                <div class="experience-card">
-                    <div class="experience-icon">🚀</div>
-                    <h3>Intern Developer</h3>
-                    <p class="experience-company">Startup Inc.</p>
-                    <p class="experience-duration">2021 - 2022</p>
-                    <p class="experience-description">
-                        Contributed to full-stack development projects and collaborated with cross-functional teams to deliver innovative solutions.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Hobbies Section -->
-    <section id="hobbies" class="section section-gray">
-        <div class="container">
-            <h2 class="section-title">Hobbies & Interests</h2>
-            <div class="hobbies-grid">
-                <div class="hobby-card">
-                    <div class="hobby-icon">📚</div>
-                    <h3>Reading</h3>
-                    <p>I enjoy reading books on technology, philosophy, and personal development.</p>
-                </div>
-                <div class="hobby-card">
-                    <div class="hobby-icon">🎮</div>
-                    <h3>Gaming</h3>
-                    <p>Playing strategy and puzzle games helps me think creatively and solve complex problems.</p>
-                </div>
-                <div class="hobby-card">
-                    <div class="hobby-icon">✈️</div>
-                    <h3>Travel</h3>
-                    <p>Exploring new places and cultures broadens my perspective and inspires creativity.</p>
-                </div>
-                <div class="hobby-card">
-                    <div class="hobby-icon">📷</div>
-                    <h3>Photography</h3>
-                    <p>Capturing moments and telling stories through images is my creative outlet.</p>
-                </div>
-                <div class="hobby-card">
-                    <div class="hobby-icon">🏃</div>
-                    <h3>Fitness</h3>
-                    <p>Staying active through running and sports keeps me energized and focused.</p>
-                </div>
-                <div class="hobby-card">
-                    <div class="hobby-icon">🎵</div>
-                    <h3>Music</h3>
-                    <p>Listening to and discovering new music is a daily source of inspiration.</p>
                 </div>
             </div>
         </div>
@@ -133,8 +101,11 @@
                 <div class="resume-summary">
                     <h3>Professional Summary</h3>
                     <p>
-                        Passionate software engineer with a strong foundation in computer science and hands-on experience 
-                        in developing innovative solutions. Committed to continuous learning and delivering high-quality work.
+                        Mid-level AI product developer and product manager with a strong background in building AI-driven conversational solutions. 
+                        Delivered an AI call assistant that reduced average handling time by 35% and cut intent matching costs sixfold while guiding 
+                        two full product cycles across finance and healthcare domains. Built a medical chatbot using FastAPI, LangChain, and Gemini 
+                        that improved response speed by 40% and supported over 50 disease diagnoses. Seeking to apply product strategy and technical 
+                        expertise to accelerate AI product innovation and drive measurable business outcomes.
                     </p>
                 </div>
                 
@@ -142,37 +113,125 @@
                     <h3>Education</h3>
                     <div class="resume-item">
                         <div class="resume-item-header">
-                            <h4>Carnegie Mellon University</h4>
-                            <span class="resume-date">2024 - Present</span>
+                            <h4>Carnegie Mellon University, Silicon Valley</h4>
+                            <span class="resume-date">Aug 2025 - Dec 2026</span>
                         </div>
-                        <p class="resume-subtitle">Master's Degree in Computer Science</p>
+                        <p class="resume-subtitle">Master of Science, Software Engineering (GPA: 3.5) | Mountain View</p>
+                        <p class="resume-subtitle">Coursework: Software Engineering, Foundation of Computer System, Functional Programming, AI in Industry</p>
                     </div>
                     <div class="resume-item">
                         <div class="resume-item-header">
-                            <h4>University Name</h4>
-                            <span class="resume-date">2018 - 2022</span>
+                            <h4>University of California San Diego</h4>
+                            <span class="resume-date">Sep 2021 - Apr 2025</span>
                         </div>
-                        <p class="resume-subtitle">Bachelor's Degree in Computer Science</p>
+                        <p class="resume-subtitle">Bachelor of Science, Mathematics-Computer Science (GPA: 3.6)</p>
+                        <p class="resume-subtitle">Coursework: Software Engineering, Design & Analysis of Algorithms, Advanced Data Structures, Computer Systems, Parallel Computing, Computer Security, Online Database Applications, Recommendation Systems, Computer Vision</p>
                     </div>
                 </div>
 
                 <div class="resume-section">
                     <h3>Skills</h3>
                     <div class="skills-container">
-                        <span class="skill-tag">JavaScript</span>
                         <span class="skill-tag">Python</span>
+                        <span class="skill-tag">C/C++</span>
                         <span class="skill-tag">Java</span>
-                        <span class="skill-tag">React</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">Go</span>
                         <span class="skill-tag">Node.js</span>
-                        <span class="skill-tag">HTML/CSS</span>
-                        <span class="skill-tag">Git</span>
-                        <span class="skill-tag">SQL</span>
+                        <span class="skill-tag">React</span>
+                        <span class="skill-tag">TypeScript</span>
+                        <span class="skill-tag">FastAPI</span>
+                        <span class="skill-tag">LangChain</span>
+                        <span class="skill-tag">LLM APIs</span>
+                        <span class="skill-tag">RAG</span>
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">MongoDB</span>
                         <span class="skill-tag">AWS</span>
+                        <span class="skill-tag">Git</span>
+                        <span class="skill-tag">CI/CD</span>
+                        <span class="skill-tag">Agile/Scrum</span>
+                        <span class="skill-tag">A/B Testing</span>
+                        <span class="skill-tag">Figma</span>
+                    </div>
+                </div>
+
+                <div class="resume-section">
+                    <h3>Projects</h3>
+                    <div class="resume-item">
+                        <div class="resume-item-header">
+                            <h4>Parking Spot Locator | CMU/BOSCH</h4>
+                            <span class="resume-date">Aug 2025 - Dec 2025</span>
+                        </div>
+                        <p class="resume-subtitle">Built a Bosch-sponsored parking spot locator using vision-language models to semantically identify parking availability from visual sensor data. Implemented a VLMap-based pipeline combining RGB, depth, and pose data with CLIP embeddings for spatial reasoning.</p>
+                        <p class="resume-subtitle"><a href="https://psl.fogx.link" target="_blank">psl.fogx.link</a></p>
+                    </div>
+                    <div class="resume-item">
+                        <div class="resume-item-header">
+                            <h4>Capitawise (2nd Place, $7,000 Prize) | Franklin Templeton</h4>
+                            <span class="resume-date">Mar 2024 - Jun 2024</span>
+                        </div>
+                        <p class="resume-subtitle">Led full-stack development of an AI-powered banking chatbot using GPT-4o, Node.js, Flask, and React, reducing customer service response time by 40%. Implemented NLP-based query handling with text/voice output, improving banking query resolution accuracy from 68% to 85%.</p>
+                    </div>
+                    <div class="resume-item">
+                        <div class="resume-item-header">
+                            <h4>PawPrints (1st Place, $15,000 Prize) | Franklin Templeton</h4>
+                            <span class="resume-date">Mar 2023 - Jun 2023</span>
+                        </div>
+                        <p class="resume-subtitle">Built a blockchain-based medical data exchange platform using React.js, Express.js, MySQL, Web3.js, and JWT authentication to securely connect pet owners, clinics, and insurers. Optimized backend APIs to cut data retrieval time from 3s to &lt;1s.</p>
                     </div>
                 </div>
 
                 <div class="resume-download">
-                    <a href="resume.pdf" class="btn btn-primary" download>Download Full Resume (PDF)</a>
+                    <a href="ChiCheng-Resume-2026-Jan.pdf" class="btn btn-primary" download>Download Full Resume (PDF)</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hobbies Section -->
+    <section id="hobbies" class="section section-gray">
+        <div class="container">
+            <h2 class="section-title">Hobbies & Interests</h2>
+            <div class="hobbies-grid">
+                <div class="hobby-card">
+                    <div class="hobby-icon">📚</div>
+                    <h3>Reading</h3>
+                    <p>Tech, philosophy, and personal growth.</p>
+                </div>
+                <div class="hobby-card">
+                    <div class="hobby-icon">🎮</div>
+                    <h3>Gaming</h3>
+                    <p>Strategy and puzzle games.</p>
+                </div>
+                <div class="hobby-card">
+                    <div class="hobby-icon">✈️</div>
+                    <h3>Travel</h3>
+                    <p>Exploring new places and cultures.</p>
+                </div>
+                <div class="hobby-card">
+                    <div class="hobby-icon">📷</div>
+                    <h3>Photography</h3>
+                    <p>Capturing moments through photos.</p>
+                </div>
+                <div class="hobby-card">
+                    <div class="hobby-icon">🏃</div>
+                    <h3>Fitness</h3>
+                    <p>Running and staying active.</p>
+                </div>
+                <div class="hobby-card">
+                    <div class="hobby-icon">🎵</div>
+                    <h3>Music</h3>
+                    <p>Discovering new music.</p>
+                </div>
+                <div class="hobby-card">
+                    <div class="hobby-icon">🎨</div>
+                    <h3>Drawing</h3>
+                    <p>Sketching and visual art.</p>
+                </div>
+                <div class="hobby-card">
+                    <div class="hobby-icon">💻</div>
+                    <h3>Studying New Technology</h3>
+                    <p>Keeping up with new tech.</p>
                 </div>
             </div>
         </div>
@@ -192,28 +251,28 @@
                             <span class="contact-icon">📧</span>
                             <div>
                                 <strong>Email</strong>
-                                <p><a href="mailto:bruce@example.com">bruce@example.com</a></p>
+                                <p><a href="mailto:bruceche@andrew.cmu.edu">bruceche@andrew.cmu.edu</a></p>
                             </div>
                         </div>
                         <div class="contact-item">
                             <span class="contact-icon">💼</span>
                             <div>
                                 <strong>LinkedIn</strong>
-                                <p><a href="https://linkedin.com/in/bruce" target="_blank">linkedin.com/in/bruce</a></p>
+                                <p><a href="https://linkedin.com/in/chi-cheng-779b4a259/" target="_blank">linkedin.com/in/chi-cheng-779b4a259/</a></p>
                             </div>
                         </div>
                         <div class="contact-item">
                             <span class="contact-icon">💻</span>
                             <div>
                                 <strong>GitHub</strong>
-                                <p><a href="https://github.com/bruceche-cmu-F25" target="_blank">github.com/bruceche-cmu-F25</a></p>
+                                <p><a href="https://github.com/Bruce0921" target="_blank">github.com/Bruce0921</a></p>
                             </div>
                         </div>
                         <div class="contact-item">
                             <span class="contact-icon">📱</span>
                             <div>
                                 <strong>Phone</strong>
-                                <p><a href="tel:+11234567890">+1 (123) 456-7890</a></p>
+                                <p><a href="tel:+18583050278">858-305-0278</a></p>
                             </div>
                         </div>
                     </div>
@@ -246,8 +305,8 @@
         <div class="container">
             <p>&copy; 2026 Bruce. All rights reserved.</p>
             <div class="social-links">
-                <a href="https://github.com/bruceche-cmu-F25" target="_blank" aria-label="GitHub">GitHub</a>
-                <a href="https://linkedin.com/in/bruce" target="_blank" aria-label="LinkedIn">LinkedIn</a>
+                <a href="https://github.com/Bruce0921" target="_blank" aria-label="GitHub">GitHub</a>
+                <a href="https://linkedin.com/in/chi-cheng-779b4a259/" target="_blank" aria-label="LinkedIn">LinkedIn</a>
             </div>
         </div>
     </footer>

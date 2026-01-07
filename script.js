@@ -87,10 +87,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.addEventListener('scroll', updateActiveNavLink);
 
-    // Contact Form Handling
+    // Contact Form Handling with EmailJS
     const contactForm = document.getElementById('contactForm');
     
     if (contactForm) {
+        // Initialize EmailJS (replace with your public key after setup)
+        // emailjs.init("YOUR_PUBLIC_KEY");
+        
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -112,12 +115,40 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            // In a real application, you would send this data to a server
-            // For now, we'll just show a success message
-            alert(`Thank you for your message, ${name}! I'll get back to you soon at ${email}.`);
+            // Show loading state
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.textContent = 'Sending...';
+            submitButton.disabled = true;
+
+            // Option 1: Using EmailJS (requires setup - see instructions below)
+            // Uncomment and configure after setting up EmailJS:
+            /*
+            emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', contactForm)
+                .then(function() {
+                    alert(`Thank you for your message, ${name}! I'll get back to you soon.`);
+                    contactForm.reset();
+                    submitButton.textContent = originalText;
+                    submitButton.disabled = false;
+                }, function(error) {
+                    alert('Sorry, there was an error sending your message. Please try again or email me directly at bruceche@andrew.cmu.edu');
+                    submitButton.textContent = originalText;
+                    submitButton.disabled = false;
+                });
+            */
+
+            // Option 2: Using mailto as fallback (works immediately, no setup needed)
+            const subject = encodeURIComponent(`Contact from ${name}`);
+            const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+            window.location.href = `mailto:bruceche@andrew.cmu.edu?subject=${subject}&body=${body}`;
             
-            // Reset form
-            contactForm.reset();
+            // Show success message
+            setTimeout(() => {
+                alert(`Thank you for your message, ${name}! Your email client should open. If not, please email me directly at bruceche@andrew.cmu.edu`);
+                contactForm.reset();
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            }, 500);
         });
     }
 
