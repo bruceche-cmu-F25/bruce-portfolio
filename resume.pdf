@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume - Bruce</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .message {
+            background-color: #f0f0f0;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #1e40af;
+        }
+    </style>
+</head>
+<body>
+    <h1>📄 Resume</h1>
+    <div class="message">
+        <p>To download my full resume in PDF format, please replace this file with your actual resume PDF.</p>
+        <p>Name the file <strong>resume.pdf</strong> and place it in the root directory.</p>
+    </div>
+    <a href="/" class="btn">Back to Website</a>
+</body>
+</html>
