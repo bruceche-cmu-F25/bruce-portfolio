@@ -87,6 +87,79 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.addEventListener('scroll', updateActiveNavLink);
 
+    // Experience focus overlay
+    const experienceMarquee = document.querySelector('.experience-marquee');
+    const experienceCards = document.querySelectorAll('.experience-card');
+    const experienceFocusPanel = document.querySelector('.experience-focus-panel');
+    const experienceFocusContent = document.querySelector('.experience-focus-content');
+    let experienceHideTimer = null;
+
+    if (experienceMarquee && experienceFocusPanel && experienceFocusContent) {
+        function scheduleExperienceHide() {
+            clearTimeout(experienceHideTimer);
+            experienceHideTimer = setTimeout(() => {
+                experienceFocusPanel.classList.remove('is-visible');
+                experienceFocusPanel.setAttribute('aria-hidden', 'true');
+                experienceMarquee.classList.remove('is-focus-active');
+            }, 80);
+        }
+
+        function showExperienceOverlay(card, details) {
+            clearTimeout(experienceHideTimer);
+
+            const cardRect = card.getBoundingClientRect();
+            const targetWidth = Math.min(920, window.innerWidth * 0.86);
+            const targetHeight = Math.min(720, window.innerHeight * 0.76);
+            const cardCenterX = cardRect.left + (cardRect.width / 2);
+            const cardCenterY = cardRect.top + (cardRect.height / 2);
+            const viewportCenterX = window.innerWidth / 2;
+            const viewportCenterY = window.innerHeight / 2;
+            const deltaX = cardCenterX - viewportCenterX;
+            const deltaY = cardCenterY - viewportCenterY;
+            const scaleX = Math.max(0.2, cardRect.width / targetWidth);
+            const scaleY = Math.max(0.2, cardRect.height / targetHeight);
+
+            experienceFocusPanel.style.setProperty('--focus-from-x', `${deltaX}px`);
+            experienceFocusPanel.style.setProperty('--focus-from-y', `${deltaY}px`);
+            experienceFocusPanel.style.setProperty('--focus-from-scale-x', scaleX.toFixed(4));
+            experienceFocusPanel.style.setProperty('--focus-from-scale-y', scaleY.toFixed(4));
+
+            experienceFocusContent.innerHTML = details.innerHTML;
+            experienceFocusPanel.classList.remove('is-visible');
+            experienceFocusPanel.setAttribute('aria-hidden', 'true');
+            experienceMarquee.classList.add('is-focus-active');
+
+            requestAnimationFrame(() => {
+                experienceFocusPanel.classList.add('is-visible');
+                experienceFocusPanel.setAttribute('aria-hidden', 'false');
+            });
+        }
+
+        experienceCards.forEach(card => {
+            const details = card.querySelector('.experience-card-back');
+
+            if (!details) {
+                return;
+            }
+
+            card.addEventListener('mouseenter', function() {
+                showExperienceOverlay(card, details);
+            });
+
+            card.addEventListener('mouseleave', function() {
+                scheduleExperienceHide();
+            });
+        });
+
+        experienceFocusPanel.addEventListener('mouseenter', function() {
+            clearTimeout(experienceHideTimer);
+        });
+
+        experienceFocusPanel.addEventListener('mouseleave', function() {
+            scheduleExperienceHide();
+        });
+    }
+
     // Contact Form Handling with EmailJS
     const contactForm = document.getElementById('contactForm');
     
@@ -206,13 +279,13 @@ From: ${email}`);
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+                entry.target.style.transform = '';
             }
         });
     }, observerOptions);
 
     // Observe elements for animation
-    const animatedElements = document.querySelectorAll('.experience-card, .hobby-card, .resume-section');
+    const animatedElements = document.querySelectorAll('.hobby-card, .resume-section');
     animatedElements.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(20px)';
