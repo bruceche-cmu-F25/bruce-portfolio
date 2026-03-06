@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Bruce's Personal Portfolio - Learn more about my experiences, hobbies, and professional background">
+    <meta name="description" content="Bruce Cheng's portfolio featuring AI product, software engineering, and project experience">
     <title>Bruce's Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -12,12 +12,12 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
-            <div class="nav-brand"></div>
+            <div class="nav-brand">Bruce Cheng</div>
             <ul class="nav-menu">
                 <li><a href="#about" class="nav-link">About</a></li>
                 <li><a href="#experience" class="nav-link">Experience</a></li>
-                <li><a href="#hobbies" class="nav-link">Hobbies</a></li>
                 <li><a href="#resume" class="nav-link">Resume</a></li>
+                <li><a href="#hobbies" class="nav-link">Hobbies</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
             <div class="hamburger" role="button" aria-label="Toggle navigation menu" aria-expanded="false" tabindex="0">
@@ -36,12 +36,19 @@
                     <img src="images/profile.jpg" alt="Bruce's profile picture">
                 </div>
                 <div class="hero-text">
+                    <p class="hero-kicker">AI + Product + Engineering</p>
                     <h1>Hi, I'm Bruce</h1>
-                    <p class="hero-subtitle">Welcome to my personal website</p>
+                    <p class="hero-subtitle">AI Product Developer, Product Manager, and Software Engineering Graduate Student</p>
                     <p class="hero-description">
-                        I'm passionate about technology, learning, and making meaningful connections. 
-                        This website is a window into my professional journey, personal interests, and the experiences that shape who I am.
+                        I'm Bruce Cheng, a mid-level AI product developer and product manager with a strong background in building AI-driven conversational solutions.
+                        I'm currently pursuing my M.S. in Software Engineering at Carnegie Mellon University, Silicon Valley.
                     </p>
+                    <div class="hero-highlights">
+                        <span class="hero-highlight">Conversational AI</span>
+                        <span class="hero-highlight">Product Strategy</span>
+                        <span class="hero-highlight">Full-Stack Delivery</span>
+                        <span class="hero-highlight">ML-Driven Experiences</span>
+                    </div>
                     <div class="hero-buttons">
                         <a href="#contact" class="btn btn-primary">Get in Touch</a>
                         <a href="#resume" class="btn btn-secondary">View Resume</a>
@@ -55,40 +62,297 @@
     <section id="experience" class="section">
         <div class="container">
             <h2 class="section-title">Experience</h2>
-            <div class="experience-grid">
-                <div class="experience-card">
-                    <div class="experience-icon">
-                        <img src="images/HelportLogo.jpg" alt="Helport AI Logo">
+            <p class="experience-intro">My work and projects move across the screen by default. Hover over the section to pause the motion, then hover a card to expand it into a readable solid-detail panel.</p>
+            <div class="experience-marquee">
+                <div class="experience-marquee-row experience-marquee-row-top">
+                    <div class="experience-marquee-track">
+                        <article class="experience-card experience-card-wide">
+                            <div class="experience-card-front">
+                                <span class="experience-kind">Work</span>
+                                <p class="experience-org">Helport AI</p>
+                                <h3 class="experience-role">AI Product Developer / Product Manager</h3>
+                                <p class="experience-duration">Sep 2024 - Jun 2025</p>
+                                <p class="experience-preview">Led product strategy for an AI-driven call assistant and shipped major cost, accuracy, and delivery improvements.</p>
+                                <div class="experience-tags">
+                                    <span>FastAPI</span>
+                                    <span>Gemini 2.0</span>
+                                    <span>Vertex AI</span>
+                                    <span>A/B Testing</span>
+                                </div>
+                            </div>
+                            <div class="experience-card-back">
+                                <h4>Helport AI</h4>
+                                <ul class="experience-highlights">
+                                    <li>Led product strategy for an AI-driven call assistant, conducting client interviews and user research across mortgage, healthcare, insurance, and government sectors.</li>
+                                    <li>Designed and deployed an AI-powered dialogue flow system using FastAPI and a curated database, cutting average handling time by 35%.</li>
+                                    <li>Migrated intent matching from Google Dialogflow to Transformer + ID with Gemini 2.0 and Vertex AI, reducing costs 6 times from $0.002 to $0.00031 per match.</li>
+                                    <li>Partnered with engineering and R&amp;D to align product vision with technical feasibility, reducing development time from 14 to 5 days.</li>
+                                    <li>Conducted A/B testing and performance analysis that improved AI model accuracy by 35% and boosted sales conversion by 15%.</li>
+                                </ul>
+                            </div>
+                        </article>
+                        <article class="experience-card experience-card-wide">
+                            <div class="experience-card-front">
+                                <span class="experience-kind">Project</span>
+                                <p class="experience-org">CMU 14-825</p>
+                                <h3 class="experience-role">Research Assistant Agent</h3>
+                                <p class="experience-duration">Jan 2026 - Mar 2026</p>
+                                <p class="experience-preview">Built a LangGraph-based research agent with RAG, multilingual querying, and scalable cloud deployment.</p>
+                                <div class="experience-tags">
+                                    <span>LangGraph</span>
+                                    <span>RAG</span>
+                                    <span>Streamlit</span>
+                                    <span>GKE</span>
+                                </div>
+                            </div>
+                            <div class="experience-card-back">
+                                <h4>Research Assistant Agent</h4>
+                                <ul class="experience-highlights">
+                                    <li>Built a LangGraph-based AI agent with a RAG pipeline to answer questions from 30 indexed academic papers.</li>
+                                    <li>Developed a Streamlit web app for paper upload, multilingual querying, and context-grounded answers with references.</li>
+                                    <li>Deployed containerized services including the AI agent, translation API, and vector database on Google Kubernetes Engine with auto-scaling.</li>
+                                    <li>Implemented semantic retrieval using vector embeddings and compared indexing algorithms including HNSW, IVF_PQ, and DiskANN.</li>
+                                </ul>
+                            </div>
+                        </article>
+                        <article class="experience-card experience-card-wide">
+                            <div class="experience-card-front">
+                                <span class="experience-kind">Work</span>
+                                <p class="experience-org">Convoloo</p>
+                                <h3 class="experience-role">Software Development Engineer Intern</h3>
+                                <p class="experience-duration">Jul 2024 - Sep 2024</p>
+                                <p class="experience-preview">Built a medical chatbot with RAG retrieval, cloud infra, and booking support.</p>
+                                <div class="experience-tags">
+                                    <span>LangChain</span>
+                                    <span>Terraform</span>
+                                    <span>MySQL</span>
+                                </div>
+                            </div>
+                            <div class="experience-card-back">
+                                <h4>Convoloo</h4>
+                                <ul class="experience-highlights">
+                                    <li>Developed a web-based AI medical chatbot using FastAPI, LangChain, React, Google Gemini, and Google Cloud for 50+ disease identification.</li>
+                                    <li>Implemented RAG-based knowledge retrieval on secure cloud infrastructure using Terraform and MySQL, reducing response time from 2.5s to 1.5s.</li>
+                                    <li>Integrated Google Calendar API for appointment booking and improved UI/UX through iterative design reviews, enabling 50+ bookings during pilot testing.</li>
+                                    <li>Led backend integration with LangServe and LangGraph using FastAPI and NestJS, streamlining deployment and improving chatbot performance.</li>
+                                </ul>
+                            </div>
+                        </article>
+                        <article class="experience-card experience-card-wide" aria-hidden="true">
+                            <div class="experience-card-front">
+                                <span class="experience-kind">Work</span>
+                                <p class="experience-org">Helport AI</p>
+                                <h3 class="experience-role">AI Product Developer / Product Manager</h3>
+                                <p class="experience-duration">Sep 2024 - Jun 2025</p>
+                                <p class="experience-preview">Led product strategy for an AI-driven call assistant and shipped major cost, accuracy, and delivery improvements.</p>
+                                <div class="experience-tags">
+                                    <span>FastAPI</span>
+                                    <span>Gemini 2.0</span>
+                                    <span>Vertex AI</span>
+                                    <span>A/B Testing</span>
+                                </div>
+                            </div>
+                            <div class="experience-card-back">
+                                <h4>Helport AI</h4>
+                                <ul class="experience-highlights">
+                                    <li>Led product strategy for an AI-driven call assistant, conducting client interviews and user research across mortgage, healthcare, insurance, and government sectors.</li>
+                                    <li>Designed and deployed an AI-powered dialogue flow system using FastAPI and a curated database, cutting average handling time by 35%.</li>
+                                    <li>Migrated intent matching from Google Dialogflow to Transformer + ID with Gemini 2.0 and Vertex AI, reducing costs 6 times from $0.002 to $0.00031 per match.</li>
+                                    <li>Partnered with engineering and R&amp;D to align product vision with technical feasibility, reducing development time from 14 to 5 days.</li>
+                                    <li>Conducted A/B testing and performance analysis that improved AI model accuracy by 35% and boosted sales conversion by 15%.</li>
+                                </ul>
+                            </div>
+                        </article>
+                        <article class="experience-card experience-card-wide" aria-hidden="true">
+                            <div class="experience-card-front">
+                                <span class="experience-kind">Project</span>
+                                <p class="experience-org">CMU 14-825</p>
+                                <h3 class="experience-role">Research Assistant Agent</h3>
+                                <p class="experience-duration">Jan 2026 - Mar 2026</p>
+                                <p class="experience-preview">Built a LangGraph-based research agent with RAG, multilingual querying, and scalable cloud deployment.</p>
+                                <div class="experience-tags">
+                                    <span>LangGraph</span>
+                                    <span>RAG</span>
+                                    <span>Streamlit</span>
+                                    <span>GKE</span>
+                                </div>
+                            </div>
+                            <div class="experience-card-back">
+                                <h4>Research Assistant Agent</h4>
+                                <ul class="experience-highlights">
+                                    <li>Built a LangGraph-based AI agent with a RAG pipeline to answer questions from 30 indexed academic papers.</li>
+                                    <li>Developed a Streamlit web app for paper upload, multilingual querying, and context-grounded answers with references.</li>
+                                    <li>Deployed containerized services including the AI agent, translation API, and vector database on Google Kubernetes Engine with auto-scaling.</li>
+                                    <li>Implemented semantic retrieval using vector embeddings and compared indexing algorithms including HNSW, IVF_PQ, and DiskANN.</li>
+                                </ul>
+                            </div>
+                        </article>
+                        <article class="experience-card experience-card-wide" aria-hidden="true">
+                            <div class="experience-card-front">
+                                <span class="experience-kind">Work</span>
+                                <p class="experience-org">Convoloo</p>
+                                <h3 class="experience-role">Software Development Engineer Intern</h3>
+                                <p class="experience-duration">Jul 2024 - Sep 2024</p>
+                                <p class="experience-preview">Built a medical chatbot with RAG retrieval, cloud infra, and booking support.</p>
+                                <div class="experience-tags">
+                                    <span>LangChain</span>
+                                    <span>Terraform</span>
+                                    <span>MySQL</span>
+                                </div>
+                            </div>
+                            <div class="experience-card-back">
+                                <h4>Convoloo</h4>
+                                <ul class="experience-highlights">
+                                    <li>Developed a web-based AI medical chatbot using FastAPI, LangChain, React, Google Gemini, and Google Cloud for 50+ disease identification.</li>
+                                    <li>Implemented RAG-based knowledge retrieval on secure cloud infrastructure using Terraform and MySQL, reducing response time from 2.5s to 1.5s.</li>
+                                    <li>Integrated Google Calendar API for appointment booking and improved UI/UX through iterative design reviews, enabling 50+ bookings during pilot testing.</li>
+                                    <li>Led backend integration with LangServe and LangGraph using FastAPI and NestJS, streamlining deployment and improving chatbot performance.</li>
+                                </ul>
+                            </div>
+                        </article>
                     </div>
-                    <h3>AI Product Developer/Product Manager</h3>
-                    <p class="experience-company">Helport AI</p>
-                    <p class="experience-duration">Sep 2024 - Jun 2025</p>
-                    <p class="experience-description">
-                        Led product strategy for an AI-driven call assistant, reducing average handling time by 35% and cutting intent matching costs sixfold. Migrated from Google Dialogflow to Transformer + ID with Gemini 2.0, reducing costs from $0.002 to $0.00031 per match. Promoted from internship to full-time in March 2025.
-                    </p>
                 </div>
-                <div class="experience-card">
-                    <div class="experience-icon">
-                        <img src="images/convoloo_logo.jpeg" alt="Convoloo Logo">
+                <div class="experience-marquee-row experience-marquee-row-bottom">
+                    <div class="experience-marquee-track">
+                        <article class="experience-card experience-card-compact">
+                            <div class="experience-card-front">
+                                <span class="experience-kind">Project</span>
+                                <p class="experience-org">CMU / BOSCH</p>
+                                <h3 class="experience-role">Parking Spot Locator</h3>
+                                <p class="experience-duration">Aug 2025 - Dec 2025</p>
+                                <p class="experience-preview">Vision-language parking search with semantic mapping and a faster backend query pipeline.</p>
+                                <div class="experience-tags">
+                                    <span>VLMap</span>
+                                    <span>CLIP</span>
+                                    <span>AWS</span>
+                                </div>
+                            </div>
+                            <div class="experience-card-back">
+                                <h4>Parking Spot Locator</h4>
+                                <ul class="experience-highlights">
+                                    <li>Built a Bosch-sponsored parking spot locator using vision-language models to identify parking availability from visual sensor data.</li>
+                                    <li>Implemented a VLMap-based pipeline combining RGB, depth, and pose data with CLIP embeddings for spatial reasoning.</li>
+                                    <li>Developed and deployed a FastAPI backend on AWS to support real-time parking queries and semantic search.</li>
+                                    <li>Optimized the semantic search pipeline, reducing parking availability query latency from 45s to 15s.</li>
+                                </ul>
+                            </div>
+                        </article>
+                        <article class="experience-card experience-card-compact">
+                            <div class="experience-card-front">
+                                <span class="experience-kind">Project</span>
+                                <p class="experience-org">Franklin Templeton</p>
+                                <h3 class="experience-role">Capitawise</h3>
+                                <p class="experience-duration">Mar 2024 - Jun 2024</p>
+                                <p class="experience-preview">Award-winning AI banking chatbot with better query resolution and faster service response.</p>
+                                <div class="experience-tags">
+                                    <span>GPT-4o</span>
+                                    <span>React</span>
+                                    <span>Flask</span>
+                                </div>
+                            </div>
+                            <div class="experience-card-back">
+                                <h4>Capitawise</h4>
+                                <ul class="experience-highlights">
+                                    <li>Led full-stack development of an AI-powered banking chatbot using GPT-4o, Node.js, Flask, and React, reducing customer service response time by 40%.</li>
+                                    <li>Implemented NLP-based query handling with text and voice output, improving banking query resolution accuracy from 68% to 85%.</li>
+                                    <li>Designed a dynamic real-time UI/UX that boosted user engagement and retention during pilot testing.</li>
+                                </ul>
+                            </div>
+                        </article>
+                        <article class="experience-card experience-card-compact">
+                            <div class="experience-card-front">
+                                <span class="experience-kind">Project</span>
+                                <p class="experience-org">Franklin Templeton</p>
+                                <h3 class="experience-role">PawPrints</h3>
+                                <p class="experience-duration">Mar 2023 - Jun 2023</p>
+                                <p class="experience-preview">Blockchain medical data exchange with secure dashboards and faster API performance.</p>
+                                <div class="experience-tags">
+                                    <span>Web3</span>
+                                    <span>Express.js</span>
+                                    <span>MySQL</span>
+                                </div>
+                            </div>
+                            <div class="experience-card-back">
+                                <h4>PawPrints</h4>
+                                <ul class="experience-highlights">
+                                    <li>Built a blockchain-based medical data exchange platform using React.js, Express.js, MySQL, Web3.js, and JWT authentication.</li>
+                                    <li>Implemented token-based on-chain record storage and role-specific dashboards for secure, permission-based access.</li>
+                                    <li>Optimized backend APIs to cut data retrieval time from 3s to &lt;1s, improving overall platform responsiveness.</li>
+                                </ul>
+                            </div>
+                        </article>
+                        <article class="experience-card experience-card-compact" aria-hidden="true">
+                            <div class="experience-card-front">
+                                <span class="experience-kind">Project</span>
+                                <p class="experience-org">CMU / BOSCH</p>
+                                <h3 class="experience-role">Parking Spot Locator</h3>
+                                <p class="experience-duration">Aug 2025 - Dec 2025</p>
+                                <p class="experience-preview">Vision-language parking search with semantic mapping and a faster backend query pipeline.</p>
+                                <div class="experience-tags">
+                                    <span>VLMap</span>
+                                    <span>CLIP</span>
+                                    <span>AWS</span>
+                                </div>
+                            </div>
+                            <div class="experience-card-back">
+                                <h4>Parking Spot Locator</h4>
+                                <ul class="experience-highlights">
+                                    <li>Built a Bosch-sponsored parking spot locator using vision-language models to identify parking availability from visual sensor data.</li>
+                                    <li>Implemented a VLMap-based pipeline combining RGB, depth, and pose data with CLIP embeddings for spatial reasoning.</li>
+                                    <li>Developed and deployed a FastAPI backend on AWS to support real-time parking queries and semantic search.</li>
+                                    <li>Optimized the semantic search pipeline, reducing parking availability query latency from 45s to 15s.</li>
+                                </ul>
+                            </div>
+                        </article>
+                        <article class="experience-card experience-card-compact" aria-hidden="true">
+                            <div class="experience-card-front">
+                                <span class="experience-kind">Project</span>
+                                <p class="experience-org">Franklin Templeton</p>
+                                <h3 class="experience-role">Capitawise</h3>
+                                <p class="experience-duration">Mar 2024 - Jun 2024</p>
+                                <p class="experience-preview">Award-winning AI banking chatbot with better query resolution and faster service response.</p>
+                                <div class="experience-tags">
+                                    <span>GPT-4o</span>
+                                    <span>React</span>
+                                    <span>Flask</span>
+                                </div>
+                            </div>
+                            <div class="experience-card-back">
+                                <h4>Capitawise</h4>
+                                <ul class="experience-highlights">
+                                    <li>Led full-stack development of an AI-powered banking chatbot using GPT-4o, Node.js, Flask, and React, reducing customer service response time by 40%.</li>
+                                    <li>Implemented NLP-based query handling with text and voice output, improving banking query resolution accuracy from 68% to 85%.</li>
+                                    <li>Designed a dynamic real-time UI/UX that boosted user engagement and retention during pilot testing.</li>
+                                </ul>
+                            </div>
+                        </article>
+                        <article class="experience-card experience-card-compact" aria-hidden="true">
+                            <div class="experience-card-front">
+                                <span class="experience-kind">Project</span>
+                                <p class="experience-org">Franklin Templeton</p>
+                                <h3 class="experience-role">PawPrints</h3>
+                                <p class="experience-duration">Mar 2023 - Jun 2023</p>
+                                <p class="experience-preview">Blockchain medical data exchange with secure dashboards and faster API performance.</p>
+                                <div class="experience-tags">
+                                    <span>Web3</span>
+                                    <span>Express.js</span>
+                                    <span>MySQL</span>
+                                </div>
+                            </div>
+                            <div class="experience-card-back">
+                                <h4>PawPrints</h4>
+                                <ul class="experience-highlights">
+                                    <li>Built a blockchain-based medical data exchange platform using React.js, Express.js, MySQL, Web3.js, and JWT authentication.</li>
+                                    <li>Implemented token-based on-chain record storage and role-specific dashboards for secure, permission-based access.</li>
+                                    <li>Optimized backend APIs to cut data retrieval time from 3s to &lt;1s, improving overall platform responsiveness.</li>
+                                </ul>
+                            </div>
+                        </article>
                     </div>
-                    <h3>Software Development Engineer Intern</h3>
-                    <p class="experience-company">Convoloo</p>
-                    <p class="experience-duration">Jul 2024 - Sep 2024</p>
-                    <p class="experience-description">
-                        Developed a web-based AI medical chatbot using FastAPI, LangChain, React, and Google Gemini, enabling accurate identification of 50+ common diseases. Reduced average response time from 2.5s to 1.5s and enabled 50+ bookings during pilot testing.
-                    </p>
                 </div>
-                <div class="experience-card">
-                    <div class="experience-icon">
-                        <img src="images/CMULogo.jpg" alt="Carnegie Mellon University Logo">
-                    </div>
-                    <h3>Graduate Student</h3>
-                    <p class="experience-company">Carnegie Mellon University, Silicon Valley</p>
-                    <p class="experience-duration">Aug 2025 - Dec 2026</p>
-                    <p class="experience-description">
-                        Pursuing Master of Science in Software Engineering (GPA: 3.5). Coursework: Software Engineering, Foundation of Computer System, Functional Programming, AI in Industry.
-                    </p>
-                </div>
+            </div>
+            <div class="experience-focus-panel" aria-hidden="true">
+                <div class="experience-focus-content"></div>
             </div>
         </div>
     </section>
@@ -117,7 +381,7 @@
                             <span class="resume-date">Aug 2025 - Dec 2026</span>
                         </div>
                         <p class="resume-subtitle">Master of Science, Software Engineering (GPA: 3.5) | Mountain View</p>
-                        <p class="resume-subtitle">Coursework: Software Engineering, Foundation of Computer System, Functional Programming, AI in Industry</p>
+                        <p class="resume-subtitle">Coursework: Software Engineering, Foundation of Computer System, Functional Programming, AI in Industry, Gen AI in Practice, Machine Learning in Software Engineering</p>
                     </div>
                     <div class="resume-item">
                         <div class="resume-item-header">
@@ -139,18 +403,45 @@
                         <span class="skill-tag">Go</span>
                         <span class="skill-tag">Node.js</span>
                         <span class="skill-tag">React</span>
+                        <span class="skill-tag">HTML</span>
+                        <span class="skill-tag">CSS</span>
                         <span class="skill-tag">TypeScript</span>
+                        <span class="skill-tag">Swift</span>
+                        <span class="skill-tag">F#</span>
+                        <span class="skill-tag">Flask</span>
+                        <span class="skill-tag">Express.js</span>
                         <span class="skill-tag">FastAPI</span>
                         <span class="skill-tag">LangChain</span>
+                        <span class="skill-tag">LangGraph</span>
                         <span class="skill-tag">LLM APIs</span>
+                        <span class="skill-tag">Prompt Engineering</span>
                         <span class="skill-tag">RAG</span>
                         <span class="skill-tag">MySQL</span>
                         <span class="skill-tag">MongoDB</span>
                         <span class="skill-tag">AWS</span>
+                        <span class="skill-tag">GCP</span>
+                        <span class="skill-tag">Docker</span>
+                        <span class="skill-tag">Kubernetes</span>
                         <span class="skill-tag">Git</span>
                         <span class="skill-tag">CI/CD</span>
+                        <span class="skill-tag">Pandas</span>
+                        <span class="skill-tag">NumPy</span>
+                        <span class="skill-tag">Next.js</span>
+                        <span class="skill-tag">Streamlit</span>
+                        <span class="skill-tag">Socket.io</span>
+                        <span class="skill-tag">Web3</span>
+                        <span class="skill-tag">FastMCP</span>
+                        <span class="skill-tag">Milvus</span>
+                        <span class="skill-tag">Orchestration</span>
+                        <span class="skill-tag">TensorFlow</span>
+                        <span class="skill-tag">Relational Database</span>
+                        <span class="skill-tag">Testing</span>
+                        <span class="skill-tag">Terraform</span>
                         <span class="skill-tag">Agile/Scrum</span>
                         <span class="skill-tag">A/B Testing</span>
+                        <span class="skill-tag">Product Roadmap Planning</span>
+                        <span class="skill-tag">User Research</span>
+                        <span class="skill-tag">Market Analysis</span>
                         <span class="skill-tag">Figma</span>
                     </div>
                 </div>
@@ -172,7 +463,7 @@
                             <li>Redesigned the intent-matching and recommendation engine, migrating from Google Dialogflow to Transformer + ID with Gemini 2.0 and Vertex AI, reducing per-intent cost from $0.002 to $0.00031 (6× cheaper).</li>
                             <li>Partnered with engineering and R&D to define technical requirements and manage agile sprints, reducing feature development time from 14 to 5 days.</li>
                             <li>Ran A/B tests and analytics that improved AI model accuracy by 35% and increased sales conversion by 15%.</li>
-                            <li>Promoted from intern to full-time AI Product Developer after building a data-processing pipeline with Pandas and NumPy that significantly improved preprocessing throughput.</li>
+                            <li>Promoted from intern to full-time AI Product Developer in March 2025 after building a data-processing pipeline with Pandas and NumPy that improved preprocessing efficiency.</li>
                         </ul>
                     </div>
 
@@ -186,9 +477,9 @@
                         </p>
                         <ul class="resume-subtitle">
                             <li>Developed a FastAPI + LangChain backend with Google Gemini and Google Cloud to accurately identify 50+ common diseases from patient queries.</li>
-                            <li>Implemented a RAG-based retrieval pipeline and optimized infrastructure, cutting average response time from 2.5s to 1.5s.</li>
-                            <li>Integrated Google Calendar API to power appointment booking, enabling 50+ successful bookings during pilot testing.</li>
-                            <li>Led backend integration with LangServe and LangGraph, improving deployment workflows and chatbot reliability.</li>
+                            <li>Implemented RAG-based knowledge retrieval on secure cloud infrastructure using Terraform and MySQL, reducing average response time from 2.5s to 1.5s and improving answer relevance for follow-up questions.</li>
+                            <li>Integrated Google Calendar API for appointment booking and enhanced UI/UX through iterative design reviews, enabling 50+ bookings during pilot testing.</li>
+                            <li>Led backend integration of the chatbot with LangServe and LangGraph using FastAPI and NestJS, streamlining deployment and improving overall chatbot performance.</li>
                         </ul>
                     </div>
                 </div>
@@ -197,10 +488,27 @@
                     <h3>Projects</h3>
                     <div class="resume-item">
                         <div class="resume-item-header">
+                            <h4>Research Assistant Agent | Project Code Demo | CMU 14-825</h4>
+                            <span class="resume-date">Jan 2026 - Mar 2026</span>
+                        </div>
+                        <ul class="resume-subtitle">
+                            <li>Built a LangGraph-based AI agent with a RAG pipeline to answer questions from 30 indexed academic papers.</li>
+                            <li>Developed a Streamlit web app for paper upload, multilingual querying, and context-grounded answers with references.</li>
+                            <li>Deployed containerized services including the AI agent, translation API, and vector database on Google Kubernetes Engine with auto-scaling.</li>
+                            <li>Implemented semantic retrieval using vector embeddings and compared indexing algorithms including HNSW, IVF_PQ, and DiskANN.</li>
+                        </ul>
+                    </div>
+                    <div class="resume-item">
+                        <div class="resume-item-header">
                             <h4>Parking Spot Locator | CMU/BOSCH</h4>
                             <span class="resume-date">Aug 2025 - Dec 2025</span>
                         </div>
-                        <p class="resume-subtitle">Built a Bosch-sponsored parking spot locator using vision-language models to semantically identify parking availability from visual sensor data. Implemented a VLMap-based pipeline combining RGB, depth, and pose data with CLIP embeddings for spatial reasoning.</p>
+                        <p class="resume-subtitle">Built a Bosch-sponsored parking spot locator using vision-language models to semantically identify parking availability from visual sensor data.</p>
+                        <ul class="resume-subtitle">
+                            <li>Implemented a VLMap-based pipeline combining RGB, depth, and pose data with CLIP embeddings for spatial reasoning.</li>
+                            <li>Developed and deployed a FastAPI backend on AWS to support real-time parking queries and semantic search.</li>
+                            <li>Optimized the semantic search pipeline, reducing parking availability query latency from 45s to 15s through improved embedding retrieval and backend query processing.</li>
+                        </ul>
                         <p class="resume-subtitle"><a href="https://psl.fogx.link" target="_blank">psl.fogx.link</a></p>
                     </div>
                     <div class="resume-item">
@@ -208,19 +516,28 @@
                             <h4>Capitawise (2nd Place, $7,000 Prize) | Franklin Templeton</h4>
                             <span class="resume-date">Mar 2024 - Jun 2024</span>
                         </div>
-                        <p class="resume-subtitle">Led full-stack development of an AI-powered banking chatbot using GPT-4o, Node.js, Flask, and React, reducing customer service response time by 40%. Implemented NLP-based query handling with text/voice output, improving banking query resolution accuracy from 68% to 85%.</p>
+                        <p class="resume-subtitle">Led full-stack development of an AI-powered banking chatbot using GPT-4o, Node.js, Flask, and React.</p>
+                        <ul class="resume-subtitle">
+                            <li>Reduced customer service response time by 40%.</li>
+                            <li>Implemented NLP-based query handling with text and voice output, improving banking query resolution accuracy from 68% to 85%.</li>
+                            <li>Designed a dynamic real-time UI/UX that improved engagement and retention during pilot testing.</li>
+                        </ul>
                     </div>
                     <div class="resume-item">
                         <div class="resume-item-header">
                             <h4>PawPrints (1st Place, $15,000 Prize) | Franklin Templeton</h4>
                             <span class="resume-date">Mar 2023 - Jun 2023</span>
                         </div>
-                        <p class="resume-subtitle">Built a blockchain-based medical data exchange platform using React.js, Express.js, MySQL, Web3.js, and JWT authentication to securely connect pet owners, clinics, and insurers. Optimized backend APIs to cut data retrieval time from 3s to &lt;1s.</p>
+                        <p class="resume-subtitle">Built a blockchain-based medical data exchange platform using React.js, Express.js, MySQL, Web3.js, and JWT authentication to securely connect pet owners, clinics, and insurers.</p>
+                        <ul class="resume-subtitle">
+                            <li>Implemented token-based on-chain record storage and role-specific dashboards for secure, permission-based access.</li>
+                            <li>Optimized backend APIs to cut data retrieval time from 3s to &lt;1s, improving platform responsiveness.</li>
+                        </ul>
                     </div>
                 </div>
 
                 <div class="resume-download">
-                    <a href="ChiCheng-Resume-2026-Jan.pdf" class="btn btn-primary" download>Download Full Resume (PDF)</a>
+                    <a href="Chi Cheng-Resume-2026-March.pdf" class="btn btn-primary" download>Download Full Resume (PDF)</a>
                 </div>
             </div>
         </div>
@@ -270,6 +587,20 @@
                     <div class="hobby-icon">💻</div>
                     <h3>Studying New Technology</h3>
                     <p>Keeping up with new tech.</p>
+                </div>
+            </div>
+            <div class="artwork-showcase">
+                <div class="artwork-header">
+                    <p class="artwork-kicker">Artwork</p>
+                    <h3>Some of My Digital Art</h3>
+                </div>
+                <div class="artwork-grid">
+                    <figure class="artwork-card">
+                        <img src="Gwen.PNG" alt="Gwen-inspired artwork by Bruce Cheng">
+                    </figure>
+                    <figure class="artwork-card">
+                        <img src="IMG_2629.PNG" alt="Sci-fi inspired artwork by Bruce Cheng">
+                    </figure>
                 </div>
             </div>
         </div>
