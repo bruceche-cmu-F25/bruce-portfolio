@@ -140,15 +140,59 @@ document.addEventListener('DOMContentLoaded', function() {
             // Option 2: Using mailto as fallback (works immediately, no setup needed)
             const subject = encodeURIComponent(`Contact from ${name}`);
             const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
-            window.location.href = `mailto:bruceche@andrew.cmu.edu?subject=${subject}&body=${body}`;
+            const mailtoLink = `mailto:bruceche@andrew.cmu.edu?subject=${subject}&body=${body}`;
             
-            // Show success message
-            setTimeout(() => {
-                alert(`Thank you for your message, ${name}! Your email client should open. If not, please email me directly at bruceche@andrew.cmu.edu`);
+            // Try to open mailto link
+            try {
+                window.location.href = mailtoLink;
+                
+                // Show success message with option to copy email
+                setTimeout(() => {
+                    const confirmMessage = `Thank you for your message, ${name}! 
+                    
+Your email client should have opened. If it didn't, would you like to copy my email address to send manually?
+
+Email: bruceche@andrew.cmu.edu`;
+                    
+                    if (confirm(confirmMessage + '\n\nClick OK to copy email address, or Cancel to close.')) {
+                        // Copy email to clipboard
+                        navigator.clipboard.writeText('bruceche@andrew.cmu.edu').then(() => {
+                            alert('Email address copied to clipboard! You can now paste it in your email client.');
+                        }).catch(() => {
+                            // Fallback if clipboard API fails
+                            alert('Email: bruceche@andrew.cmu.edu\n\nYou can copy this email address manually.');
+                        });
+                    }
+                    
+                    contactForm.reset();
+                    submitButton.textContent = originalText;
+                    submitButton.disabled = false;
+                }, 500);
+            } catch (error) {
+                // If mailto fails, show manual option
+                alert(`Thank you for your message, ${name}! 
+                
+Please send your message to: bruceche@andrew.cmu.edu
+
+Subject: Contact from ${name}
+
+Message:
+${message}
+
+---
+From: ${email}`);
+                
+                // Copy email to clipboard
+                navigator.clipboard.writeText('bruceche@andrew.cmu.edu').then(() => {
+                    console.log('Email copied to clipboard');
+                }).catch(() => {
+                    console.log('Clipboard copy failed');
+                });
+                
                 contactForm.reset();
                 submitButton.textContent = originalText;
                 submitButton.disabled = false;
-            }, 500);
+            }
         });
     }
 
