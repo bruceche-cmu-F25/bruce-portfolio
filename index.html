@@ -1,709 +1,694 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Bruce Cheng's portfolio featuring AI product, software engineering, and project experience">
-    <title>Bruce's Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bruce Cheng — Software Engineer, AI Builder, MS @ CMU Silicon Valley. Portfolio of AI systems, agentic workflows, and full-stack projects.">
+  <title>Bruce Cheng · Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand">Bruce Cheng</div>
-            <ul class="nav-menu">
-                <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#experience" class="nav-link">Experience</a></li>
-                <li><a href="#resume" class="nav-link">Resume</a></li>
-                <li><a href="#hobbies" class="nav-link">Hobbies</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
-            </ul>
-            <div class="hamburger" role="button" aria-label="Toggle navigation menu" aria-expanded="false" tabindex="0">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+
+  <!-- UI chrome -->
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <div class="cursor-dot"      aria-hidden="true"></div>
+  <div class="cursor-ring"     aria-hidden="true"></div>
+
+  <!-- ── Pixel Loader ──────────────────────────────────────────── -->
+  <div class="pixel-loader" id="pixelLoader" role="status" aria-label="Loading">
+    <div class="pixel-scanlines" aria-hidden="true"></div>
+    <div class="pixel-loader-inner">
+      <div class="pixel-bc" aria-hidden="true">
+        <span class="px-letter">B</span><span class="px-letter">C</span>
+      </div>
+      <div class="pixel-bar-wrap">
+        <div class="pixel-bar-inner" id="pixelBarFill"></div>
+      </div>
+      <div class="pixel-loader-status">
+        <span class="pixel-cursor" aria-hidden="true">▋</span>
+        <span id="pixelStatusText">INITIALIZING</span>
+      </div>
+    </div>
+    <div class="pixel-tile-grid" id="pixelTileGrid" aria-hidden="true"></div>
+  </div>
+
+  <!-- ── Navigation ─────────────────────────────────────────────── -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a href="#hero" class="nav-brand" aria-label="Bruce Cheng – home">
+        <span class="nav-monogram">BC</span>
+        <span class="nav-name">Bruce Cheng</span>
+      </a>
+      <ul class="nav-menu" role="list">
+        <li><a href="#about"      class="nav-link">About</a></li>
+        <li><a href="#experience" class="nav-link">Experience</a></li>
+        <li><a href="#work"       class="nav-link">Work</a></li>
+        <li><a href="#stack"   class="nav-link">Stack</a></li>
+        <li><a href="#life"    class="nav-link">Life</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+        <li>
+          <a href="Chi Cheng-Resume-2026-May.pdf" class="nav-resume" target="_blank" rel="noopener" download>
+            Resume ↗
+          </a>
+        </li>
+      </ul>
+      <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── Hero ───────────────────────────────────────────────────── -->
+  <section id="hero" class="hero" aria-label="Introduction">
+    <div class="container hero-container">
+      <div class="hero-content">
+        <div class="hero-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>Open to Summer 2026 Internships</span>
         </div>
-    </nav>
-
-    <!-- Hero/About Section -->
-    <section id="about" class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-image">
-                    <img src="images/profile.jpg" alt="Bruce's profile picture">
-                </div>
-                <div class="hero-text">
-                    <p class="hero-kicker">AI + Product + Engineering</p>
-                    <h1>Hi, I'm Bruce</h1>
-                    <p class="hero-subtitle">AI Product Developer, Product Manager, and Software Engineering Graduate Student</p>
-                    <p class="hero-description">
-                        I'm Bruce Cheng, a mid-level AI product developer and product manager with a strong background in building AI-driven conversational solutions.
-                        I'm currently pursuing my M.S. in Software Engineering at Carnegie Mellon University, Silicon Valley.
-                    </p>
-                    <div class="hero-highlights">
-                        <span class="hero-highlight">Conversational AI</span>
-                        <span class="hero-highlight">Product Strategy</span>
-                        <span class="hero-highlight">Full-Stack Delivery</span>
-                        <span class="hero-highlight">ML-Driven Experiences</span>
-                    </div>
-                    <div class="hero-buttons">
-                        <a href="#contact" class="btn btn-primary">Get in Touch</a>
-                        <a href="#resume" class="btn btn-secondary">View Resume</a>
-                    </div>
-                </div>
-            </div>
+        <h1 class="hero-name">
+          <span class="hero-name-line1">BRUCE</span>
+          <span class="hero-name-line2">CHENG</span>
+        </h1>
+        <svg class="hero-name-underline" viewBox="0 0 380 14" fill="none" aria-hidden="true" preserveAspectRatio="none">
+          <path d="M2,9 C60,3 130,13 200,8 C260,4 310,12 378,7" stroke="#1AA09A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"/>
+        </svg>
+        <p class="hero-role">Software Engineer · AI Builder · MS @ CMU Silicon Valley</p>
+        <p class="hero-tagline">Building AI systems and agentic workflows that actually ship.</p>
+        <div class="hero-ctas">
+          <a href="#work"    class="btn btn-primary">View My Work →</a>
+          <a href="#contact" class="btn btn-ghost">Get in Touch</a>
         </div>
-    </section>
+      </div>
+      <div class="hero-photo-wrap" aria-hidden="true">
+        <img src="images/profile.jpg" alt="Bruce Cheng" class="hero-photo" loading="eager">
+      </div>
+    </div>
+    <div class="hero-scroll-cue" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="hero-scroll-bar"></div>
+    </div>
+  </section>
 
-    <!-- Experience Section -->
-    <section id="experience" class="section">
-        <div class="container">
-            <h2 class="section-title">Experience</h2>
-            <p class="experience-intro">My work and projects move across the screen by default. Hover over the section to pause the motion, then hover a card to expand it into a readable solid-detail panel.</p>
-            <div class="experience-marquee">
-                <div class="experience-marquee-row experience-marquee-row-top">
-                    <div class="experience-marquee-track">
-                        <article class="experience-card experience-card-wide">
-                            <div class="experience-card-front">
-                                <img class="experience-card-logo" src="images/HelportLogo.jpg" alt="Helport AI logo">
-                                <span class="experience-kind">Work</span>
-                                <p class="experience-org">Helport AI</p>
-                                <h3 class="experience-role">AI Product Developer / Product Manager</h3>
-                                <p class="experience-duration">Sep 2024 - Jun 2025</p>
-                                <p class="experience-preview">Led product strategy for an AI-driven call assistant and shipped major cost, accuracy, and delivery improvements.</p>
-                                <div class="experience-tags">
-                                    <span>FastAPI</span>
-                                    <span>Gemini 2.0</span>
-                                    <span>Vertex AI</span>
-                                    <span>A/B Testing</span>
-                                </div>
-                            </div>
-                            <div class="experience-card-back">
-                                <h4>Helport AI</h4>
-                                <ul class="experience-highlights">
-                                    <li>Led product strategy for an AI-driven call assistant, conducting client interviews and user research across mortgage, healthcare, insurance, and government sectors.</li>
-                                    <li>Designed and deployed an AI-powered dialogue flow system using FastAPI and a curated database, cutting average handling time by 35%.</li>
-                                    <li>Migrated intent matching from Google Dialogflow to Transformer + ID with Gemini 2.0 and Vertex AI, reducing costs 6 times from $0.002 to $0.00031 per match.</li>
-                                    <li>Partnered with engineering and R&amp;D to align product vision with technical feasibility, reducing development time from 14 to 5 days.</li>
-                                    <li>Conducted A/B testing and performance analysis that improved AI model accuracy by 35% and boosted sales conversion by 15%.</li>
-                                </ul>
-                            </div>
-                        </article>
-                        <article class="experience-card experience-card-wide">
-                            <div class="experience-card-front">
-                                <img class="experience-card-logo" src="images/CMULogo.jpg" alt="Carnegie Mellon University logo">
-                                <span class="experience-kind">Project</span>
-                                <p class="experience-org">CMU 14-825</p>
-                                <h3 class="experience-role">Research Assistant Agent</h3>
-                                <p class="experience-duration">Jan 2026 - Mar 2026</p>
-                                <p class="experience-preview">Built a LangGraph-based research agent with RAG, multilingual querying, and scalable cloud deployment.</p>
-                                <div class="experience-tags">
-                                    <span>LangGraph</span>
-                                    <span>RAG</span>
-                                    <span>Streamlit</span>
-                                    <span>GKE</span>
-                                </div>
-                            </div>
-                            <div class="experience-card-back">
-                                <h4>Research Assistant Agent</h4>
-                                <ul class="experience-highlights">
-                                    <li>Built a LangGraph-based AI agent with a RAG pipeline to answer questions from 30 indexed academic papers.</li>
-                                    <li>Developed a Streamlit web app for paper upload, multilingual querying, and context-grounded answers with references.</li>
-                                    <li>Deployed containerized services including the AI agent, translation API, and vector database on Google Kubernetes Engine with auto-scaling.</li>
-                                    <li>Implemented semantic retrieval using vector embeddings and compared indexing algorithms including HNSW, IVF_PQ, and DiskANN.</li>
-                                </ul>
-                            </div>
-                        </article>
-                        <article class="experience-card experience-card-wide">
-                            <div class="experience-card-front">
-                                <img class="experience-card-logo" src="images/convoloo_logo.jpeg" alt="Convoloo logo">
-                                <span class="experience-kind">Work</span>
-                                <p class="experience-org">Convoloo</p>
-                                <h3 class="experience-role">Software Development Engineer Intern</h3>
-                                <p class="experience-duration">Jul 2024 - Sep 2024</p>
-                                <p class="experience-preview">Built a medical chatbot with RAG retrieval, cloud infra, and booking support.</p>
-                                <div class="experience-tags">
-                                    <span>LangChain</span>
-                                    <span>Terraform</span>
-                                    <span>MySQL</span>
-                                </div>
-                            </div>
-                            <div class="experience-card-back">
-                                <h4>Convoloo</h4>
-                                <ul class="experience-highlights">
-                                    <li>Developed a web-based AI medical chatbot using FastAPI, LangChain, React, Google Gemini, and Google Cloud for 50+ disease identification.</li>
-                                    <li>Implemented RAG-based knowledge retrieval on secure cloud infrastructure using Terraform and MySQL, reducing response time from 2.5s to 1.5s.</li>
-                                    <li>Integrated Google Calendar API for appointment booking and improved UI/UX through iterative design reviews, enabling 50+ bookings during pilot testing.</li>
-                                    <li>Led backend integration with LangServe and LangGraph using FastAPI and NestJS, streamlining deployment and improving chatbot performance.</li>
-                                </ul>
-                            </div>
-                        </article>
-                        <article class="experience-card experience-card-wide" aria-hidden="true">
-                            <div class="experience-card-front">
-                                <img class="experience-card-logo" src="images/HelportLogo.jpg" alt="Helport AI logo">
-                                <span class="experience-kind">Work</span>
-                                <p class="experience-org">Helport AI</p>
-                                <h3 class="experience-role">AI Product Developer / Product Manager</h3>
-                                <p class="experience-duration">Sep 2024 - Jun 2025</p>
-                                <p class="experience-preview">Led product strategy for an AI-driven call assistant and shipped major cost, accuracy, and delivery improvements.</p>
-                                <div class="experience-tags">
-                                    <span>FastAPI</span>
-                                    <span>Gemini 2.0</span>
-                                    <span>Vertex AI</span>
-                                    <span>A/B Testing</span>
-                                </div>
-                            </div>
-                            <div class="experience-card-back">
-                                <h4>Helport AI</h4>
-                                <ul class="experience-highlights">
-                                    <li>Led product strategy for an AI-driven call assistant, conducting client interviews and user research across mortgage, healthcare, insurance, and government sectors.</li>
-                                    <li>Designed and deployed an AI-powered dialogue flow system using FastAPI and a curated database, cutting average handling time by 35%.</li>
-                                    <li>Migrated intent matching from Google Dialogflow to Transformer + ID with Gemini 2.0 and Vertex AI, reducing costs 6 times from $0.002 to $0.00031 per match.</li>
-                                    <li>Partnered with engineering and R&amp;D to align product vision with technical feasibility, reducing development time from 14 to 5 days.</li>
-                                    <li>Conducted A/B testing and performance analysis that improved AI model accuracy by 35% and boosted sales conversion by 15%.</li>
-                                </ul>
-                            </div>
-                        </article>
-                        <article class="experience-card experience-card-wide" aria-hidden="true">
-                            <div class="experience-card-front">
-                                <img class="experience-card-logo" src="images/CMULogo.jpg" alt="Carnegie Mellon University logo">
-                                <span class="experience-kind">Project</span>
-                                <p class="experience-org">CMU 14-825</p>
-                                <h3 class="experience-role">Research Assistant Agent</h3>
-                                <p class="experience-duration">Jan 2026 - Mar 2026</p>
-                                <p class="experience-preview">Built a LangGraph-based research agent with RAG, multilingual querying, and scalable cloud deployment.</p>
-                                <div class="experience-tags">
-                                    <span>LangGraph</span>
-                                    <span>RAG</span>
-                                    <span>Streamlit</span>
-                                    <span>GKE</span>
-                                </div>
-                            </div>
-                            <div class="experience-card-back">
-                                <h4>Research Assistant Agent</h4>
-                                <ul class="experience-highlights">
-                                    <li>Built a LangGraph-based AI agent with a RAG pipeline to answer questions from 30 indexed academic papers.</li>
-                                    <li>Developed a Streamlit web app for paper upload, multilingual querying, and context-grounded answers with references.</li>
-                                    <li>Deployed containerized services including the AI agent, translation API, and vector database on Google Kubernetes Engine with auto-scaling.</li>
-                                    <li>Implemented semantic retrieval using vector embeddings and compared indexing algorithms including HNSW, IVF_PQ, and DiskANN.</li>
-                                </ul>
-                            </div>
-                        </article>
-                        <article class="experience-card experience-card-wide" aria-hidden="true">
-                            <div class="experience-card-front">
-                                <img class="experience-card-logo" src="images/convoloo_logo.jpeg" alt="Convoloo logo">
-                                <span class="experience-kind">Work</span>
-                                <p class="experience-org">Convoloo</p>
-                                <h3 class="experience-role">Software Development Engineer Intern</h3>
-                                <p class="experience-duration">Jul 2024 - Sep 2024</p>
-                                <p class="experience-preview">Built a medical chatbot with RAG retrieval, cloud infra, and booking support.</p>
-                                <div class="experience-tags">
-                                    <span>LangChain</span>
-                                    <span>Terraform</span>
-                                    <span>MySQL</span>
-                                </div>
-                            </div>
-                            <div class="experience-card-back">
-                                <h4>Convoloo</h4>
-                                <ul class="experience-highlights">
-                                    <li>Developed a web-based AI medical chatbot using FastAPI, LangChain, React, Google Gemini, and Google Cloud for 50+ disease identification.</li>
-                                    <li>Implemented RAG-based knowledge retrieval on secure cloud infrastructure using Terraform and MySQL, reducing response time from 2.5s to 1.5s.</li>
-                                    <li>Integrated Google Calendar API for appointment booking and improved UI/UX through iterative design reviews, enabling 50+ bookings during pilot testing.</li>
-                                    <li>Led backend integration with LangServe and LangGraph using FastAPI and NestJS, streamlining deployment and improving chatbot performance.</li>
-                                </ul>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-                <div class="experience-marquee-row experience-marquee-row-bottom">
-                    <div class="experience-marquee-track">
-                        <article class="experience-card experience-card-compact">
-                            <div class="experience-card-front">
-                                <img class="experience-card-logo" src="images/CMULogo.jpg" alt="Carnegie Mellon University logo">
-                                <img class="experience-card-logo experience-card-logo-secondary" src="images/bosch_logo.png" alt="Bosch logo">
-                                <span class="experience-kind">Project</span>
-                                <p class="experience-org">CMU / BOSCH</p>
-                                <h3 class="experience-role">Parking Spot Locator</h3>
-                                <p class="experience-duration">Aug 2025 - Dec 2025</p>
-                                <p class="experience-preview">Vision-language parking search with semantic mapping and a faster backend query pipeline.</p>
-                                <div class="experience-tags">
-                                    <span>VLMap</span>
-                                    <span>CLIP</span>
-                                    <span>AWS</span>
-                                </div>
-                            </div>
-                            <div class="experience-card-back">
-                                <h4>Parking Spot Locator</h4>
-                                <ul class="experience-highlights">
-                                    <li>Built a Bosch-sponsored parking spot locator using vision-language models to identify parking availability from visual sensor data.</li>
-                                    <li>Implemented a VLMap-based pipeline combining RGB, depth, and pose data with CLIP embeddings for spatial reasoning.</li>
-                                    <li>Developed and deployed a FastAPI backend on AWS to support real-time parking queries and semantic search.</li>
-                                    <li>Optimized the semantic search pipeline, reducing parking availability query latency from 45s to 15s.</li>
-                                </ul>
-                            </div>
-                        </article>
-                        <article class="experience-card experience-card-compact">
-                            <div class="experience-card-front">
-                                <img class="experience-card-logo experience-card-logo-wide" src="images/ft_logo_pos_0119.png" alt="Franklin Templeton logo">
-                                <span class="experience-kind">Project</span>
-                                <p class="experience-org">Franklin Templeton</p>
-                                <h3 class="experience-role">Capitawise</h3>
-                                <p class="experience-duration">Mar 2024 - Jun 2024</p>
-                                <p class="experience-preview">Award-winning AI banking chatbot with better query resolution and faster service response.</p>
-                                <div class="experience-tags">
-                                    <span>GPT-4o</span>
-                                    <span>React</span>
-                                    <span>Flask</span>
-                                </div>
-                            </div>
-                            <div class="experience-card-back">
-                                <h4>Capitawise</h4>
-                                <ul class="experience-highlights">
-                                    <li>Led full-stack development of an AI-powered banking chatbot using GPT-4o, Node.js, Flask, and React, reducing customer service response time by 40%.</li>
-                                    <li>Implemented NLP-based query handling with text and voice output, improving banking query resolution accuracy from 68% to 85%.</li>
-                                    <li>Designed a dynamic real-time UI/UX that boosted user engagement and retention during pilot testing.</li>
-                                </ul>
-                            </div>
-                        </article>
-                        <article class="experience-card experience-card-compact">
-                            <div class="experience-card-front">
-                                <img class="experience-card-logo experience-card-logo-wide" src="images/ft_logo_pos_0119.png" alt="Franklin Templeton logo">
-                                <span class="experience-kind">Project</span>
-                                <p class="experience-org">Franklin Templeton</p>
-                                <h3 class="experience-role">PawPrints</h3>
-                                <p class="experience-duration">Mar 2023 - Jun 2023</p>
-                                <p class="experience-preview">Blockchain medical data exchange with secure dashboards and faster API performance.</p>
-                                <div class="experience-tags">
-                                    <span>Web3</span>
-                                    <span>Express.js</span>
-                                    <span>MySQL</span>
-                                </div>
-                            </div>
-                            <div class="experience-card-back">
-                                <h4>PawPrints</h4>
-                                <ul class="experience-highlights">
-                                    <li>Built a blockchain-based medical data exchange platform using React.js, Express.js, MySQL, Web3.js, and JWT authentication.</li>
-                                    <li>Implemented token-based on-chain record storage and role-specific dashboards for secure, permission-based access.</li>
-                                    <li>Optimized backend APIs to cut data retrieval time from 3s to &lt;1s, improving overall platform responsiveness.</li>
-                                </ul>
-                            </div>
-                        </article>
-                        <article class="experience-card experience-card-compact" aria-hidden="true">
-                            <div class="experience-card-front">
-                                <img class="experience-card-logo" src="images/CMULogo.jpg" alt="Carnegie Mellon University logo">
-                                <img class="experience-card-logo experience-card-logo-secondary" src="images/bosch_logo.png" alt="Bosch logo">
-                                <span class="experience-kind">Project</span>
-                                <p class="experience-org">CMU / BOSCH</p>
-                                <h3 class="experience-role">Parking Spot Locator</h3>
-                                <p class="experience-duration">Aug 2025 - Dec 2025</p>
-                                <p class="experience-preview">Vision-language parking search with semantic mapping and a faster backend query pipeline.</p>
-                                <div class="experience-tags">
-                                    <span>VLMap</span>
-                                    <span>CLIP</span>
-                                    <span>AWS</span>
-                                </div>
-                            </div>
-                            <div class="experience-card-back">
-                                <h4>Parking Spot Locator</h4>
-                                <ul class="experience-highlights">
-                                    <li>Built a Bosch-sponsored parking spot locator using vision-language models to identify parking availability from visual sensor data.</li>
-                                    <li>Implemented a VLMap-based pipeline combining RGB, depth, and pose data with CLIP embeddings for spatial reasoning.</li>
-                                    <li>Developed and deployed a FastAPI backend on AWS to support real-time parking queries and semantic search.</li>
-                                    <li>Optimized the semantic search pipeline, reducing parking availability query latency from 45s to 15s.</li>
-                                </ul>
-                            </div>
-                        </article>
-                        <article class="experience-card experience-card-compact" aria-hidden="true">
-                            <div class="experience-card-front">
-                                <img class="experience-card-logo experience-card-logo-wide" src="images/ft_logo_pos_0119.png" alt="Franklin Templeton logo">
-                                <span class="experience-kind">Project</span>
-                                <p class="experience-org">Franklin Templeton</p>
-                                <h3 class="experience-role">Capitawise</h3>
-                                <p class="experience-duration">Mar 2024 - Jun 2024</p>
-                                <p class="experience-preview">Award-winning AI banking chatbot with better query resolution and faster service response.</p>
-                                <div class="experience-tags">
-                                    <span>GPT-4o</span>
-                                    <span>React</span>
-                                    <span>Flask</span>
-                                </div>
-                            </div>
-                            <div class="experience-card-back">
-                                <h4>Capitawise</h4>
-                                <ul class="experience-highlights">
-                                    <li>Led full-stack development of an AI-powered banking chatbot using GPT-4o, Node.js, Flask, and React, reducing customer service response time by 40%.</li>
-                                    <li>Implemented NLP-based query handling with text and voice output, improving banking query resolution accuracy from 68% to 85%.</li>
-                                    <li>Designed a dynamic real-time UI/UX that boosted user engagement and retention during pilot testing.</li>
-                                </ul>
-                            </div>
-                        </article>
-                        <article class="experience-card experience-card-compact" aria-hidden="true">
-                            <div class="experience-card-front">
-                                <img class="experience-card-logo experience-card-logo-wide" src="images/ft_logo_pos_0119.png" alt="Franklin Templeton logo">
-                                <span class="experience-kind">Project</span>
-                                <p class="experience-org">Franklin Templeton</p>
-                                <h3 class="experience-role">PawPrints</h3>
-                                <p class="experience-duration">Mar 2023 - Jun 2023</p>
-                                <p class="experience-preview">Blockchain medical data exchange with secure dashboards and faster API performance.</p>
-                                <div class="experience-tags">
-                                    <span>Web3</span>
-                                    <span>Express.js</span>
-                                    <span>MySQL</span>
-                                </div>
-                            </div>
-                            <div class="experience-card-back">
-                                <h4>PawPrints</h4>
-                                <ul class="experience-highlights">
-                                    <li>Built a blockchain-based medical data exchange platform using React.js, Express.js, MySQL, Web3.js, and JWT authentication.</li>
-                                    <li>Implemented token-based on-chain record storage and role-specific dashboards for secure, permission-based access.</li>
-                                    <li>Optimized backend APIs to cut data retrieval time from 3s to &lt;1s, improving overall platform responsiveness.</li>
-                                </ul>
-                            </div>
-                        </article>
-                    </div>
-                </div>
+  <!-- ── About ──────────────────────────────────────────────────── -->
+  <section id="about" class="section section-alt" aria-label="About Bruce Cheng">
+    <div class="container">
+      <div class="about-layout">
+
+        <div class="about-left">
+          <div class="stats-grid">
+            <div class="stat-tile">
+              <span class="stat-value" data-count="3.6" data-decimals="1">3.6</span>
+              <span class="stat-label">GPA</span>
             </div>
-            <div class="experience-focus-panel" aria-hidden="true">
-                <div class="experience-focus-content"></div>
+            <div class="stat-tile">
+              <span class="stat-value" data-count="7" data-decimals="0">7</span>
+              <span class="stat-label">Projects</span>
             </div>
+            <div class="stat-tile">
+              <span class="stat-value" data-count="2" data-decimals="0">2</span>
+              <span class="stat-label">Roles</span>
+            </div>
+            <div class="stat-tile">
+              <span class="stat-value stat-text">CMU</span>
+              <span class="stat-label">MS '26</span>
+            </div>
+          </div>
+
+          <div class="edu-cards">
+            <div class="edu-card">
+              <img src="images/CMULogo.jpg" alt="Carnegie Mellon University" class="edu-logo">
+              <div class="edu-info">
+                <strong>Carnegie Mellon University</strong>
+                <span>MS Software Engineering</span>
+                <span class="edu-meta">GPA 3.6 · Silicon Valley · 2025–2026</span>
+              </div>
+            </div>
+            <div class="edu-card">
+              <div class="edu-logo edu-logo-ucsd" aria-label="UC San Diego">UCSD</div>
+              <div class="edu-info">
+                <strong>UC San Diego</strong>
+                <span>BS Mathematics–Computer Science</span>
+                <span class="edu-meta">GPA 3.6 · San Diego · 2021–2025</span>
+              </div>
+            </div>
+          </div>
         </div>
-    </section>
 
-    <!-- Resume Section -->
-    <section id="resume" class="section">
-        <div class="container">
-            <h2 class="section-title">Resume</h2>
-            <div class="resume-content">
-                <div class="resume-summary">
-                    <h3>Professional Summary</h3>
-                    <p>
-                        Mid-level AI product developer and product manager with a strong background in building AI-driven conversational solutions. 
-                        Delivered an AI call assistant that reduced average handling time by 35% and cut intent matching costs sixfold while guiding 
-                        two full product cycles across finance and healthcare domains. Built a medical chatbot using FastAPI, LangChain, and Gemini 
-                        that improved response speed by 40% and supported over 50 disease diagnoses. Seeking to apply product strategy and technical 
-                        expertise to accelerate AI product innovation and drive measurable business outcomes.
-                    </p>
-                </div>
-                
-                <div class="resume-section">
-                    <h3>Education</h3>
-                    <div class="resume-item">
-                        <div class="resume-item-header">
-                            <h4>Carnegie Mellon University, Silicon Valley</h4>
-                            <span class="resume-date">Aug 2025 - Dec 2026</span>
-                        </div>
-                        <p class="resume-subtitle">Master of Science, Software Engineering (GPA: 3.5) | Mountain View</p>
-                        <p class="resume-subtitle">Coursework: Software Engineering, Foundation of Computer System, Functional Programming, AI in Industry, Gen AI in Practice, Machine Learning in Software Engineering</p>
-                    </div>
-                    <div class="resume-item">
-                        <div class="resume-item-header">
-                            <h4>University of California San Diego</h4>
-                            <span class="resume-date">Sep 2021 - Apr 2025</span>
-                        </div>
-                        <p class="resume-subtitle">Bachelor of Science, Mathematics-Computer Science (GPA: 3.6)</p>
-                        <p class="resume-subtitle">Coursework: Software Engineering, Design & Analysis of Algorithms, Advanced Data Structures, Computer Systems, Parallel Computing, Computer Security, Online Database Applications, Recommendation Systems, Computer Vision</p>
-                    </div>
-                </div>
-
-                <div class="resume-section">
-                    <h3>Skills</h3>
-                    <div class="skills-container">
-                        <span class="skill-tag">Python</span>
-                        <span class="skill-tag">C/C++</span>
-                        <span class="skill-tag">Java</span>
-                        <span class="skill-tag">JavaScript</span>
-                        <span class="skill-tag">Go</span>
-                        <span class="skill-tag">Node.js</span>
-                        <span class="skill-tag">React</span>
-                        <span class="skill-tag">HTML</span>
-                        <span class="skill-tag">CSS</span>
-                        <span class="skill-tag">TypeScript</span>
-                        <span class="skill-tag">Swift</span>
-                        <span class="skill-tag">F#</span>
-                        <span class="skill-tag">Flask</span>
-                        <span class="skill-tag">Express.js</span>
-                        <span class="skill-tag">FastAPI</span>
-                        <span class="skill-tag">LangChain</span>
-                        <span class="skill-tag">LangGraph</span>
-                        <span class="skill-tag">LLM APIs</span>
-                        <span class="skill-tag">Prompt Engineering</span>
-                        <span class="skill-tag">RAG</span>
-                        <span class="skill-tag">MySQL</span>
-                        <span class="skill-tag">MongoDB</span>
-                        <span class="skill-tag">AWS</span>
-                        <span class="skill-tag">GCP</span>
-                        <span class="skill-tag">Docker</span>
-                        <span class="skill-tag">Kubernetes</span>
-                        <span class="skill-tag">Git</span>
-                        <span class="skill-tag">CI/CD</span>
-                        <span class="skill-tag">Pandas</span>
-                        <span class="skill-tag">NumPy</span>
-                        <span class="skill-tag">Next.js</span>
-                        <span class="skill-tag">Streamlit</span>
-                        <span class="skill-tag">Socket.io</span>
-                        <span class="skill-tag">Web3</span>
-                        <span class="skill-tag">FastMCP</span>
-                        <span class="skill-tag">Milvus</span>
-                        <span class="skill-tag">Orchestration</span>
-                        <span class="skill-tag">TensorFlow</span>
-                        <span class="skill-tag">Relational Database</span>
-                        <span class="skill-tag">Testing</span>
-                        <span class="skill-tag">Terraform</span>
-                        <span class="skill-tag">Agile/Scrum</span>
-                        <span class="skill-tag">A/B Testing</span>
-                        <span class="skill-tag">Product Roadmap Planning</span>
-                        <span class="skill-tag">User Research</span>
-                        <span class="skill-tag">Market Analysis</span>
-                        <span class="skill-tag">Figma</span>
-                    </div>
-                </div>
-
-                <div class="resume-section">
-                    <h3>Work Experience</h3>
-
-                    <div class="resume-item">
-                        <div class="resume-item-header">
-                            <h4>Helport AI</h4>
-                            <span class="resume-date">Sep 2024 - Jun 2025 · AI Product Developer / Product Manager</span>
-                        </div>
-                        <p class="resume-subtitle">
-                            Led product strategy for an AI-driven call assistant across mortgage, healthcare, insurance, and government sectors,
-                            guiding 2+ end-to-end product cycles from discovery to launch.
-                        </p>
-                        <ul class="resume-subtitle">
-                            <li>Designed and shipped an AI-powered dialogue flow system using FastAPI and a curated knowledge base, cutting average handling time by 35%.</li>
-                            <li>Redesigned the intent-matching and recommendation engine, migrating from Google Dialogflow to Transformer + ID with Gemini 2.0 and Vertex AI, reducing per-intent cost from $0.002 to $0.00031 (6× cheaper).</li>
-                            <li>Partnered with engineering and R&D to define technical requirements and manage agile sprints, reducing feature development time from 14 to 5 days.</li>
-                            <li>Ran A/B tests and analytics that improved AI model accuracy by 35% and increased sales conversion by 15%.</li>
-                            <li>Promoted from intern to full-time AI Product Developer in March 2025 after building a data-processing pipeline with Pandas and NumPy that improved preprocessing efficiency.</li>
-                        </ul>
-                    </div>
-
-                    <div class="resume-item">
-                        <div class="resume-item-header">
-                            <h4>Convoloo</h4>
-                            <span class="resume-date">Jul 2024 - Sep 2024 · Software Development Engineer Intern</span>
-                        </div>
-                        <p class="resume-subtitle">
-                            Built production-ready features for a web-based AI medical chatbot, focusing on performance, reliability, and patient experience.
-                        </p>
-                        <ul class="resume-subtitle">
-                            <li>Developed a FastAPI + LangChain backend with Google Gemini and Google Cloud to accurately identify 50+ common diseases from patient queries.</li>
-                            <li>Implemented RAG-based knowledge retrieval on secure cloud infrastructure using Terraform and MySQL, reducing average response time from 2.5s to 1.5s and improving answer relevance for follow-up questions.</li>
-                            <li>Integrated Google Calendar API for appointment booking and enhanced UI/UX through iterative design reviews, enabling 50+ bookings during pilot testing.</li>
-                            <li>Led backend integration of the chatbot with LangServe and LangGraph using FastAPI and NestJS, streamlining deployment and improving overall chatbot performance.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="resume-section">
-                    <h3>Projects</h3>
-                    <div class="resume-item">
-                        <div class="resume-item-header">
-                            <h4>Research Assistant Agent | Project Code Demo | CMU 14-825</h4>
-                            <span class="resume-date">Jan 2026 - Mar 2026</span>
-                        </div>
-                        <ul class="resume-subtitle">
-                            <li>Built a LangGraph-based AI agent with a RAG pipeline to answer questions from 30 indexed academic papers.</li>
-                            <li>Developed a Streamlit web app for paper upload, multilingual querying, and context-grounded answers with references.</li>
-                            <li>Deployed containerized services including the AI agent, translation API, and vector database on Google Kubernetes Engine with auto-scaling.</li>
-                            <li>Implemented semantic retrieval using vector embeddings and compared indexing algorithms including HNSW, IVF_PQ, and DiskANN.</li>
-                        </ul>
-                    </div>
-                    <div class="resume-item">
-                        <div class="resume-item-header">
-                            <h4>Parking Spot Locator | CMU/BOSCH</h4>
-                            <span class="resume-date">Aug 2025 - Dec 2025</span>
-                        </div>
-                        <p class="resume-subtitle">Built a Bosch-sponsored parking spot locator using vision-language models to semantically identify parking availability from visual sensor data.</p>
-                        <ul class="resume-subtitle">
-                            <li>Implemented a VLMap-based pipeline combining RGB, depth, and pose data with CLIP embeddings for spatial reasoning.</li>
-                            <li>Developed and deployed a FastAPI backend on AWS to support real-time parking queries and semantic search.</li>
-                            <li>Optimized the semantic search pipeline, reducing parking availability query latency from 45s to 15s through improved embedding retrieval and backend query processing.</li>
-                        </ul>
-                        <p class="resume-subtitle"><a href="https://psl.fogx.link" target="_blank">psl.fogx.link</a></p>
-                    </div>
-                    <div class="resume-item">
-                        <div class="resume-item-header">
-                            <h4>Capitawise (2nd Place, $7,000 Prize) | Franklin Templeton</h4>
-                            <span class="resume-date">Mar 2024 - Jun 2024</span>
-                        </div>
-                        <p class="resume-subtitle">Led full-stack development of an AI-powered banking chatbot using GPT-4o, Node.js, Flask, and React.</p>
-                        <ul class="resume-subtitle">
-                            <li>Reduced customer service response time by 40%.</li>
-                            <li>Implemented NLP-based query handling with text and voice output, improving banking query resolution accuracy from 68% to 85%.</li>
-                            <li>Designed a dynamic real-time UI/UX that improved engagement and retention during pilot testing.</li>
-                        </ul>
-                    </div>
-                    <div class="resume-item">
-                        <div class="resume-item-header">
-                            <h4>PawPrints (1st Place, $15,000 Prize) | Franklin Templeton</h4>
-                            <span class="resume-date">Mar 2023 - Jun 2023</span>
-                        </div>
-                        <p class="resume-subtitle">Built a blockchain-based medical data exchange platform using React.js, Express.js, MySQL, Web3.js, and JWT authentication to securely connect pet owners, clinics, and insurers.</p>
-                        <ul class="resume-subtitle">
-                            <li>Implemented token-based on-chain record storage and role-specific dashboards for secure, permission-based access.</li>
-                            <li>Optimized backend APIs to cut data retrieval time from 3s to &lt;1s, improving platform responsiveness.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="resume-download">
-                    <a href="Chi Cheng-Resume-2026-March.pdf" class="btn btn-primary" download>Download Full Resume (PDF)</a>
-                </div>
-            </div>
+        <div class="about-right">
+          <p class="section-kicker">About</p>
+          <h2 class="about-heading">Building at the<br>frontier of AI</h2>
+          <p class="about-body">MS student in Software Engineering at Carnegie Mellon University, Silicon Valley, with hands-on experience building AI systems and agentic workflows that ship to production. Previously at Helport AI — reduced intent-matching cost by 6× and average handling time by 35% across mortgage, healthcare, and insurance verticals. Actively seeking Summer 2026 internships in software engineering, AI/agentic systems, or product roles.</p>
+          <div class="about-links">
+            <a href="https://github.com/Bruce0921" target="_blank" rel="noopener" class="about-link">GitHub ↗</a>
+            <a href="https://linkedin.com/in/chi-cheng-779b4a259/" target="_blank" rel="noopener" class="about-link">LinkedIn ↗</a>
+            <a href="Chi Cheng-Resume-2026-May.pdf" download class="about-link">Resume ↓</a>
+          </div>
         </div>
-    </section>
 
-    <!-- Hobbies Section -->
-    <section id="hobbies" class="section section-gray">
-        <div class="container">
-            <h2 class="section-title">Hobbies & Interests</h2>
-            <div class="hobbies-grid">
-                <div class="hobby-card">
-                    <div class="hobby-icon">📚</div>
-                    <h3>Reading</h3>
-                    <p>Tech, philosophy, and personal growth.</p>
-                </div>
-                <div class="hobby-card">
-                    <div class="hobby-icon">🎮</div>
-                    <h3>Gaming</h3>
-                    <p>Strategy and puzzle games.</p>
-                </div>
-                <div class="hobby-card">
-                    <div class="hobby-icon">✈️</div>
-                    <h3>Travel</h3>
-                    <p>Exploring new places and cultures.</p>
-                </div>
-                <div class="hobby-card">
-                    <div class="hobby-icon">📷</div>
-                    <h3>Photography</h3>
-                    <p>Capturing moments through photos.</p>
-                </div>
-                <div class="hobby-card">
-                    <div class="hobby-icon">🏃</div>
-                    <h3>Fitness</h3>
-                    <p>Running and staying active.</p>
-                </div>
-                <div class="hobby-card">
-                    <div class="hobby-icon">🎵</div>
-                    <h3>Music</h3>
-                    <p>Discovering new music.</p>
-                </div>
-                <div class="hobby-card">
-                    <div class="hobby-icon">🎨</div>
-                    <h3>Drawing</h3>
-                    <p>Sketching and visual art.</p>
-                </div>
-                <div class="hobby-card">
-                    <div class="hobby-icon">💻</div>
-                    <h3>Studying New Technology</h3>
-                    <p>Keeping up with new tech.</p>
-                </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Experience Timeline ───────────────────────────────────── -->
+  <section id="experience" class="section section-experience" aria-label="Work experience timeline">
+    <div class="exp-cmu-bg" aria-hidden="true"></div>
+    <div class="container">
+      <p class="section-kicker">Timeline</p>
+      <h2 class="section-heading">Where I've Worked</h2>
+    </div>
+
+    <div class="exp-marquee-wrap">
+      <div class="exp-marquee-inner" id="expMarquee">
+
+        <!-- ── Card set 1 ── -->
+        <article class="exp-card">
+          <div class="exp-card-head">
+            <img src="images/HelportLogo.jpg" alt="Helport AI" class="exp-logo">
+            <span class="bento-badge badge-work">Work</span>
+          </div>
+          <p class="exp-org">Helport AI</p>
+          <h3 class="exp-role">AI Product Developer / PM</h3>
+          <p class="exp-date">Sep 2024 – Jun 2025</p>
+          <div class="exp-chips">
+            <span class="metric green">35% AHT ↓</span>
+            <span class="metric green">6× cost ↓</span>
+          </div>
+        </article>
+
+        <article class="exp-card">
+          <div class="exp-card-head">
+            <img src="images/convoloo_logo.jpeg" alt="Convoloo" class="exp-logo">
+            <span class="bento-badge badge-work">Work</span>
+          </div>
+          <p class="exp-org">Convoloo</p>
+          <h3 class="exp-role">SDE Intern</h3>
+          <p class="exp-date">Jul 2024 – Sep 2024</p>
+          <div class="exp-chips">
+            <span class="metric green">2.5s → 1.5s</span>
+          </div>
+        </article>
+
+        <article class="exp-card">
+          <div class="exp-card-head">
+            <img src="images/CMULogo.jpg" alt="CMU" class="exp-logo">
+            <span class="bento-badge badge-project">Project</span>
+          </div>
+          <p class="exp-org">CMU 14-825</p>
+          <h3 class="exp-role">Research Assistant Agent</h3>
+          <p class="exp-date">Jan 2026 – Mar 2026</p>
+          <div class="exp-chips">
+            <span class="metric blue">30+ papers indexed</span>
+          </div>
+        </article>
+
+        <article class="exp-card">
+          <div class="exp-card-head">
+            <span class="live-badge">● LIVE</span>
+            <span class="bento-badge badge-project">Project</span>
+          </div>
+          <p class="exp-org">Independent</p>
+          <h3 class="exp-role">NightyNight</h3>
+          <p class="exp-date">Apr 2025 – Present</p>
+          <div class="exp-chips">
+            <span class="metric blue">LangGraph</span>
+            <span class="metric blue">ElevenLabs</span>
+          </div>
+        </article>
+
+        <article class="exp-card">
+          <div class="exp-card-head">
+            <img src="images/ft_logo_pos_0119.png" alt="Franklin Templeton" class="exp-logo exp-logo-ft">
+            <span class="bento-badge badge-project">Project</span>
+          </div>
+          <p class="exp-org">Franklin Templeton</p>
+          <h3 class="exp-role">Capitawise</h3>
+          <p class="exp-date">Mar – Jun 2024</p>
+          <div class="exp-chips">
+            <span class="metric amber">🏆 $7,000</span>
+          </div>
+        </article>
+
+        <article class="exp-card">
+          <div class="exp-card-head">
+            <img src="images/ft_logo_pos_0119.png" alt="Franklin Templeton" class="exp-logo exp-logo-ft">
+            <span class="bento-badge badge-project">Project</span>
+          </div>
+          <p class="exp-org">Franklin Templeton</p>
+          <h3 class="exp-role">PawPrints</h3>
+          <p class="exp-date">Mar – Jun 2023</p>
+          <div class="exp-chips">
+            <span class="metric amber">🥇 $15,000</span>
+          </div>
+        </article>
+
+        <article class="exp-card">
+          <div class="exp-card-head">
+            <img src="images/bosch_logo.png" alt="Bosch" class="exp-logo">
+            <span class="bento-badge badge-project">Project</span>
+          </div>
+          <p class="exp-org">CMU × BOSCH</p>
+          <h3 class="exp-role">Parking Spot Locator</h3>
+          <p class="exp-date">Aug – Dec 2025</p>
+          <div class="exp-chips">
+            <span class="metric green">3× faster</span>
+          </div>
+        </article>
+
+        <!-- ── Card set 2 (duplicate for seamless loop) ── -->
+        <article class="exp-card" aria-hidden="true">
+          <div class="exp-card-head">
+            <img src="images/HelportLogo.jpg" alt="" class="exp-logo">
+            <span class="bento-badge badge-work">Work</span>
+          </div>
+          <p class="exp-org">Helport AI</p>
+          <h3 class="exp-role">AI Product Developer / PM</h3>
+          <p class="exp-date">Sep 2024 – Jun 2025</p>
+          <div class="exp-chips">
+            <span class="metric green">35% AHT ↓</span>
+            <span class="metric green">6× cost ↓</span>
+          </div>
+        </article>
+
+        <article class="exp-card" aria-hidden="true">
+          <div class="exp-card-head">
+            <img src="images/convoloo_logo.jpeg" alt="" class="exp-logo">
+            <span class="bento-badge badge-work">Work</span>
+          </div>
+          <p class="exp-org">Convoloo</p>
+          <h3 class="exp-role">SDE Intern</h3>
+          <p class="exp-date">Jul 2024 – Sep 2024</p>
+          <div class="exp-chips">
+            <span class="metric green">2.5s → 1.5s</span>
+          </div>
+        </article>
+
+        <article class="exp-card" aria-hidden="true">
+          <div class="exp-card-head">
+            <img src="images/CMULogo.jpg" alt="" class="exp-logo">
+            <span class="bento-badge badge-project">Project</span>
+          </div>
+          <p class="exp-org">CMU 14-825</p>
+          <h3 class="exp-role">Research Assistant Agent</h3>
+          <p class="exp-date">Jan 2026 – Mar 2026</p>
+          <div class="exp-chips">
+            <span class="metric blue">30+ papers indexed</span>
+          </div>
+        </article>
+
+        <article class="exp-card" aria-hidden="true">
+          <div class="exp-card-head">
+            <span class="live-badge">● LIVE</span>
+            <span class="bento-badge badge-project">Project</span>
+          </div>
+          <p class="exp-org">Independent</p>
+          <h3 class="exp-role">NightyNight</h3>
+          <p class="exp-date">Apr 2025 – Present</p>
+          <div class="exp-chips">
+            <span class="metric blue">LangGraph</span>
+            <span class="metric blue">ElevenLabs</span>
+          </div>
+        </article>
+
+        <article class="exp-card" aria-hidden="true">
+          <div class="exp-card-head">
+            <img src="images/ft_logo_pos_0119.png" alt="" class="exp-logo exp-logo-ft">
+            <span class="bento-badge badge-project">Project</span>
+          </div>
+          <p class="exp-org">Franklin Templeton</p>
+          <h3 class="exp-role">Capitawise</h3>
+          <p class="exp-date">Mar – Jun 2024</p>
+          <div class="exp-chips">
+            <span class="metric amber">🏆 $7,000</span>
+          </div>
+        </article>
+
+        <article class="exp-card" aria-hidden="true">
+          <div class="exp-card-head">
+            <img src="images/ft_logo_pos_0119.png" alt="" class="exp-logo exp-logo-ft">
+            <span class="bento-badge badge-project">Project</span>
+          </div>
+          <p class="exp-org">Franklin Templeton</p>
+          <h3 class="exp-role">PawPrints</h3>
+          <p class="exp-date">Mar – Jun 2023</p>
+          <div class="exp-chips">
+            <span class="metric amber">🥇 $15,000</span>
+          </div>
+        </article>
+
+        <article class="exp-card" aria-hidden="true">
+          <div class="exp-card-head">
+            <img src="images/bosch_logo.png" alt="" class="exp-logo">
+            <span class="bento-badge badge-project">Project</span>
+          </div>
+          <p class="exp-org">CMU × BOSCH</p>
+          <h3 class="exp-role">Parking Spot Locator</h3>
+          <p class="exp-date">Aug – Dec 2025</p>
+          <div class="exp-chips">
+            <span class="metric green">3× faster</span>
+          </div>
+        </article>
+
+      </div><!-- /.exp-marquee-inner -->
+    </div><!-- /.exp-marquee-wrap -->
+  </section>
+
+  <!-- ── Work: Bento Grid ───────────────────────────────────────── -->
+  <section id="work" class="section" aria-label="Work experience and projects">
+    <div class="container">
+      <p class="section-kicker">Work &amp; Projects</p>
+      <h2 class="section-heading">What I've Built</h2>
+
+      <div class="bento-grid">
+
+        <!-- Helport AI — 7 col × 2 rows -->
+        <article class="bento-card bento-helport" data-key="helport"
+                 role="button" tabindex="0" aria-label="Helport AI — click to expand">
+          <div class="bento-inner">
+            <div class="bento-meta-row">
+              <span class="bento-badge badge-work">Work</span>
+              <img src="images/HelportLogo.jpg" alt="Helport AI" class="bento-logo">
             </div>
-            <div class="artwork-showcase">
-                <div class="artwork-header">
-                    <p class="artwork-kicker">Artwork</p>
-                    <h3>Some of My Digital Art</h3>
-                </div>
-                <div class="artwork-grid">
-                    <figure class="artwork-card">
-                        <img src="Gwen.PNG" alt="Gwen-inspired artwork by Bruce Cheng">
-                    </figure>
-                    <figure class="artwork-card">
-                        <img src="IMG_2629.PNG" alt="Sci-fi inspired artwork by Bruce Cheng">
-                    </figure>
-                </div>
+            <p class="bento-org">Helport AI</p>
+            <h3 class="bento-title">AI Product Developer / PM</h3>
+            <p class="bento-date">Sep 2024 – Jun 2025</p>
+            <div class="bento-metrics">
+              <span class="metric green">35% AHT ↓</span>
+              <span class="metric green">6× cost reduction</span>
+              <span class="metric green">14d → 5d cycle</span>
+              <span class="metric green">15% conversion ↑</span>
             </div>
-            <div class="personality-showcase">
-                <div class="personality-copy">
-                    <p class="artwork-kicker">Personality</p>
-                    <h3>MBTI Snapshot</h3>
-                    <p>Campaigner (ENFP-A) with a creative, people-oriented profile.</p>
-                </div>
-                <figure class="personality-card">
-                    <img src="images/MBTI.png" alt="MBTI personality test results screenshot showing Campaigner ENFP-A">
-                </figure>
+            <p class="bento-desc">Led product strategy for an AI-driven call assistant across mortgage, healthcare, insurance, and government. Migrated intent matching from Dialogflow to Gemini 2.0 + Vertex AI, slashing per-match cost 6×. Promoted to FT in March 2025.</p>
+            <div class="bento-tags">
+              <span>FastAPI</span><span>Gemini 2.0</span><span>Vertex AI</span><span>A/B Testing</span><span>Docker</span><span>Python</span>
             </div>
+          </div>
+        </article>
+
+        <!-- NightyNight — 5 col × 2 rows -->
+        <article class="bento-card bento-nighty" data-key="nighty"
+                 role="button" tabindex="0" aria-label="NightyNight — click to expand">
+          <div class="bento-inner">
+            <div class="bento-meta-row">
+              <span class="bento-badge badge-project">Project</span>
+              <span class="live-badge">● LIVE</span>
+            </div>
+            <p class="bento-org">Independent</p>
+            <h3 class="bento-title">NightyNight</h3>
+            <p class="bento-date">Apr 2025 – Present</p>
+            <div class="bento-metrics">
+              <span class="metric blue">LangGraph multi-agent</span>
+              <span class="metric blue">ElevenLabs TTS</span>
+            </div>
+            <p class="bento-desc">Full-stack AI bedtime science story generator with React/TS frontend and FastAPI backend over SSE, age-adaptive prompting for 4 audience profiles and 7 narrator voices.</p>
+            <div class="bento-tags">
+              <span>LangGraph</span><span>FastAPI</span><span>React/TS</span><span>ElevenLabs</span><span>SSE</span>
+            </div>
+            <a href="https://nightynight-1.onrender.com/" target="_blank" rel="noopener"
+               class="bento-demo-link" onclick="event.stopPropagation()">Demo ↗</a>
+          </div>
+        </article>
+
+        <!-- Convoloo — 5 col × 1 row -->
+        <article class="bento-card bento-convoloo" data-key="convoloo"
+                 role="button" tabindex="0" aria-label="Convoloo — click to expand">
+          <div class="bento-inner">
+            <div class="bento-meta-row">
+              <span class="bento-badge badge-work">Work</span>
+              <img src="images/convoloo_logo.jpeg" alt="Convoloo" class="bento-logo">
+            </div>
+            <p class="bento-org">Convoloo</p>
+            <h3 class="bento-title">Software Development Engineer Intern</h3>
+            <p class="bento-date">Jul 2024 – Sep 2024</p>
+            <div class="bento-metrics">
+              <span class="metric green">2.5s → 1.5s response</span>
+              <span class="metric green">50+ bookings</span>
+            </div>
+            <div class="bento-tags">
+              <span>LangChain</span><span>FastAPI</span><span>Terraform</span><span>MySQL</span><span>GCP</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Research Assistant Agent — 7 col × 1 row -->
+        <article class="bento-card bento-research" data-key="research"
+                 role="button" tabindex="0" aria-label="Research Assistant Agent — click to expand">
+          <div class="bento-inner">
+            <div class="bento-meta-row">
+              <span class="bento-badge badge-project">Project</span>
+              <img src="images/CMULogo.jpg" alt="CMU" class="bento-logo">
+            </div>
+            <p class="bento-org">CMU 14-825</p>
+            <h3 class="bento-title">Research Assistant Agent</h3>
+            <p class="bento-date">Jan 2026 – Mar 2026</p>
+            <div class="bento-metrics">
+              <span class="metric blue">30 papers indexed</span>
+              <span class="metric blue">GKE auto-scale</span>
+              <span class="metric blue">Multilingual</span>
+            </div>
+            <div class="bento-tags">
+              <span>LangGraph</span><span>RAG</span><span>Streamlit</span><span>GKE</span><span>Milvus</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Parking Spot Locator — 4 col -->
+        <article class="bento-card bento-parking" data-key="parking"
+                 role="button" tabindex="0" aria-label="Parking Spot Locator — click to expand">
+          <div class="bento-inner">
+            <div class="bento-meta-row">
+              <span class="bento-badge badge-project">Project</span>
+              <div class="bento-logos-pair">
+                <img src="images/CMULogo.jpg" alt="CMU" class="bento-logo-sm">
+                <img src="images/bosch_logo.png" alt="Bosch" class="bento-logo-sm bento-logo-wide-sm">
+              </div>
+            </div>
+            <h3 class="bento-title">Parking Spot Locator</h3>
+            <p class="bento-date">Aug – Dec 2025</p>
+            <div class="bento-metrics">
+              <span class="metric green">3× faster (45s→15s)</span>
+            </div>
+            <div class="bento-tags">
+              <span>VLMap</span><span>CLIP</span><span>AWS</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Capitawise — 4 col -->
+        <article class="bento-card bento-capitawise" data-key="capitawise"
+                 role="button" tabindex="0" aria-label="Capitawise — click to expand">
+          <div class="bento-inner">
+            <div class="bento-meta-row">
+              <span class="bento-badge badge-project">Project</span>
+              <img src="images/ft_logo_pos_0119.png" alt="Franklin Templeton" class="bento-logo bento-logo-ft">
+            </div>
+            <h3 class="bento-title">Capitawise</h3>
+            <p class="bento-date">Mar – Jun 2024</p>
+            <div class="bento-metrics">
+              <span class="metric amber">🏆 2nd Place · $7,000</span>
+            </div>
+            <div class="bento-tags">
+              <span>GPT-4o</span><span>React</span><span>Flask</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- PawPrints — 4 col -->
+        <article class="bento-card bento-pawprints" data-key="pawprints"
+                 role="button" tabindex="0" aria-label="PawPrints — click to expand">
+          <div class="bento-inner">
+            <div class="bento-meta-row">
+              <span class="bento-badge badge-project">Project</span>
+              <img src="images/ft_logo_pos_0119.png" alt="Franklin Templeton" class="bento-logo bento-logo-ft">
+            </div>
+            <h3 class="bento-title">PawPrints</h3>
+            <p class="bento-date">Mar – Jun 2023</p>
+            <div class="bento-metrics">
+              <span class="metric amber">🥇 1st Place · $15,000</span>
+            </div>
+            <div class="bento-tags">
+              <span>Web3</span><span>Express.js</span><span>MySQL</span>
+            </div>
+          </div>
+        </article>
+
+      </div><!-- /.bento-grid -->
+    </div>
+
+    <!-- Bento detail overlay -->
+    <div class="bento-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Project details">
+      <div class="bento-overlay-panel">
+        <button class="bento-close-btn" aria-label="Close details">✕</button>
+        <div class="bento-overlay-body"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── Stack ──────────────────────────────────────────────────── -->
+  <section id="stack" class="section section-alt" aria-label="Technology stack">
+    <div class="container">
+      <p class="section-kicker">Technologies</p>
+      <h2 class="section-heading">Tech Stack</h2>
+      <div class="stack-grid">
+        <div class="stack-row">
+          <span class="stack-label">Languages</span>
+          <div class="stack-pills">
+            <span>Python</span><span>C/C++</span><span>JavaScript</span><span>TypeScript</span>
+            <span>Go</span><span>Java</span><span>Swift</span><span>F#</span>
+          </div>
         </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="section section-gray">
-        <div class="container">
-            <h2 class="section-title">Contact Me</h2>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h3>Let's Connect</h3>
-                    <p>I'm always interested in hearing about new opportunities, collaborations, or just having a conversation. Feel free to reach out!</p>
-                    
-                    <div class="contact-methods">
-                        <div class="contact-item">
-                            <span class="contact-icon">📧</span>
-                            <div>
-                                <strong>Email</strong>
-                                <p><a href="mailto:bruceche@andrew.cmu.edu">bruceche@andrew.cmu.edu</a></p>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-icon">💼</span>
-                            <div>
-                                <strong>LinkedIn</strong>
-                                <p><a href="https://linkedin.com/in/chi-cheng-779b4a259/" target="_blank">linkedin.com/in/chi-cheng-779b4a259/</a></p>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-icon">💻</span>
-                            <div>
-                                <strong>GitHub</strong>
-                                <p><a href="https://github.com/Bruce0921" target="_blank">github.com/Bruce0921</a></p>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-icon">📱</span>
-                            <div>
-                                <strong>Phone</strong>
-                                <p><a href="tel:+18583050278">858-305-0278</a></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="contact-form">
-                    <h3>Send a Message</h3>
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" rows="5" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send Message</button>
-                    </form>
-                </div>
-            </div>
+        <div class="stack-row">
+          <span class="stack-label">AI / ML</span>
+          <div class="stack-pills">
+            <span>LangGraph</span><span>LangChain</span><span>RAG</span><span>Prompt Engineering</span>
+            <span>PyTorch</span><span>TensorFlow</span><span>vLLM</span><span>Hugging Face</span>
+            <span>OpenAI API</span><span>Milvus</span><span>LangSmith</span>
+          </div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 Bruce. All rights reserved.</p>
-            <div class="social-links">
-                <a href="https://github.com/Bruce0921" target="_blank" aria-label="GitHub">GitHub</a>
-                <a href="https://linkedin.com/in/chi-cheng-779b4a259/" target="_blank" aria-label="LinkedIn">LinkedIn</a>
-            </div>
+        <div class="stack-row">
+          <span class="stack-label">Frameworks</span>
+          <div class="stack-pills">
+            <span>FastAPI</span><span>React</span><span>Next.js</span><span>Node.js</span>
+            <span>Flask</span><span>Express.js</span><span>Streamlit</span><span>FastMCP</span>
+          </div>
         </div>
-    </footer>
+        <div class="stack-row">
+          <span class="stack-label">Cloud &amp; DevOps</span>
+          <div class="stack-pills">
+            <span>AWS</span><span>GCP</span><span>Docker</span><span>Kubernetes</span>
+            <span>Terraform</span><span>CI/CD</span>
+          </div>
+        </div>
+        <div class="stack-row">
+          <span class="stack-label">Databases</span>
+          <div class="stack-pills">
+            <span>MySQL</span><span>MongoDB</span><span>Milvus</span><span>PostgreSQL</span>
+          </div>
+        </div>
+        <div class="stack-row">
+          <span class="stack-label">Product</span>
+          <div class="stack-pills">
+            <span>A/B Testing</span><span>Figma</span><span>Agile/Scrum</span>
+            <span>LangSmith</span><span>User Research</span><span>Product Roadmap</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <script src="script.js"></script>
+  <!-- ── Life ───────────────────────────────────────────────────── -->
+  <section id="life" class="section" aria-label="Life and interests">
+    <div class="container">
+      <p class="section-kicker">Beyond Code</p>
+      <h2 class="section-heading">Life &amp; Interests</h2>
+
+      <div class="hobbies-grid">
+        <div class="hobby-card"><div class="hobby-icon">📚</div><h3>Reading</h3><p>Tech, philosophy, and personal growth.</p></div>
+        <div class="hobby-card"><div class="hobby-icon">🎮</div><h3>Gaming</h3><p>Strategy and puzzle games.</p></div>
+        <div class="hobby-card"><div class="hobby-icon">✈️</div><h3>Travel</h3><p>Exploring new places and cultures.</p></div>
+        <div class="hobby-card"><div class="hobby-icon">📷</div><h3>Photography</h3><p>Capturing moments through photos.</p></div>
+        <div class="hobby-card"><div class="hobby-icon">🏃</div><h3>Fitness</h3><p>Running and staying active.</p></div>
+        <div class="hobby-card"><div class="hobby-icon">🎵</div><h3>Music</h3><p>Discovering new music.</p></div>
+        <div class="hobby-card"><div class="hobby-icon">🎨</div><h3>Drawing</h3><p>Sketching and digital art.</p></div>
+        <div class="hobby-card"><div class="hobby-icon">💻</div><h3>New Tech</h3><p>Keeping up with what's next.</p></div>
+      </div>
+
+      <div class="life-showcase">
+        <div class="artwork-block">
+          <p class="section-kicker">Artwork</p>
+          <h3 class="life-subheading">Digital Art</h3>
+          <div class="artwork-grid">
+            <figure class="artwork-card">
+              <img src="Gwen.PNG" alt="Gwen-inspired digital artwork by Bruce Cheng" loading="lazy">
+            </figure>
+            <figure class="artwork-card">
+              <img src="IMG_2629.PNG" alt="Sci-fi inspired digital artwork by Bruce Cheng" loading="lazy">
+            </figure>
+          </div>
+        </div>
+        <div class="mbti-block">
+          <p class="section-kicker">Personality</p>
+          <h3 class="life-subheading">MBTI Snapshot</h3>
+          <p class="mbti-desc">Campaigner (ENFP-A) — creative, people-oriented, and driven by possibility.</p>
+          <figure class="mbti-card">
+            <img src="images/MBTI.png" alt="MBTI personality result — ENFP-A Campaigner" loading="lazy">
+          </figure>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Contact ────────────────────────────────────────────────── -->
+  <section id="contact" class="section section-contact" aria-label="Contact Bruce Cheng">
+    <div class="contact-glow" aria-hidden="true"></div>
+    <div class="container">
+      <p class="section-kicker">Get In Touch</p>
+      <h2 class="contact-heading">Let's Work<br>Together</h2>
+      <p class="contact-sub">Open to internships, collaborations, and interesting conversations.</p>
+
+      <div class="contact-cards">
+        <a href="mailto:bruceche@andrew.cmu.edu" class="contact-card">
+          <span class="contact-icon">📧</span>
+          <span class="contact-label">Email</span>
+          <span class="contact-value">bruceche@andrew.cmu.edu</span>
+        </a>
+        <a href="https://linkedin.com/in/chi-cheng-779b4a259/" target="_blank" rel="noopener" class="contact-card">
+          <span class="contact-icon">💼</span>
+          <span class="contact-label">LinkedIn</span>
+          <span class="contact-value">chi-cheng-779b4a259</span>
+        </a>
+        <a href="https://github.com/Bruce0921" target="_blank" rel="noopener" class="contact-card">
+          <span class="contact-icon">💻</span>
+          <span class="contact-label">GitHub</span>
+          <span class="contact-value">Bruce0921</span>
+        </a>
+        <a href="tel:+18583050278" class="contact-card">
+          <span class="contact-icon">📱</span>
+          <span class="contact-label">Phone</span>
+          <span class="contact-value">858-305-0278</span>
+        </a>
+      </div>
+
+      <form id="contactForm" class="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required placeholder="your@email.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" required placeholder="What's on your mind?"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Message →</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© 2026 Bruce Cheng</p>
+      <div class="footer-links">
+        <a href="https://github.com/Bruce0921"                    target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/in/chi-cheng-779b4a259/"    target="_blank" rel="noopener">LinkedIn</a>
+        <a href="Chi Cheng-Resume-2026-May.pdf" download>Resume</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
