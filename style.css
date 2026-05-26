@@ -86,6 +86,7 @@ ul { list-style: none; }
 }
 
 .section-heading {
+  font-family: 'Inter', sans-serif;
   font-size: clamp(1.75rem, 3.5vw, 2.5rem);
   font-weight: 700;
   color: var(--text-1);
@@ -349,10 +350,11 @@ ul { list-style: none; }
 }
 
 .hero-name {
-  font-size: clamp(3.6rem, 10vw, 8.5rem);
-  font-weight: 900;
-  letter-spacing: -0.045em;
-  line-height: 0.9;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(3rem, 8.5vw, 8rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
 }
 .hero-name-line1 {
   display: block;
@@ -523,8 +525,11 @@ ul { list-style: none; }
 
 .about-right { display: flex; flex-direction: column; justify-content: center; }
 .about-heading {
+  font-family: 'Inter', sans-serif;
   font-size: clamp(1.8rem, 3.5vw, 2.6rem);
   font-weight: 800;
+  font-style: normal;
+  text-transform: none;
   color: var(--text-1);
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -800,8 +805,11 @@ ul { list-style: none; }
   color: var(--text-3);
 }
 .overlay-title {
+  font-family: 'Inter', sans-serif;
   font-size: clamp(1.4rem, 3vw, 2rem);
   font-weight: 800;
+  font-style: normal;
+  text-transform: none;
   color: var(--text-1);
   letter-spacing: -0.025em;
   line-height: 1.15;
@@ -1013,8 +1021,11 @@ ul { list-style: none; }
 }
 
 .contact-heading {
+  font-family: 'Inter', sans-serif;
   font-size: clamp(2.5rem, 6vw, 5rem);
   font-weight: 900;
+  font-style: normal;
+  text-transform: none;
   color: var(--text-1);
   letter-spacing: -0.04em;
   line-height: 1.0;
@@ -1394,12 +1405,15 @@ body::after {
   mix-blend-mode: overlay;
 }
 
-/* ── Editorial hero typography ──────────────────────────────────── */
+/* ── Hero typography override ────────────────────────────────────── */
 .hero-name {
-  font-size: clamp(5rem, 14vw, 13rem) !important;
-  letter-spacing: -0.045em !important;
-  line-height: 0.88 !important;
-  font-weight: 900 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: clamp(4rem, 11vw, 10rem) !important;
+  font-style: normal !important;
+  font-weight: 800 !important;
+  text-transform: none !important;
+  letter-spacing: -0.04em !important;
+  line-height: 0.92 !important;
 }
 .hero-name-line1 {
   /* "BRUCE" — warm white */
