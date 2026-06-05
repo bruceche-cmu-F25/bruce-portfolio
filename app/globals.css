@@ -1,6 +1,6 @@
 /* ================================================================
-   BRUCE CHENG — Broken IDE Design System
-   VSCode chrome · tilted cards · electric lime × deep violet
+   BRUCE CHENG — Broken IDE · CMU Tartan Edition
+   VSCode chrome · tilted cards · gold × crimson tartan
    ================================================================ */
 
 :root {
@@ -10,27 +10,30 @@
   --sidebar-w:   220px;
   --statusbar-h: 26px;
 
-  --bg-1:     #0D0D14;
-  --bg-2:     #11111D;
-  --bg-3:     #16162A;
-  --bg-4:     #1E1E38;
-  --titlebar: #080810;
-  --tabbar:   #0F0F1C;
+  --bg-1:     #080C14;
+  --bg-2:     #0D1120;
+  --bg-3:     #121828;
+  --bg-4:     #1A2235;
+  --titlebar: #050810;
+  --tabbar:   #0A0E1A;
 
-  --lime:   #CBFF47;
-  --violet: #9D4EDD;
-  --pink:   #FF36AB;
-  --cyan:   #36C9FF;
-  --amber:  #FFB347;
-  --red:    #FF5370;
-  --green:  #9ECE6A;
+  --lime:    #FFB81C;   /* CMU gold — primary accent */
+  --violet:  #C41230;   /* CMU crimson — status bar & key highlights */
+  --gold:    #FFB81C;
+  --crimson: #C41230;
+  --forest:  #1B7340;
+  --pink:    #FF4560;
+  --cyan:    #36C9FF;
+  --amber:   #FFB347;
+  --red:     #FF5370;
+  --green:   #9ECE6A;
 
-  --text-1: #D4D4EE;
-  --text-2: #7070A0;
-  --text-3: #3A3A5C;
+  --text-1: #D8D8EE;
+  --text-2: #6A6A9A;
+  --text-3: #363658;
 
   --border:       rgba(255,255,255,0.06);
-  --border-focus: rgba(203,255,71,0.25);
+  --border-focus: rgba(255,184,28,0.28);
 
   --syn-keyword: #BB9AF7;
   --syn-func:    #7AA2F7;
@@ -131,7 +134,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 }
 .vsc-file:hover { color: var(--text-1); background: rgba(255,255,255,0.04); }
 .vsc-file.active {
-  color: var(--text-1); background: rgba(203,255,71,0.06);
+  color: var(--text-1); background: rgba(255,184,28,0.06);
   border-left-color: var(--lime);
 }
 .vsc-file-icon { font-size: 0.85rem; flex-shrink: 0; }
@@ -234,7 +237,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 }
 .cursor-ring {
   position: fixed; z-index: 9998; width: 28px; height: 28px; border-radius: 50%;
-  border: 1.5px solid rgba(203,255,71,0.5); pointer-events: none;
+  border: 1.5px solid rgba(255,184,28,0.5); pointer-events: none;
   transition: width 0.2s, height 0.2s, border-color 0.2s;
 }
 .cursor-ring.is-hovered { width: 44px; height: 44px; border-color: var(--lime); }
@@ -247,8 +250,8 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   cursor: pointer; transition: all 0.2s var(--ease);
   border: none; text-decoration: none; font-family: inherit;
 }
-.btn-primary { background: var(--lime); color: #0D0D14; }
-.btn-primary:hover { background: #DCFF6F; box-shadow: 0 0 24px rgba(203,255,71,0.35); transform: translateY(-1px); }
+.btn-primary { background: var(--lime); color: #080C14; font-weight: 700; }
+.btn-primary:hover { background: #FFCD5E; box-shadow: 0 0 24px rgba(255,184,28,0.45); transform: translateY(-1px); }
 .btn-ghost { background: transparent; color: var(--text-1); border: 1.5px solid var(--border-focus); }
 .btn-ghost:hover { border-color: var(--lime); color: var(--lime); transform: translateY(-1px); }
 
@@ -310,12 +313,12 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .hero-photo {
   width: 260px; height: 260px; border-radius: 50%;
   object-fit: cover; object-position: center top;
-  border: 2px solid rgba(203,255,71,0.2);
-  box-shadow: 0 0 60px rgba(203,255,71,0.1);
+  border: 2px solid rgba(255,184,28,0.2);
+  box-shadow: 0 0 60px rgba(255,184,28,0.1);
 }
 .hero-photo-ring {
   position: absolute; inset: -16px; border-radius: 50%;
-  border: 1px dashed rgba(203,255,71,0.15);
+  border: 1px dashed rgba(255,184,28,0.15);
   animation: spin 20s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -384,7 +387,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .about-links  { display: flex; gap: 1rem; flex-wrap: wrap; }
 .about-link {
   font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: var(--lime);
-  border-bottom: 1px solid rgba(203,255,71,0.3); padding-bottom: 1px; transition: border-color 0.15s;
+  border-bottom: 1px solid rgba(255,184,28,0.3); padding-bottom: 1px; transition: border-color 0.15s;
 }
 .about-link:hover { border-color: var(--lime); }
 
@@ -455,12 +458,12 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 }
 .work-card::before {
   content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at top right, rgba(203,255,71,0.04), transparent 60%);
+  background: radial-gradient(circle at top right, rgba(255,184,28,0.04), transparent 60%);
   pointer-events: none;
 }
 .work-card:hover {
   border-color: var(--border-focus); background: var(--bg-4);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(203,255,71,0.1);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,184,28,0.1);
   transform: translateY(-8px) rotate(0deg) !important; z-index: 2;
 }
 .work-card:nth-child(1) { transform: rotate(-1.2deg); }
@@ -531,8 +534,8 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .overlay-tags { display: flex; flex-wrap: wrap; gap: 0.45rem; }
 .overlay-tags span { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--text-3); background: rgba(255,255,255,0.04); border: 1px solid var(--border); padding: 0.18rem 0.55rem; border-radius: 4px; }
 .overlay-links { margin-top: 1.25rem; }
-.overlay-link { display: inline-flex; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--lime); border: 1px solid rgba(203,255,71,0.3); padding: 0.4rem 1rem; border-radius: 6px; transition: border-color 0.15s, background 0.15s; }
-.overlay-link:hover { border-color: var(--lime); background: rgba(203,255,71,0.06); }
+.overlay-link { display: inline-flex; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--lime); border: 1px solid rgba(255,184,28,0.3); padding: 0.4rem 1rem; border-radius: 6px; transition: border-color 0.15s, background 0.15s; }
+.overlay-link:hover { border-color: var(--lime); background: rgba(255,184,28,0.06); }
 
 /* ── Stack ──────────────────────────────────────────────────────── */
 .stack-grid { display: flex; flex-direction: column; gap: 0; }
@@ -587,7 +590,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 
 /* ── Contact ────────────────────────────────────────────────────── */
 .section-contact { background: var(--bg-2); position: relative; overflow: hidden; }
-.contact-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 400px; background: radial-gradient(ellipse, rgba(157,78,221,0.08), transparent 70%); pointer-events: none; }
+.contact-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 400px; background: radial-gradient(ellipse, rgba(196,18,48,0.07), transparent 70%); pointer-events: none; }
 .contact-heading { font-family: 'Unbounded', sans-serif; font-size: clamp(2.2rem, 6vw, 4.5rem); font-weight: 900; color: var(--text-1); letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 1rem; }
 .contact-sub { font-size: 1rem; color: var(--text-2); margin-bottom: 3rem; }
 .contact-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 3rem; }
@@ -614,12 +617,12 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 /* ── Pixel Loader ───────────────────────────────────────────────── */
 .pixel-loader { position: fixed; inset: 0; z-index: 9999; background: var(--bg-1); display: flex; align-items: center; justify-content: center; flex-direction: column; transition: opacity 0.35s, visibility 0.35s; }
 .pixel-loader.is-done { opacity: 0; visibility: hidden; pointer-events: none; }
-.pixel-scanlines { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(203,255,71,0.015) 3px, rgba(203,255,71,0.015) 4px); pointer-events: none; }
+.pixel-scanlines { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,184,28,0.015) 3px, rgba(255,184,28,0.015) 4px); pointer-events: none; }
 .pixel-loader-inner { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
 .pixel-bc { display: flex; gap: 0.25rem; }
-.px-letter { font-family: 'JetBrains Mono', monospace; font-size: clamp(5rem, 18vw, 11rem); font-weight: 700; color: var(--lime); text-shadow: 0 0 30px rgba(203,255,71,0.5), 0 0 60px rgba(203,255,71,0.2); line-height: 1; }
+.px-letter { font-family: 'JetBrains Mono', monospace; font-size: clamp(5rem, 18vw, 11rem); font-weight: 700; color: var(--lime); text-shadow: 0 0 30px rgba(255,184,28,0.5), 0 0 60px rgba(255,184,28,0.2); line-height: 1; }
 .pixel-bar-wrap { width: 220px; height: 6px; background: var(--bg-3); border-radius: 3px; overflow: hidden; }
-.pixel-bar-inner { height: 100%; width: 0%; background: var(--lime); border-radius: 3px; transition: width 0.25s steps(8); box-shadow: 0 0 12px rgba(203,255,71,0.6); }
+.pixel-bar-inner { height: 100%; width: 0%; background: var(--lime); border-radius: 3px; transition: width 0.25s steps(8); box-shadow: 0 0 12px rgba(255,184,28,0.6); }
 .pixel-loader-status { display: flex; align-items: center; gap: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-3); letter-spacing: 0.1em; }
 .pixel-cursor { color: var(--lime); animation: blink-cursor 1s step-end infinite; }
 @keyframes blink-cursor { 50%{opacity:0} }

@@ -1,7 +1,10 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+const TartanWave = dynamic(() => import('./TartanWave'), { ssr: false })
 
 function CharSplit({ text, className }: { text: string; className: string }) {
   return (
@@ -17,31 +20,7 @@ function CharSplit({ text, className }: { text: string; className: string }) {
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
-  const vantaRef   = useRef<HTMLDivElement>(null)
-  const vantaFx    = useRef<{ destroy: () => void } | null>(null)
   const [ready, setReady] = useState(false)
-
-  // Vanta.js NET background
-  useEffect(() => {
-    let alive = true
-    ;(async () => {
-      const THREE = await import('three')
-      // @ts-expect-error — no official types
-      const VANTA = await import('vanta/dist/vanta.net.min')
-      if (!alive || !vantaRef.current) return
-      vantaFx.current = VANTA.default({
-        el: vantaRef.current,
-        THREE,
-        color: 0x9D4EDD,
-        backgroundColor: 0x0D0D14,
-        points: 9,
-        maxDistance: 24,
-        spacing: 18,
-        showDots: true,
-      })
-    })()
-    return () => { alive = false; vantaFx.current?.destroy() }
-  }, [])
 
   // Wait for pixel loader
   useEffect(() => {
@@ -123,7 +102,7 @@ export default function Hero() {
 
   return (
     <section id="hero" className="hero" ref={sectionRef} aria-label="Introduction">
-      <div ref={vantaRef} className="hero-vanta-bg" aria-hidden="true" />
+      <TartanWave />
       <div className="container hero-container">
         <div className="hero-content">
           <div className="hero-status">
@@ -135,7 +114,7 @@ export default function Hero() {
             <CharSplit text="CHENG" className="hero-name-line2" />
           </h1>
           <svg className="hero-name-underline" viewBox="0 0 380 14" fill="none" aria-hidden="true" preserveAspectRatio="none">
-            <path d="M2,9 C60,3 130,13 200,8 C260,4 310,12 378,7" stroke="#CBFF47" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.85" />
+            <path d="M2,9 C60,3 130,13 200,8 C260,4 310,12 378,7" stroke="#FFB81C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.85" />
           </svg>
           <p className="hero-role">Software Engineer · AI Builder · MS @ CMU Silicon Valley</p>
           <p className="hero-tagline">Building AI systems and agentic workflows that actually ship.</p>
