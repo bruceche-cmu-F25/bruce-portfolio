@@ -114,7 +114,7 @@ export default function Hero() {
             <CharSplit text="CHENG" className="hero-name-line2" />
           </h1>
           <svg className="hero-name-underline" viewBox="0 0 380 14" fill="none" aria-hidden="true" preserveAspectRatio="none">
-            <path d="M2,9 C60,3 130,13 200,8 C260,4 310,12 378,7" stroke="#FFB81C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.85" />
+            <path d="M2,9 C60,3 130,13 200,8 C260,4 310,12 378,7" stroke="#00C4A7" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.85" />
           </svg>
           <p className="hero-role">Software Engineer · AI Builder · MS @ CMU Silicon Valley</p>
           <p className="hero-tagline">Building AI systems and agentic workflows that actually ship.</p>
