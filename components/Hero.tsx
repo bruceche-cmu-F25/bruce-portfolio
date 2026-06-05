@@ -32,11 +32,11 @@ export default function Hero() {
       vantaFx.current = VANTA.default({
         el: vantaRef.current,
         THREE,
-        color: 0x1AA09A,
-        backgroundColor: 0x0C1220,
-        points: 8,
-        maxDistance: 22,
-        spacing: 20,
+        color: 0x9D4EDD,
+        backgroundColor: 0x0D0D14,
+        points: 9,
+        maxDistance: 24,
+        spacing: 18,
         showDots: true,
       })
     })()
@@ -135,7 +135,7 @@ export default function Hero() {
             <CharSplit text="CHENG" className="hero-name-line2" />
           </h1>
           <svg className="hero-name-underline" viewBox="0 0 380 14" fill="none" aria-hidden="true" preserveAspectRatio="none">
-            <path d="M2,9 C60,3 130,13 200,8 C260,4 310,12 378,7" stroke="#1AA09A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.75" />
+            <path d="M2,9 C60,3 130,13 200,8 C260,4 310,12 378,7" stroke="#CBFF47" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.85" />
           </svg>
           <p className="hero-role">Software Engineer · AI Builder · MS @ CMU Silicon Valley</p>
           <p className="hero-tagline">Building AI systems and agentic workflows that actually ship.</p>
