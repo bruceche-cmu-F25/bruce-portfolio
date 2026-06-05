@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const NAV_ITEMS = [
   { id: 'hero',       label: 'index',     ext: '.tsx', icon: '⚛' },
@@ -15,14 +15,14 @@ export default function VSCodeLayout() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
-    const sectionIds = NAV_ITEMS.map(n => n.id)
+    const CHROME_H = 36 + 36  // titlebar + tabbar
     const observers: IntersectionObserver[] = []
-    sectionIds.forEach(id => {
+    NAV_ITEMS.forEach(({ id }) => {
       const el = document.getElementById(id)
       if (!el) return
       const obs = new IntersectionObserver(
         ([entry]) => { if (entry.isIntersecting) setActiveId(id) },
-        { threshold: 0.3 }
+        { rootMargin: `-${CHROME_H}px 0px 0px 0px`, threshold: 0.15 }
       )
       obs.observe(el)
       observers.push(obs)
@@ -31,9 +31,13 @@ export default function VSCodeLayout() {
   }, [])
 
   function scrollTo(id: string) {
-    const el = document.getElementById(id)
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
     setMobileOpen(false)
+    const el = document.getElementById(id)
+    if (!el) return
+    // Offset by the fixed chrome height so section headings aren't hidden behind tabs
+    const CHROME_H = 36 + 36
+    const top = el.getBoundingClientRect().top + window.scrollY - CHROME_H
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
   }
 
   const activeItem = NAV_ITEMS.find(n => n.id === activeId) ?? NAV_ITEMS[0]
