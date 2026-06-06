@@ -270,19 +270,25 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 }
 
 /* ── Cursor ─────────────────────────────────────────────────────── */
+/* All animation handled by GSAP ticker — no CSS transitions here   */
 .cursor-dot, .cursor-ring { display: none; }
 .has-custom-cursor { cursor: none; }
-.has-custom-cursor .cursor-dot, .has-custom-cursor .cursor-ring { display: block; }
+.has-custom-cursor .cursor-dot,
+.has-custom-cursor .cursor-ring { display: block; }
 .cursor-dot {
-  position: fixed; z-index: 9999; width: 6px; height: 6px; border-radius: 50%;
+  position: fixed; z-index: 9999;
+  width: 5px; height: 5px; border-radius: 50%;
   background: var(--lime); pointer-events: none;
+  transform-origin: center center;
+  will-change: transform;
 }
 .cursor-ring {
-  position: fixed; z-index: 9998; width: 28px; height: 28px; border-radius: 50%;
-  border: 1.5px solid rgba(0,196,167,0.5); pointer-events: none;
-  transition: width 0.2s, height 0.2s, border-color 0.2s;
+  position: fixed; z-index: 9998;
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1.5px solid rgba(0,196,167,0.45);
+  pointer-events: none;
+  will-change: transform, width, height;
 }
-.cursor-ring.is-hovered { width: 44px; height: 44px; border-color: var(--lime); }
 
 /* ── Buttons ────────────────────────────────────────────────────── */
 .btn {
