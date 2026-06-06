@@ -269,26 +269,29 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   z-index: 120;
 }
 
-/* ── Cursor ─────────────────────────────────────────────────────── */
-/* All animation handled by GSAP ticker — no CSS transitions here   */
-.cursor-dot, .cursor-ring { display: none; }
+/* ── Cursor — IDE crosshair ─────────────────────────────────────── */
+/* All animation via GSAP ticker; no CSS transitions                */
+.cursor-cross { display: none; }
 .has-custom-cursor { cursor: none; }
-.has-custom-cursor .cursor-dot,
-.has-custom-cursor .cursor-ring { display: block; }
-.cursor-dot {
+.has-custom-cursor .cursor-cross { display: block; }
+.cursor-cross {
   position: fixed; z-index: 9999;
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--lime); pointer-events: none;
-  transform-origin: center center;
-  will-change: transform;
+  pointer-events: none; will-change: transform;
 }
-.cursor-ring {
-  position: fixed; z-index: 9998;
-  width: 28px; height: 28px; border-radius: 50%;
-  border: 1.5px solid rgba(0,196,167,0.45);
-  pointer-events: none;
-  will-change: transform, width, height;
+/* Four arms — each positioned relative to the 0×0 crosshair origin */
+.c-t, .c-b, .c-r, .c-l {
+  position: absolute;
+  background: var(--lime);
+  border-radius: 1px;
 }
+/* Vertical arms (top / bottom) */
+.c-t, .c-b { width: 1.5px; height: 9px; left: -0.75px; }
+.c-t { bottom: 4px; }
+.c-b { top:    4px; }
+/* Horizontal arms (right / left) */
+.c-r, .c-l { height: 1.5px; width: 9px; top: -0.75px; }
+.c-r { left:  4px; }
+.c-l { right: 4px; }
 
 /* ── Buttons ────────────────────────────────────────────────────── */
 .btn {
