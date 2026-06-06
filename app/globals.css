@@ -80,6 +80,14 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   font-size: 0.7rem; color: var(--text-3); margin: 0 auto;
 }
 .vsc-titlebar-label em { color: var(--text-2); font-style: normal; }
+.vsc-titlebar-cv {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.67rem; color: var(--text-3);
+  padding: 0.2rem 0.6rem; border-radius: 3px;
+  border: 1px solid var(--border); flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s; text-decoration: none;
+}
+.vsc-titlebar-cv:hover { color: var(--lime); border-color: var(--border-focus); }
 
 .vsc-activity {
   position: fixed;
@@ -118,36 +126,57 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .vsc-sidebar::-webkit-scrollbar { width: 4px; }
 .vsc-sidebar::-webkit-scrollbar-thumb { background: var(--bg-4); border-radius: 2px; }
 
-.vsc-sidebar-label {
+/* ── Sidebar tree ─────────────────────────────────────────────── */
+.vsc-sidebar-section-header {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.64rem; font-weight: 700; letter-spacing: 0.1em;
+  font-size: 0.64rem; font-weight: 700; letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--text-3);
-  padding: 0.8rem 1rem 0.4rem;
+  padding: 0.55rem 0.75rem 0.3rem 0.75rem;
 }
-.vsc-file {
-  display: flex; align-items: center; gap: 0.5rem;
-  padding: 0.35rem 0.75rem 0.35rem 1rem;
+.vsc-sidebar-project-root {
+  display: flex; align-items: center; gap: 4px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.74rem; color: var(--text-2);
-  cursor: pointer;
-  border-left: 2px solid transparent;
-  transition: all 0.15s; text-decoration: none;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
+  color: var(--text-2); padding: 0.3rem 0.5rem;
+  cursor: default; user-select: none;
 }
-.vsc-file:hover { color: var(--text-1); background: rgba(255,255,255,0.04); }
-.vsc-file.active {
-  color: var(--text-1); background: rgba(0,196,167,0.06);
+.vsc-tree { flex: 1; overflow-y: auto; }
+.vsc-tree-folder {
+  display: flex; align-items: center; gap: 4px; width: 100%;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; color: var(--text-2);
+  padding: 0.28rem 0.5rem; text-align: left;
+  transition: color 0.12s, background 0.12s;
+}
+.vsc-tree-folder:hover { color: var(--text-1); background: rgba(255,255,255,0.04); }
+.vsc-chevron { font-size: 0.6rem; opacity: 0.6; flex-shrink: 0; }
+.vsc-folder-ico { font-size: 0.75rem; opacity: 0.55; flex-shrink: 0; }
+.vsc-tree-file {
+  display: flex; align-items: center; gap: 6px; width: 100%;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.71rem; color: var(--text-2);
+  padding: 0.25rem 0.5rem; text-align: left;
+  border-left: 2px solid transparent;
+  transition: color 0.12s, background 0.12s;
+}
+.vsc-tree-file:hover { color: var(--text-1); background: rgba(255,255,255,0.04); }
+.vsc-tree-file.active {
+  color: var(--text-1); background: rgba(0,196,167,0.08);
   border-left-color: var(--lime);
 }
-.vsc-file-icon { font-size: 0.85rem; flex-shrink: 0; }
-.vsc-file-name { color: var(--text-1); }
-.vsc-file-ext  { color: var(--text-3); }
-.vsc-sidebar-divider { height: 1px; background: var(--border); margin: 0.6rem 1rem; }
+.vsc-ftype {
+  font-size: 0.58rem; font-weight: 700; flex-shrink: 0;
+  min-width: 18px; text-align: center; letter-spacing: -0.02em;
+}
+.vsc-fname { color: inherit; }
+.vsc-fext  { color: var(--text-3); }
+.vsc-sidebar-divider { height: 1px; background: var(--border); margin: 0.6rem 0.75rem; }
 .vsc-sidebar-bottom { padding: 0.5rem 0.75rem 1rem; display: flex; flex-direction: column; gap: 2px; }
 .vsc-social-link {
   display: flex; align-items: center; gap: 0.5rem;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.69rem; color: var(--text-3);
-  padding: 0.3rem 0.25rem; border-radius: 4px;
+  font-size: 0.67rem; color: var(--text-3);
+  padding: 0.28rem 0.25rem; border-radius: 4px;
   transition: color 0.15s; text-decoration: none;
 }
 .vsc-social-link:hover { color: var(--lime); }
@@ -164,8 +193,8 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 }
 .vsc-tabbar::-webkit-scrollbar { height: 0; }
 .vsc-tab {
-  display: flex; align-items: center; gap: 0.45rem;
-  padding: 0 1rem;
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0 0.55rem 0 0.75rem;
   font-family: 'JetBrains Mono', monospace; font-size: 0.71rem;
   color: var(--text-3); border-right: 1px solid var(--border);
   white-space: nowrap; cursor: pointer; flex-shrink: 0;
@@ -174,8 +203,14 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 }
 .vsc-tab:hover { color: var(--text-2); background: rgba(255,255,255,0.03); }
 .vsc-tab.active { color: var(--text-1); background: var(--bg-1); border-top-color: var(--lime); }
-.vsc-tab-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-3); flex-shrink: 0; }
-.vsc-tab.active .vsc-tab-dot { background: var(--lime); }
+.vsc-tab-close {
+  font-size: 0.85rem; line-height: 1; opacity: 0;
+  color: var(--text-3); margin-left: 2px; flex-shrink: 0;
+  transition: opacity 0.12s;
+}
+.vsc-tab:hover .vsc-tab-close,
+.vsc-tab.active .vsc-tab-close { opacity: 0.55; }
+.vsc-tab-close:hover { opacity: 1 !important; }
 
 .vsc-statusbar {
   position: fixed; bottom: 0; left: 0; right: 0;
@@ -194,6 +229,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .vsc-status-item:hover { background: rgba(255,255,255,0.12); }
 .vsc-status-item.open { background: rgba(255,255,255,0.15); font-weight: 600; color: #fff; }
 .status-dot-green { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: blink 2s ease-in-out infinite; }
+.vsc-status-hash { opacity: 0.45; font-size: 0.63rem; margin-left: 2px; }
 .vsc-status-spacer { flex: 1; }
 
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
@@ -216,6 +252,11 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .vsc-mobile-brand { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--lime); }
 .vsc-hamburger { display: flex; flex-direction: column; gap: 5px; padding: 6px; }
 .vsc-hamburger span { display: block; width: 22px; height: 2px; background: var(--text-2); border-radius: 1px; transition: transform 0.2s, opacity 0.2s; }
+.vsc-mobile-menu {
+  position: fixed; top: 52px; left: 0; right: 0; z-index: 199;
+  background: var(--bg-2); border-bottom: 1px solid var(--border);
+  padding: 0.5rem 0;
+}
 
 /* ── Scroll progress ────────────────────────────────────────────── */
 .scroll-progress {

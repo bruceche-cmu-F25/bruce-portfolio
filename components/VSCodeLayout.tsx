@@ -1,28 +1,129 @@
 'use client'
 import { useEffect, useState } from 'react'
 
+// ── Nav items (tab bar + tree leaves) ───────────────────────────────
 const NAV_ITEMS = [
-  { id: 'hero',       label: 'index',     ext: '.tsx', icon: '⚛' },
-  { id: 'about',      label: 'about',     ext: '.ts',  icon: '👤' },
-  { id: 'work',       label: 'work',      ext: '.tsx', icon: '⚡' },
-  { id: 'stack',      label: 'stack',     ext: '.ts',  icon: '🛠' },
-  { id: 'life',       label: 'life',      ext: '.tsx', icon: '🎨' },
-  { id: 'contact',    label: 'contact',   ext: '.ts',  icon: '📬' },
+  { id: 'hero',    label: 'index',   ext: '.tsx' },
+  { id: 'about',   label: 'about',   ext: '.ts'  },
+  { id: 'work',    label: 'work',    ext: '.tsx' },
+  { id: 'stack',   label: 'stack',   ext: '.json'},
+  { id: 'life',    label: 'life',    ext: '.tsx' },
+  { id: 'contact', label: 'contact', ext: '.ts'  },
 ]
 
+// ── Activity bar icons ───────────────────────────────────────────────
+const ACT_ITEMS = [
+  { id: 'hero',    sym: '⊟', title: 'Explorer'       },
+  { id: 'about',   sym: '◉', title: 'About'          },
+  { id: 'work',    sym: '⊡', title: 'Work'           },
+  { id: 'stack',   sym: '⟨⟩', title: 'Stack'          },
+  { id: 'life',    sym: '◈', title: 'Life'           },
+  { id: 'contact', sym: '◎', title: 'Contact'        },
+]
+
+// ── Colored file-type badge ──────────────────────────────────────────
+function FileTypeIcon({ ext }: { ext: string }) {
+  const map: Record<string, { ch: string; color: string }> = {
+    '.tsx':  { ch: '⚛',  color: '#4FC3F7' },
+    '.ts':   { ch: 'TS', color: '#81C784' },
+    '.json': { ch: '{ }',color: '#FFD54F' },
+    '.md':   { ch: '##', color: '#64B5F6' },
+    '.py':   { ch: 'py', color: '#A5D6A7' },
+  }
+  const { ch, color } = map[ext] ?? { ch: '·', color: '#556' }
+  return <span className="vsc-ftype" style={{ color }}>{ch}</span>
+}
+
+// ── Sidebar file tree ─────────────────────────────────────────────────
+type FileNode   = { type: 'file';   id: string; label: string; ext: string }
+type FolderNode = { type: 'folder'; label: string; children: FileNode[] }
+type TreeNode   = FileNode | FolderNode
+
+const TREE: TreeNode[] = [
+  {
+    type: 'folder', label: 'experience',
+    children: [
+      { type: 'file', id: 'work', label: 'helport-ai',     ext: '.md'  },
+      { type: 'file', id: 'work', label: 'convoloo',       ext: '.md'  },
+    ],
+  },
+  {
+    type: 'folder', label: 'projects',
+    children: [
+      { type: 'file', id: 'work', label: 'nightynight',    ext: '.tsx' },
+      { type: 'file', id: 'work', label: 'research-agent', ext: '.ts'  },
+      { type: 'file', id: 'work', label: 'parking-locator',ext: '.py'  },
+      { type: 'file', id: 'work', label: 'capitawise',     ext: '.ts'  },
+    ],
+  },
+  { type: 'file', id: 'hero',    label: 'index',   ext: '.tsx' },
+  { type: 'file', id: 'about',   label: 'about',   ext: '.ts'  },
+  { type: 'file', id: 'stack',   label: 'stack',   ext: '.json'},
+  { type: 'file', id: 'life',    label: 'life',    ext: '.tsx' },
+  { type: 'file', id: 'contact', label: 'contact', ext: '.ts'  },
+  { type: 'file', id: '',        label: 'README',  ext: '.md'  },
+]
+
+function SidebarTree({ activeId, onNavigate }: { activeId: string; onNavigate: (id: string) => void }) {
+  const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({
+    experience: true, projects: true,
+  })
+
+  function toggle(label: string) {
+    setOpenFolders(prev => ({ ...prev, [label]: !prev[label] }))
+  }
+
+  function renderNode(node: TreeNode, depth = 0) {
+    if (node.type === 'folder') {
+      const isOpen = openFolders[node.label] ?? true
+      return (
+        <div key={node.label}>
+          <button
+            className="vsc-tree-folder"
+            style={{ paddingLeft: `${6 + depth * 12}px` }}
+            onClick={() => toggle(node.label)}
+          >
+            <span className="vsc-chevron">{isOpen ? '▾' : '▸'}</span>
+            <span className="vsc-folder-ico">⊟</span>
+            {node.label}
+          </button>
+          {isOpen && node.children.map(child => renderNode(child, depth + 1))}
+        </div>
+      )
+    }
+
+    const isActive = node.id && node.id === activeId
+    return (
+      <button
+        key={`${node.label}${node.ext}`}
+        className={`vsc-tree-file${isActive ? ' active' : ''}`}
+        style={{ paddingLeft: `${6 + depth * 12 + 14}px` }}
+        onClick={() => node.id && onNavigate(node.id)}
+      >
+        <FileTypeIcon ext={node.ext} />
+        <span className="vsc-fname">{node.label}</span>
+        <span className="vsc-fext">{node.ext}</span>
+      </button>
+    )
+  }
+
+  return <div className="vsc-tree">{TREE.map(n => renderNode(n))}</div>
+}
+
+// ── Main layout component ─────────────────────────────────────────────
 export default function VSCodeLayout() {
   const [activeId, setActiveId] = useState('hero')
   const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
-    const CHROME_H = 36 + 36  // titlebar + tabbar
+    const CHROME_H = 36 + 36
     const observers: IntersectionObserver[] = []
     NAV_ITEMS.forEach(({ id }) => {
       const el = document.getElementById(id)
       if (!el) return
       const obs = new IntersectionObserver(
         ([entry]) => { if (entry.isIntersecting) setActiveId(id) },
-        { rootMargin: `-${CHROME_H}px 0px 0px 0px`, threshold: 0.15 }
+        { rootMargin: `-${CHROME_H}px 0px 0px 0px`, threshold: 0.15 },
       )
       obs.observe(el)
       observers.push(obs)
@@ -34,7 +135,6 @@ export default function VSCodeLayout() {
     setMobileOpen(false)
     const el = document.getElementById(id)
     if (!el) return
-    // Offset by the fixed chrome height so section headings aren't hidden behind tabs
     const CHROME_H = 36 + 36
     const top = el.getBoundingClientRect().top + window.scrollY - CHROME_H
     window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
@@ -44,52 +144,49 @@ export default function VSCodeLayout() {
 
   return (
     <>
-      {/* Title bar */}
+      {/* ── Title bar ─────────────────────────────────────────────── */}
       <header className="vsc-titlebar" aria-hidden="true">
         <div className="vsc-traffic">
           <span /><span /><span />
         </div>
         <span className="vsc-titlebar-label">
-          bruce-portfolio — <em>{activeItem.label}{activeItem.ext}</em>
+          ⚛ Bruce Cheng — <em>{activeItem.label}{activeItem.ext}</em>
         </span>
+        <a
+          href="/Chi Cheng-Resume-2026-May.pdf"
+          download
+          className="vsc-titlebar-cv"
+          aria-label="Download CV"
+        >
+          ↓ Download CV
+        </a>
       </header>
 
-      {/* Activity bar */}
+      {/* ── Activity bar ──────────────────────────────────────────── */}
       <nav className="vsc-activity" aria-label="Activity bar">
-        {NAV_ITEMS.map(item => (
+        {ACT_ITEMS.map(item => (
           <button
             key={item.id}
             className={`vsc-act-btn${activeId === item.id ? ' active' : ''}`}
             onClick={() => scrollTo(item.id)}
-            title={item.label}
-            aria-label={item.label}
+            title={item.title}
+            aria-label={item.title}
           >
-            {item.icon}
+            {item.sym}
           </button>
         ))}
         <div className="vsc-act-spacer" />
-        <button className="vsc-act-btn" title="Resume" aria-label="Download resume"
-          onClick={() => window.open('/Chi Cheng-Resume-2026-May.pdf', '_blank')}>
-          📄
-        </button>
+        <button className="vsc-act-btn" title="Settings" aria-label="Settings">⚙</button>
       </nav>
 
-      {/* Sidebar */}
+      {/* ── Sidebar ───────────────────────────────────────────────── */}
       <aside className="vsc-sidebar" aria-label="Explorer">
-        <span className="vsc-sidebar-label">Explorer</span>
-        {NAV_ITEMS.map(item => (
-          <button
-            key={item.id}
-            className={`vsc-file${activeId === item.id ? ' active' : ''}`}
-            onClick={() => scrollTo(item.id)}
-          >
-            <span className="vsc-file-icon">{item.icon}</span>
-            <span>
-              <span className="vsc-file-name">{item.label}</span>
-              <span className="vsc-file-ext">{item.ext}</span>
-            </span>
-          </button>
-        ))}
+        <div className="vsc-sidebar-section-header">Explorer</div>
+        <div className="vsc-sidebar-project-root">
+          <span className="vsc-chevron">▾</span>
+          BRUCE-PORTFOLIO
+        </div>
+        <SidebarTree activeId={activeId} onNavigate={scrollTo} />
         <div className="vsc-sidebar-divider" />
         <div className="vsc-sidebar-bottom">
           <a href="https://github.com/Bruce0921" target="_blank" rel="noopener" className="vsc-social-link">
@@ -104,7 +201,7 @@ export default function VSCodeLayout() {
         </div>
       </aside>
 
-      {/* Tab bar */}
+      {/* ── Tab bar ───────────────────────────────────────────────── */}
       <div className="vsc-tabbar" aria-label="Open tabs">
         {NAV_ITEMS.map(item => (
           <button
@@ -112,33 +209,34 @@ export default function VSCodeLayout() {
             className={`vsc-tab${activeId === item.id ? ' active' : ''}`}
             onClick={() => scrollTo(item.id)}
           >
-            <span className="vsc-tab-dot" />
+            <FileTypeIcon ext={item.ext} />
             {item.label}{item.ext}
+            <span className="vsc-tab-close">×</span>
           </button>
         ))}
       </div>
 
-      {/* Status bar */}
+      {/* ── Status bar ────────────────────────────────────────────── */}
       <footer className="vsc-statusbar" aria-label="Status bar">
         <div className="vsc-status-item open">
           <span className="status-dot-green" />
-          main
+          ⎇ main
+          <span className="vsc-status-hash">(ae09903)</span>
         </div>
         <div className="vsc-status-item">⚡ Next.js 14</div>
-        <div className="vsc-status-item">TypeScript</div>
         <div className="vsc-status-spacer" />
-        <div className="vsc-status-item">GSAP + Lenis</div>
+        <div className="vsc-status-item">{activeItem.label}{activeItem.ext}</div>
+        <div className="vsc-status-item">TypeScript</div>
+        <div className="vsc-status-item">UTF-8</div>
         <div className="vsc-status-item">
           <a href="/Chi Cheng-Resume-2026-May.pdf" download style={{ color: 'inherit', textDecoration: 'none' }}>
             ↓ Resume
           </a>
         </div>
-        <div className="vsc-status-item">
-          © {new Date().getFullYear()} Bruce Cheng
-        </div>
+        <div className="vsc-status-item">© {new Date().getFullYear()} Bruce Cheng</div>
       </footer>
 
-      {/* Mobile bar */}
+      {/* ── Mobile bar ────────────────────────────────────────────── */}
       <div className="vsc-mobile-bar">
         <span className="vsc-mobile-brand">BC.tsx</span>
         <button
@@ -152,22 +250,19 @@ export default function VSCodeLayout() {
         </button>
       </div>
 
-      {/* Mobile dropdown */}
+      {/* ── Mobile dropdown ───────────────────────────────────────── */}
       {mobileOpen && (
-        <nav
-          style={{
-            position: 'fixed', top: 52, left: 0, right: 0, zIndex: 199,
-            background: 'var(--bg-2)', borderBottom: '1px solid var(--border)',
-            padding: '0.5rem 0',
-          }}
-        >
+        <nav className="vsc-mobile-menu">
           {NAV_ITEMS.map(item => (
-            <button key={item.id} className={`vsc-file${activeId === item.id ? ' active' : ''}`}
+            <button
+              key={item.id}
+              className={`vsc-tree-file${activeId === item.id ? ' active' : ''}`}
               style={{ width: '100%', textAlign: 'left' }}
-              onClick={() => scrollTo(item.id)}>
-              <span className="vsc-file-icon">{item.icon}</span>
-              <span className="vsc-file-name">{item.label}</span>
-              <span className="vsc-file-ext">{item.ext}</span>
+              onClick={() => scrollTo(item.id)}
+            >
+              <FileTypeIcon ext={item.ext} />
+              <span className="vsc-fname">{item.label}</span>
+              <span className="vsc-fext">{item.ext}</span>
             </button>
           ))}
           <div style={{ padding: '0.75rem 1rem' }}>
