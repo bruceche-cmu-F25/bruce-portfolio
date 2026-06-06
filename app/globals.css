@@ -48,7 +48,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family: 'Geist', sans-serif;
   background: var(--bg-1);
   color: var(--text-1);
   -webkit-font-smoothing: antialiased;
@@ -76,12 +76,12 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .vsc-traffic span:nth-child(2) { background: #FEBC2E; }
 .vsc-traffic span:nth-child(3) { background: #28C840; }
 .vsc-titlebar-label {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Geist Mono', monospace;
   font-size: 0.7rem; color: var(--text-3); margin: 0 auto;
 }
 .vsc-titlebar-label em { color: var(--text-2); font-style: normal; }
 .vsc-titlebar-cv {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Geist Mono', monospace;
   font-size: 0.67rem; color: var(--text-3);
   padding: 0.2rem 0.6rem; border-radius: 3px;
   border: 1px solid var(--border); flex-shrink: 0;
@@ -128,14 +128,14 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 
 /* ── Sidebar tree ─────────────────────────────────────────────── */
 .vsc-sidebar-section-header {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Geist Mono', monospace;
   font-size: 0.64rem; font-weight: 700; letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--text-3);
   padding: 0.55rem 0.75rem 0.3rem 0.75rem;
 }
 .vsc-sidebar-project-root {
   display: flex; align-items: center; gap: 4px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Geist Mono', monospace;
   font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
   color: var(--text-2); padding: 0.3rem 0.5rem;
   cursor: default; user-select: none;
@@ -143,7 +143,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .vsc-tree { flex: 1; overflow-y: auto; }
 .vsc-tree-folder {
   display: flex; align-items: center; gap: 4px; width: 100%;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Geist Mono', monospace;
   font-size: 0.72rem; color: var(--text-2);
   padding: 0.28rem 0.5rem; text-align: left;
   transition: color 0.12s, background 0.12s;
@@ -153,7 +153,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .vsc-folder-ico { font-size: 0.75rem; opacity: 0.55; flex-shrink: 0; }
 .vsc-tree-file {
   display: flex; align-items: center; gap: 6px; width: 100%;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Geist Mono', monospace;
   font-size: 0.71rem; color: var(--text-2);
   padding: 0.25rem 0.5rem; text-align: left;
   border-left: 2px solid transparent;
@@ -174,7 +174,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .vsc-sidebar-bottom { padding: 0.5rem 0.75rem 1rem; display: flex; flex-direction: column; gap: 2px; }
 .vsc-social-link {
   display: flex; align-items: center; gap: 0.5rem;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Geist Mono', monospace;
   font-size: 0.67rem; color: var(--text-3);
   padding: 0.28rem 0.25rem; border-radius: 4px;
   transition: color 0.15s; text-decoration: none;
@@ -195,7 +195,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .vsc-tab {
   display: flex; align-items: center; gap: 0.4rem;
   padding: 0 0.55rem 0 0.75rem;
-  font-family: 'JetBrains Mono', monospace; font-size: 0.71rem;
+  font-family: 'Geist Mono', monospace; font-size: 0.71rem;
   color: var(--text-3); border-right: 1px solid var(--border);
   white-space: nowrap; cursor: pointer; flex-shrink: 0;
   border-top: 2px solid transparent;
@@ -218,7 +218,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   background: var(--violet);
   display: flex; align-items: center;
   padding: 0 0.5rem; gap: 0; z-index: 200;
-  font-family: 'JetBrains Mono', monospace; font-size: 0.67rem;
+  font-family: 'Geist Mono', monospace; font-size: 0.67rem;
 }
 .vsc-status-item {
   display: flex; align-items: center; gap: 0.35rem;
@@ -249,7 +249,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   align-items: center; justify-content: space-between;
   padding: 0 1.25rem; z-index: 200;
 }
-.vsc-mobile-brand { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--lime); }
+.vsc-mobile-brand { font-family: 'Geist Mono', monospace; font-size: 0.85rem; color: var(--lime); }
 .vsc-hamburger { display: flex; flex-direction: column; gap: 5px; padding: 6px; }
 .vsc-hamburger span { display: block; width: 22px; height: 2px; background: var(--text-2); border-radius: 1px; transition: transform 0.2s, opacity 0.2s; }
 .vsc-mobile-menu {
@@ -315,16 +315,16 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .section { padding: 6rem 0; }
 .section-alt { background: var(--bg-2); }
 .section-kicker {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Geist Mono', monospace;
   font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--lime); display: block; margin-bottom: 0.5rem;
 }
 .section-kicker::before { content: '// '; color: var(--syn-comment); }
 .section-heading {
-  font-family: 'Unbounded', sans-serif;
+  font-family: 'Geist Mono', monospace;
   font-size: clamp(1.6rem, 3.5vw, 2.6rem);
   font-weight: 700; color: var(--text-1);
-  letter-spacing: -0.02em; margin-bottom: 3rem; line-height: 1.15;
+  letter-spacing: -0.01em; margin-bottom: 3rem; line-height: 1.15;
 }
 
 /* ── Hero ───────────────────────────────────────────────────────── */
@@ -344,15 +344,15 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   display: inline-flex; align-items: center; gap: 0.6rem;
   background: rgba(158,206,106,0.1); border: 1px solid rgba(158,206,106,0.25);
   border-radius: 100px; padding: 0.35rem 0.9rem;
-  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--green);
+  font-family: 'Geist Mono', monospace; font-size: 0.7rem; color: var(--green);
   margin-bottom: 1.75rem;
 }
 .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: blink 2s ease-in-out infinite; }
 
 .hero-name {
-  font-family: 'Unbounded', sans-serif;
+  font-family: 'Geist Mono', monospace;
   font-size: clamp(3.5rem, 10vw, 9rem);
-  font-weight: 900; letter-spacing: -0.03em; line-height: 0.9;
+  font-weight: 900; letter-spacing: -0.01em; line-height: 0.92;
   margin-bottom: 0.5rem;
 }
 .hero-name-line1 { display: block; color: var(--text-1); }
@@ -393,13 +393,13 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 }
 .stat-tile:hover { background: var(--bg-4); }
 .stat-value {
-  font-family: 'Unbounded', sans-serif;
+  font-family: 'Geist Mono', monospace;
   font-size: clamp(2rem, 5vw, 3rem); font-weight: 900;
   color: var(--lime); letter-spacing: -0.03em; line-height: 1;
 }
 .stat-text { font-size: clamp(1.6rem, 4vw, 2.4rem) !important; }
 .stat-label {
-  font-family: 'JetBrains Mono', monospace; font-size: 0.66rem;
+  font-family: 'Geist Mono', monospace; font-size: 0.66rem;
   color: var(--text-3); letter-spacing: 0.08em; text-transform: uppercase;
 }
 .edu-cards { display: flex; flex-direction: column; gap: 0.75rem; }
@@ -415,22 +415,22 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   width: 40px; height: 40px; border-radius: 8px;
   background: #00629B; color: #FFD700;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; font-weight: 700; flex-shrink: 0;
+  font-family: 'Geist Mono', monospace; font-size: 0.58rem; font-weight: 700; flex-shrink: 0;
 }
 .edu-info { display: flex; flex-direction: column; gap: 0.15rem; }
 .edu-info strong { font-size: 0.84rem; color: var(--text-1); }
 .edu-info span   { font-size: 0.76rem; color: var(--text-2); }
-.edu-meta { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem !important; color: var(--text-3) !important; }
+.edu-meta { font-family: 'Geist Mono', monospace; font-size: 0.64rem !important; color: var(--text-3) !important; }
 
 .about-heading {
-  font-family: 'Unbounded', sans-serif;
+  font-family: 'Geist Mono', monospace;
   font-size: clamp(1.5rem, 3.2vw, 2.2rem); font-weight: 700;
-  color: var(--text-1); letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 1.25rem;
+  color: var(--text-1); letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 1.25rem;
 }
 .about-body   { font-size: 0.97rem; line-height: 1.8; color: var(--text-2); margin-bottom: 1.75rem; }
 .about-links  { display: flex; gap: 1rem; flex-wrap: wrap; }
 .about-link {
-  font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: var(--lime);
+  font-family: 'Geist Mono', monospace; font-size: 0.76rem; color: var(--lime);
   border-bottom: 1px solid rgba(0,196,167,0.3); padding-bottom: 1px; transition: border-color 0.15s;
 }
 .about-link:hover { border-color: var(--lime); }
@@ -463,26 +463,26 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .exp-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
 .exp-logo { height: 28px; max-width: 80px; object-fit: contain; border-radius: 4px; }
 .exp-logo-ft { max-width: 64px; object-fit: contain; }
-.exp-org  { font-size: 0.68rem; color: var(--text-3); font-family: 'JetBrains Mono', monospace; margin-bottom: 0.2rem; }
+.exp-org  { font-size: 0.68rem; color: var(--text-3); font-family: 'Geist Mono', monospace; margin-bottom: 0.2rem; }
 .exp-role { font-size: 0.86rem; font-weight: 600; color: var(--text-1); margin-bottom: 0.3rem; line-height: 1.3; }
-.exp-date { font-size: 0.68rem; color: var(--text-3); font-family: 'JetBrains Mono', monospace; margin-bottom: 0.75rem; }
+.exp-date { font-size: 0.68rem; color: var(--text-3); font-family: 'Geist Mono', monospace; margin-bottom: 0.75rem; }
 .exp-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 
 /* ── Badges & metrics ───────────────────────────────────────────── */
 .bento-badge {
-  font-family: 'JetBrains Mono', monospace; font-size: 0.59rem; font-weight: 700;
+  font-family: 'Geist Mono', monospace; font-size: 0.59rem; font-weight: 700;
   letter-spacing: 0.08em; text-transform: uppercase; padding: 0.18rem 0.5rem; border-radius: 4px;
 }
 .badge-work    { background: rgba(255,83,112,0.12); color: var(--red);      border: 1px solid rgba(255,83,112,0.22); }
 .badge-project { background: rgba(54,201,255,0.10); color: var(--cyan); border: 1px solid rgba(54,201,255,0.20); }
 
 .live-badge {
-  font-family: 'JetBrains Mono', monospace; font-size: 0.59rem; font-weight: 700;
+  font-family: 'Geist Mono', monospace; font-size: 0.59rem; font-weight: 700;
   color: var(--green); background: rgba(158,206,106,0.1);
   border: 1px solid rgba(158,206,106,0.25); padding: 0.18rem 0.5rem; border-radius: 4px;
 }
 .metric {
-  font-family: 'JetBrains Mono', monospace; font-size: 0.67rem;
+  font-family: 'Geist Mono', monospace; font-size: 0.67rem;
   padding: 0.18rem 0.55rem; border-radius: 100px; white-space: nowrap;
 }
 .metric.green { background: rgba(158,206,106,0.1); color: var(--green);     border: 1px solid rgba(158,206,106,0.18); }
@@ -523,9 +523,9 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .work-card-head    { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
 .work-card-logo    { width: 36px; height: 36px; border-radius: 8px; object-fit: contain; }
 .work-card-badges  { display: flex; gap: 0.35rem; flex-wrap: wrap; }
-.work-card-org     { font-family: 'JetBrains Mono', monospace; font-size: 0.67rem; color: var(--text-3); margin-bottom: 0.2rem; }
+.work-card-org     { font-family: 'Geist Mono', monospace; font-size: 0.67rem; color: var(--text-3); margin-bottom: 0.2rem; }
 .work-card-title   { font-size: 0.98rem; font-weight: 700; color: var(--text-1); line-height: 1.3; margin-bottom: 0.3rem; }
-.work-card-date    { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--text-3); margin-bottom: 1rem; }
+.work-card-date    { font-family: 'Geist Mono', monospace; font-size: 0.65rem; color: var(--text-3); margin-bottom: 1rem; }
 .work-card-desc    { font-size: 0.82rem; color: var(--text-2); line-height: 1.6; margin-bottom: 1rem; }
 .work-card-metrics { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
 .work-card-tags {
@@ -533,13 +533,13 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   padding-top: 0.75rem; border-top: 1px solid var(--border);
 }
 .work-card-tags span {
-  font-family: 'JetBrains Mono', monospace; font-size: 0.63rem; color: var(--text-3);
+  font-family: 'Geist Mono', monospace; font-size: 0.63rem; color: var(--text-3);
   background: rgba(255,255,255,0.03); border: 1px solid var(--border);
   padding: 0.14rem 0.45rem; border-radius: 4px;
 }
 .work-card-demo {
   display: inline-flex; align-items: center; gap: 0.35rem;
-  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--lime);
+  font-family: 'Geist Mono', monospace; font-size: 0.7rem; color: var(--lime);
   margin-top: 0.75rem; transition: opacity 0.15s;
 }
 .work-card-demo:hover { opacity: 0.75; }
@@ -567,18 +567,18 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .overlay-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
 .overlay-logo { width: 48px; height: 48px; border-radius: 10px; object-fit: contain; flex-shrink: 0; }
 .overlay-header-info { display: flex; flex-direction: column; gap: 0.3rem; }
-.overlay-org   { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-3); }
-.overlay-award { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--amber); margin-bottom: 0.5rem; }
-.overlay-title { font-family: 'Unbounded', sans-serif; font-size: clamp(1.2rem, 2.5vw, 1.75rem); font-weight: 700; color: var(--text-1); letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 0.35rem; }
-.overlay-date  { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-3); margin-bottom: 1.25rem; }
+.overlay-org   { font-family: 'Geist Mono', monospace; font-size: 0.7rem; color: var(--text-3); }
+.overlay-award { font-family: 'Geist Mono', monospace; font-size: 0.78rem; color: var(--amber); margin-bottom: 0.5rem; }
+.overlay-title { font-family: 'Geist Mono', monospace; font-size: clamp(1.2rem, 2.5vw, 1.75rem); font-weight: 700; color: var(--text-1); letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 0.35rem; }
+.overlay-date  { font-family: 'Geist Mono', monospace; font-size: 0.7rem; color: var(--text-3); margin-bottom: 1.25rem; }
 .overlay-metrics { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
 .overlay-points { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.5rem; }
 .overlay-points li { font-size: 0.86rem; color: var(--text-2); line-height: 1.65; padding-left: 1rem; position: relative; }
 .overlay-points li::before { content: '›'; position: absolute; left: 0; color: var(--lime); }
 .overlay-tags { display: flex; flex-wrap: wrap; gap: 0.45rem; }
-.overlay-tags span { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--text-3); background: rgba(255,255,255,0.04); border: 1px solid var(--border); padding: 0.18rem 0.55rem; border-radius: 4px; }
+.overlay-tags span { font-family: 'Geist Mono', monospace; font-size: 0.66rem; color: var(--text-3); background: rgba(255,255,255,0.04); border: 1px solid var(--border); padding: 0.18rem 0.55rem; border-radius: 4px; }
 .overlay-links { margin-top: 1.25rem; }
-.overlay-link { display: inline-flex; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--lime); border: 1px solid rgba(0,196,167,0.3); padding: 0.4rem 1rem; border-radius: 6px; transition: border-color 0.15s, background 0.15s; }
+.overlay-link { display: inline-flex; align-items: center; font-family: 'Geist Mono', monospace; font-size: 0.78rem; color: var(--lime); border: 1px solid rgba(0,196,167,0.3); padding: 0.4rem 1rem; border-radius: 6px; transition: border-color 0.15s, background 0.15s; }
 .overlay-link:hover { border-color: var(--lime); background: rgba(0,196,167,0.06); }
 
 /* ── Stack ──────────────────────────────────────────────────────── */
@@ -588,13 +588,13 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   padding: 1.25rem 0; border-bottom: 1px solid var(--border);
 }
 .stack-label {
-  font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; font-weight: 700;
+  font-family: 'Geist Mono', monospace; font-size: 0.66rem; font-weight: 700;
   color: var(--text-3); letter-spacing: 0.08em; text-transform: uppercase;
   width: 120px; flex-shrink: 0; padding-top: 0.15rem;
 }
 .stack-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .stack-pills span {
-  font-family: 'JetBrains Mono', monospace; font-size: 0.71rem; color: var(--text-2);
+  font-family: 'Geist Mono', monospace; font-size: 0.71rem; color: var(--text-2);
   background: var(--bg-3); border: 1px solid var(--border);
   padding: 0.28rem 0.7rem; border-radius: 6px; transition: all 0.15s; cursor: default;
 }
@@ -635,27 +635,27 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 /* ── Contact ────────────────────────────────────────────────────── */
 .section-contact { background: var(--bg-2); position: relative; overflow: hidden; }
 .contact-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 400px; background: radial-gradient(ellipse, rgba(196,18,48,0.07), transparent 70%); pointer-events: none; }
-.contact-heading { font-family: 'Unbounded', sans-serif; font-size: clamp(2.2rem, 6vw, 4.5rem); font-weight: 900; color: var(--text-1); letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 1rem; }
+.contact-heading { font-family: 'Geist Mono', monospace; font-size: clamp(2.2rem, 6vw, 4.5rem); font-weight: 900; color: var(--text-1); letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 1rem; }
 .contact-sub { font-size: 1rem; color: var(--text-2); margin-bottom: 3rem; }
 .contact-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 3rem; }
 .contact-card { background: var(--bg-3); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 0.4rem; text-decoration: none; transition: all 0.2s; }
 .contact-card:hover { border-color: var(--border-focus); background: var(--bg-4); transform: translateY(-2px); }
 .contact-icon  { font-size: 1.5rem; }
-.contact-label { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; }
+.contact-label { font-family: 'Geist Mono', monospace; font-size: 0.66rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; }
 .contact-value { font-size: 0.76rem; color: var(--text-2); word-break: break-all; }
 .contact-form  { display: flex; flex-direction: column; gap: 1.25rem; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
 .form-group { display: flex; flex-direction: column; gap: 0.45rem; }
-.form-group label { font-family: 'JetBrains Mono', monospace; font-size: 0.67rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; }
+.form-group label { font-family: 'Geist Mono', monospace; font-size: 0.67rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; }
 .form-group input, .form-group textarea { background: var(--bg-3); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; color: var(--text-1); font-family: inherit; font-size: 0.88rem; outline: none; transition: border-color 0.15s; resize: vertical; }
 .form-group input:focus, .form-group textarea:focus { border-color: var(--border-focus); }
 
 /* ── Footer ─────────────────────────────────────────────────────── */
 .footer { background: var(--titlebar); border-top: 1px solid var(--border); padding: 1.5rem 0; }
 .footer-inner { display: flex; justify-content: space-between; align-items: center; }
-.footer p { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-3); }
+.footer p { font-family: 'Geist Mono', monospace; font-size: 0.7rem; color: var(--text-3); }
 .footer-links { display: flex; gap: 1.5rem; }
-.footer-links a { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-3); transition: color 0.15s; }
+.footer-links a { font-family: 'Geist Mono', monospace; font-size: 0.7rem; color: var(--text-3); transition: color 0.15s; }
 .footer-links a:hover { color: var(--lime); }
 
 /* ── Pixel Loader ───────────────────────────────────────────────── */
@@ -664,10 +664,10 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .pixel-scanlines { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,196,167,0.015) 3px, rgba(0,196,167,0.015) 4px); pointer-events: none; }
 .pixel-loader-inner { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
 .pixel-bc { display: flex; gap: 0.25rem; }
-.px-letter { font-family: 'JetBrains Mono', monospace; font-size: clamp(5rem, 18vw, 11rem); font-weight: 700; color: var(--lime); text-shadow: 0 0 30px rgba(0,196,167,0.5), 0 0 60px rgba(0,196,167,0.2); line-height: 1; }
+.px-letter { font-family: 'Geist Mono', monospace; font-size: clamp(5rem, 18vw, 11rem); font-weight: 700; color: var(--lime); text-shadow: 0 0 30px rgba(0,196,167,0.5), 0 0 60px rgba(0,196,167,0.2); line-height: 1; }
 .pixel-bar-wrap { width: 220px; height: 6px; background: var(--bg-3); border-radius: 3px; overflow: hidden; }
 .pixel-bar-inner { height: 100%; width: 0%; background: var(--lime); border-radius: 3px; transition: width 0.25s steps(8); box-shadow: 0 0 12px rgba(0,196,167,0.6); }
-.pixel-loader-status { display: flex; align-items: center; gap: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-3); letter-spacing: 0.1em; }
+.pixel-loader-status { display: flex; align-items: center; gap: 0.5rem; font-family: 'Geist Mono', monospace; font-size: 0.7rem; color: var(--text-3); letter-spacing: 0.1em; }
 .pixel-cursor { color: var(--lime); animation: blink-cursor 1s step-end infinite; }
 @keyframes blink-cursor { 50%{opacity:0} }
 .pixel-tile-grid { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
