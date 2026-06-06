@@ -5,18 +5,26 @@ import { useGSAP } from '@gsap/react'
 
 // ── Coordinate space ────────────────────────────────────────────
 const VW = 1600, VH = 900   // 16:9 viewBox (SVG handles scaling)
-const SP = 68                // px between stripe centres
+const SP = 40                // px between stripe centres — denser tartan
 
 // ── Tartan palette ───────────────────────────────────────────────
+// Thick stripes cycle across crimson, teal, gold, bright-green, forest.
+// Thin accent lines separate them. No single colour dominates.
 const PAL = [
-  { s: 'rgba(0,175,150,0.88)',  w: 2.8 }, // teal thick
-  { s: 'rgba(185,22,45,0.82)', w: 2.0 }, // crimson
-  { s: 'rgba(25,100,55,0.72)', w: 1.6 }, // forest
-  { s: 'rgba(190,145,20,0.68)',w: 1.6 }, // muted gold
-  { s: 'rgba(12,40,100,0.45)', w: 0.8 }, // navy
-  { s: 'rgba(0,175,150,0.55)', w: 0.9 }, // teal thin
-  { s: 'rgba(185,22,45,0.45)', w: 0.8 }, // crimson thin
-  { s: 'rgba(38,165,95,0.70)', w: 1.8 }, // bright green
+  { s: 'rgba(185,22,45,0.92)',  w: 2.8 }, // crimson THICK
+  { s: 'rgba(25,100,55,0.55)', w: 0.6 }, // forest thin
+  { s: 'rgba(185,22,45,0.55)', w: 1.0 }, // crimson medium
+  { s: 'rgba(0,175,150,0.90)', w: 2.6 }, // teal THICK
+  { s: 'rgba(12,40,100,0.42)', w: 0.6 }, // navy thin
+  { s: 'rgba(0,175,150,0.52)', w: 0.9 }, // teal thin
+  { s: 'rgba(190,145,20,0.88)',w: 2.8 }, // gold THICK
+  { s: 'rgba(0,175,150,0.52)', w: 0.9 }, // teal thin
+  { s: 'rgba(12,40,100,0.40)', w: 0.6 }, // navy thin
+  { s: 'rgba(38,165,95,0.92)', w: 2.8 }, // bright-green THICK
+  { s: 'rgba(12,40,100,0.38)', w: 0.6 }, // navy thin
+  { s: 'rgba(185,22,45,0.55)', w: 1.0 }, // crimson medium
+  { s: 'rgba(25,100,55,0.90)', w: 2.6 }, // forest THICK
+  { s: 'rgba(185,22,45,0.42)', w: 0.6 }, // crimson thin
 ] as const
 
 function pal(n: number) { return PAL[((n % PAL.length) + PAL.length) % PAL.length] }
@@ -74,8 +82,8 @@ export default function TartanWave() {
 
     // ── Entrance: arcs draw in from their starting edge ──────────
     const ENTER = 1.5   // duration per line
-    const SA    = 0.038 // stagger between Set-A lines
-    const SB    = 0.042 // stagger between Set-B lines
+    const SA    = 0.022 // stagger between Set-A lines (tighter with more lines)
+    const SB    = 0.024 // stagger between Set-B lines
 
     gsap.to(pathsA, {
       strokeDashoffset: 0,
@@ -102,7 +110,7 @@ export default function TartanWave() {
     ;[...pathsA, ...pathsB].forEach((path, i) => {
       const base    = parseFloat(path.getAttribute('stroke-width') ?? '1')
       const dur     = 1.8 + (i % 7) * 0.22   // 1.8 s → 3.1 s, varied per line
-      const lineDelay = entranceEnd + i * 0.07  // rolling start
+      const lineDelay = entranceEnd + i * 0.04  // rolling start
 
       gsap.fromTo(
         path,
