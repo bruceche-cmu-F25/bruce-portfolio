@@ -127,10 +127,7 @@ export default function Hero() {
           <img src="/images/profile.jpg" alt="Bruce Cheng" className="hero-photo" />
         </div>
       </div>
-      <div className="hero-scroll-cue" aria-hidden="true">
-        <span>Scroll</span>
-        <div className="hero-scroll-bar" />
-      </div>
+
     </section>
   )
 }

@@ -275,7 +275,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .has-custom-cursor { cursor: none; }
 .has-custom-cursor .cursor-cross { display: block; }
 .cursor-cross {
-  position: fixed; z-index: 9999;
+  position: fixed; top: 0; left: 0; z-index: 9999;
   pointer-events: none; will-change: transform;
 }
 /* Four arms — each positioned relative to the 0×0 crosshair origin */
@@ -379,18 +379,6 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.hero-scroll-cue {
-  position: absolute; bottom: 2rem; left: 2.5rem;
-  display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem; color: var(--text-3); letter-spacing: 0.1em;
-}
-.hero-scroll-bar {
-  width: 1px; height: 40px;
-  background: linear-gradient(to bottom, var(--lime), transparent);
-  animation: scroll-drop 1.8s ease-in-out infinite;
-}
-@keyframes scroll-drop { 0%{opacity:0;transform:scaleY(0);transform-origin:top} 50%{opacity:1} 100%{opacity:0;transform:scaleY(1);transform-origin:bottom} }
 
 /* ── About ───────────────────────────────────────────────────────── */
 .about-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: start; }

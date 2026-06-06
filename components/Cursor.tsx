@@ -16,7 +16,7 @@ export default function Cursor() {
     if (!cross || !top || !right || !bot || !left) return
 
     document.body.classList.add('has-custom-cursor')
-    gsap.set(cross, { xPercent: -50, yPercent: -50, autoAlpha: 0 })
+    gsap.set(cross, { autoAlpha: 0 })
 
     let mx = -400, my = -400
     let visible  = false
