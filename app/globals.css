@@ -30,8 +30,8 @@
   --green:   #9ECE6A;
 
   --text-1: #D8D8EE;
-  --text-2: #6A6A9A;
-  --text-3: #363658;
+  --text-2: #8898B0;
+  --text-3: #50586A;
 
   --border:       rgba(255,255,255,0.06);
   --border-focus: rgba(0,196,167,0.28);
@@ -297,6 +297,11 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .btn-ghost { background: transparent; color: var(--text-1); border: 1.5px solid var(--border-focus); }
 .btn-ghost:hover { border-color: var(--lime); color: var(--lime); transform: translateY(-1px); }
 
+/* ── Scroll offset for fixed chrome ────────────────────────────── */
+#hero, #about, #work, #stack, #life, #contact {
+  scroll-margin-top: calc(var(--titlebar-h) + var(--tabbar-h));
+}
+
 /* ── Section layout ─────────────────────────────────────────────── */
 .section { padding: 6rem 0; }
 .section-alt { background: var(--bg-2); }
@@ -425,7 +430,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   font-size: clamp(1.5rem, 3.2vw, 2.2rem); font-weight: 700;
   color: var(--text-1); letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 1.25rem;
 }
-.about-body   { font-size: 0.93rem; line-height: 1.75; color: var(--text-2); margin-bottom: 1.75rem; }
+.about-body   { font-size: 0.97rem; line-height: 1.8; color: var(--text-2); margin-bottom: 1.75rem; }
 .about-links  { display: flex; gap: 1rem; flex-wrap: wrap; }
 .about-link {
   font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: var(--lime);
@@ -472,7 +477,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   letter-spacing: 0.08em; text-transform: uppercase; padding: 0.18rem 0.5rem; border-radius: 4px;
 }
 .badge-work    { background: rgba(255,83,112,0.12); color: var(--red);      border: 1px solid rgba(255,83,112,0.22); }
-.badge-project { background: rgba(122,162,247,0.12); color: var(--syn-func); border: 1px solid rgba(122,162,247,0.22); }
+.badge-project { background: rgba(54,201,255,0.10); color: var(--cyan); border: 1px solid rgba(54,201,255,0.20); }
 
 .live-badge {
   font-family: 'JetBrains Mono', monospace; font-size: 0.59rem; font-weight: 700;
@@ -484,7 +489,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   padding: 0.18rem 0.55rem; border-radius: 100px; white-space: nowrap;
 }
 .metric.green { background: rgba(158,206,106,0.1); color: var(--green);     border: 1px solid rgba(158,206,106,0.18); }
-.metric.blue  { background: rgba(122,162,247,0.1); color: var(--syn-func);  border: 1px solid rgba(122,162,247,0.18); }
+.metric.blue  { background: rgba(54,201,255,0.08); color: var(--cyan);      border: 1px solid rgba(54,201,255,0.18); }
 .metric.amber { background: rgba(255,179,71,0.1);  color: var(--amber);     border: 1px solid rgba(255,179,71,0.18); }
 
 /* ── Work — Tilted Grid ─────────────────────────────────────────── */

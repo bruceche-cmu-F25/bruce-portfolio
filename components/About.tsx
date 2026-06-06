@@ -81,7 +81,7 @@ export default function About() {
             <h2 className="about-heading">Building at the<br />frontier of AI</h2>
             <p className="about-body">MS student in Software Engineering at Carnegie Mellon University, Silicon Valley, with hands-on experience building AI systems and agentic workflows that ship to production. Previously at Helport AI — reduced intent-matching cost by 6× and average handling time by 35% across mortgage, healthcare, and insurance verticals. Actively seeking Summer 2026 internships in software engineering, AI/agentic systems, or product roles.</p>
             <div className="about-links">
-              <a href="https://github.com/Bruce0921" target="_blank" rel="noopener" className="about-link">GitHub ↗</a>
+              <a href="https://github.com/bruceche-cmu-F25" target="_blank" rel="noopener" className="about-link">GitHub ↗</a>
               <a href="https://linkedin.com/in/chi-cheng-779b4a259/" target="_blank" rel="noopener" className="about-link">LinkedIn ↗</a>
               <a href="/Chi Cheng-Resume-2026-May.pdf" download className="about-link">Resume ↓</a>
             </div>

@@ -189,8 +189,8 @@ export default function VSCodeLayout() {
         <SidebarTree activeId={activeId} onNavigate={scrollTo} />
         <div className="vsc-sidebar-divider" />
         <div className="vsc-sidebar-bottom">
-          <a href="https://github.com/Bruce0921" target="_blank" rel="noopener" className="vsc-social-link">
-            ⬡ github.com/Bruce0921
+          <a href="https://github.com/bruceche-cmu-F25" target="_blank" rel="noopener" className="vsc-social-link">
+            ⬡ github.com/bruceche-cmu-F25
           </a>
           <a href="https://linkedin.com/in/chi-cheng-779b4a259/" target="_blank" rel="noopener" className="vsc-social-link">
             ⬡ linkedin.com/in/chi-cheng
