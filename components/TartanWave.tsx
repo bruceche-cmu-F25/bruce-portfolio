@@ -12,19 +12,19 @@ const SP = 40                // px between stripe centres — denser tartan
 // Thin accent lines separate them. No single colour dominates.
 const PAL = [
   { s: 'rgba(185,22,45,0.92)',  w: 2.8 }, // crimson THICK
-  { s: 'rgba(25,100,55,0.55)', w: 0.6 }, // forest thin
-  { s: 'rgba(185,22,45,0.55)', w: 1.0 }, // crimson medium
-  { s: 'rgba(0,175,150,0.90)', w: 2.6 }, // teal THICK
-  { s: 'rgba(12,40,100,0.42)', w: 0.6 }, // navy thin
-  { s: 'rgba(0,175,150,0.52)', w: 0.9 }, // teal thin
-  { s: 'rgba(190,145,20,0.88)',w: 2.8 }, // gold THICK
-  { s: 'rgba(0,175,150,0.52)', w: 0.9 }, // teal thin
-  { s: 'rgba(12,40,100,0.40)', w: 0.6 }, // navy thin
-  { s: 'rgba(38,165,95,0.92)', w: 2.8 }, // bright-green THICK
-  { s: 'rgba(12,40,100,0.38)', w: 0.6 }, // navy thin
-  { s: 'rgba(185,22,45,0.55)', w: 1.0 }, // crimson medium
-  { s: 'rgba(25,100,55,0.90)', w: 2.6 }, // forest THICK
-  { s: 'rgba(185,22,45,0.42)', w: 0.6 }, // crimson thin
+  { s: 'rgba(25,100,55,0.72)',  w: 1.1 }, // forest (always visible)
+  { s: 'rgba(185,22,45,0.62)',  w: 1.2 }, // crimson medium
+  { s: 'rgba(0,175,150,0.90)',  w: 2.6 }, // teal THICK
+  { s: 'rgba(12,40,100,0.62)',  w: 1.0 }, // navy (always visible)
+  { s: 'rgba(0,175,150,0.65)',  w: 1.1 }, // teal medium
+  { s: 'rgba(190,145,20,0.88)', w: 2.8 }, // gold THICK
+  { s: 'rgba(0,175,150,0.65)',  w: 1.1 }, // teal medium
+  { s: 'rgba(12,40,100,0.60)',  w: 1.0 }, // navy (always visible)
+  { s: 'rgba(38,165,95,0.92)',  w: 2.8 }, // bright-green THICK
+  { s: 'rgba(12,40,100,0.58)',  w: 1.0 }, // navy (always visible)
+  { s: 'rgba(185,22,45,0.62)',  w: 1.2 }, // crimson medium
+  { s: 'rgba(25,100,55,0.90)',  w: 2.6 }, // forest THICK
+  { s: 'rgba(185,22,45,0.55)',  w: 1.0 }, // crimson (always visible)
 ] as const
 
 function pal(n: number) { return PAL[((n % PAL.length) + PAL.length) % PAL.length] }
@@ -85,24 +85,26 @@ export default function TartanWave() {
     const SA    = 0.022 // stagger between Set-A lines (tighter with more lines)
     const SB    = 0.024 // stagger between Set-B lines
 
+    // Both sets start together — simultaneous entrance from opposite corners
+    const ENTRANCE_DELAY = 0.15
     gsap.to(pathsA, {
       strokeDashoffset: 0,
       duration: ENTER,
       stagger: { each: SA, from: 'start' },
       ease: 'power2.inOut',
-      delay: 0.1,
+      delay: ENTRANCE_DELAY,
     })
     gsap.to(pathsB, {
       strokeDashoffset: 0,
       duration: ENTER,
       stagger: { each: SB, from: 'end' },
       ease: 'power2.inOut',
-      delay: 0.3,
+      delay: ENTRANCE_DELAY,
     })
 
     // Estimate when the last line finishes drawing
     const entranceEnd =
-      0.3 + Math.max(SA * pathsA.length, SB * pathsB.length) + ENTER + 0.15
+      ENTRANCE_DELAY + Math.max(SA * pathsA.length, SB * pathsB.length) + ENTER + 0.15
 
     // ── Continuous: per-line strokeWidth pulse ────────────────────
     // Each line gets its own independent infinite yoyo tween (no restarts)
@@ -114,7 +116,7 @@ export default function TartanWave() {
 
       gsap.fromTo(
         path,
-        { strokeWidth: base * 0.12 },
+        { strokeWidth: Math.max(0.55, base * 0.35) },  // never thinner than 0.55px
         {
           strokeWidth: base * 2.8,
           duration: dur,
