@@ -1,0 +1,11 @@
+Model Information:
+* title:	Sci-fi Investigaion Room Asset
+* source:	https://sketchfab.com/3d-models/sci-fi-investigaion-room-asset-7f36278512be46e3aacba6dcbcc1b64f
+* author:	Szatmari Zoltan (https://sketchfab.com/szatmarizoltan)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Sci-fi Investigaion Room Asset" (https://sketchfab.com/3d-models/sci-fi-investigaion-room-asset-7f36278512be46e3aacba6dcbcc1b64f) by Szatmari Zoltan (https://sketchfab.com/szatmarizoltan) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

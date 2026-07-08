@@ -1,0 +1,11 @@
+Model Information:
+* title:	Blackhole Spear(Effect)
+* source:	https://sketchfab.com/3d-models/blackhole-speareffect-d3f30a49fad7446f90b8f07fb9dde284
+* author:	Evan F. (https://sketchfab.com/350713)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Blackhole Spear(Effect)" (https://sketchfab.com/3d-models/blackhole-speareffect-d3f30a49fad7446f90b8f07fb9dde284) by Evan F. (https://sketchfab.com/350713) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

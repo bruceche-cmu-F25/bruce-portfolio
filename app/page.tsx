@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 
-const PixelLoader    = dynamic(() => import('@/components/PixelLoader'),    { ssr: false })
+const SpaceIntro     = dynamic(() => import('@/components/SpaceIntro'),     { ssr: false })
 const Cursor         = dynamic(() => import('@/components/Cursor'),          { ssr: false })
 const LenisInit      = dynamic(() => import('@/components/LenisInit'),      { ssr: false })
 const VSCodeLayout   = dynamic(() => import('@/components/VSCodeLayout'),   { ssr: false })
@@ -15,7 +15,7 @@ const Contact        = dynamic(() => import('@/components/Contact'),         { s
 export default function Page() {
   return (
     <>
-      <PixelLoader />
+      <SpaceIntro />
       <Cursor />
       <LenisInit />
       <VSCodeLayout />
