@@ -7,6 +7,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js'
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 import gsap from 'gsap'
 
 type Phase = 'loading' | 'ready' | 'dive' | 'boot' | 'cli' | 'done'
@@ -88,11 +89,17 @@ export default function SpaceIntro() {
     document.documentElement.style.overflow = 'hidden'
     document.body.style.overflow = 'hidden'
 
+    // studio-style environment lighting, same role as Sketchfab's default env
+    const pmrem = new THREE.PMREMGenerator(renderer)
+    const envMap = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
+    pmrem.dispose()
+
     /* ---------- shared state ---------- */
     const clock = new THREE.Clock()
     const spin = { hole: 0.06, fx: -0.25 }
     let holeGroup: THREE.Group | null = null
     let fxGroup: THREE.Group | null = null
+    const fxMats: THREE.MeshStandardMaterial[] = []
     let idleFloat = true
     let camBaseY = 0
 
@@ -156,7 +163,7 @@ export default function SpaceIntro() {
     const res = new THREE.Vector2(window.innerWidth, window.innerHeight)
     const composer1 = new EffectComposer(renderer)
     composer1.addPass(new RenderPass(scene1, camera1))
-    composer1.addPass(new UnrealBloomPass(res.clone(), 0.45, 0.55, 0.6))
+    composer1.addPass(new UnrealBloomPass(res.clone(), 0.9, 0.75, 0.62))
     composer1.addPass(new OutputPass())
     const composer2 = new EffectComposer(renderer)
     composer2.addPass(new RenderPass(scene2, camera2))
@@ -180,32 +187,21 @@ export default function SpaceIntro() {
         /* ----- scene 1: black hole ----- */
         scene1.add(makeStars(2600, 0.9))
 
-        // render the asset with its authored texture colors: albedo doubles as emissive,
-        // so no scene light can tint it and bloom picks up the bright bands
-        // Sketchfab renders the rings and light bands additively — the glTF export
-        // downgrades that to plain alpha blending, which is what washes the colors out.
-        const ADDITIVE = ['ring', 'ring2', 'black_hole_light1', 'black_hole_light2', 'black_hole_light3']
+        // Sketchfab's "Final Render" = authored materials (albedo/spec/emission as-is)
+        // + studio environment lighting + bloom post-processing. Keep the materials
+        // untouched and reproduce the env + post instead.
+        scene1.environment = envMap
+        ;(scene1 as any).environmentIntensity = 1.1
+        // …except the horizon spheres: they must stay pure black, not reflect the env
+        const NO_ENV = ['black_hole_center', 'black_hole_distortion', 'black_hole_blackoutside']
         hole.scene.traverse(o => {
           const m = o as THREE.Mesh
           if (!m.isMesh) return
           const mat = m.material as THREE.MeshStandardMaterial
-          if (!mat || !(mat as any).isMeshStandardMaterial) return
-          if (!mat.emissiveMap && mat.map) {
-            mat.emissiveMap = mat.map
-            // slightly warm tint — matches the amber grade of the Sketchfab render
-            mat.emissive = new THREE.Color(1.0, 0.88, 0.72)
-            mat.emissiveIntensity = 1.0
-          } else if (mat.emissiveMap) {
-            // keep the authored glow but don't let HDR strength blow out the horizon
-            mat.emissive = new THREE.Color(1.0, 0.92, 0.8)
-            mat.emissiveIntensity = Math.min(mat.emissiveIntensity, 1.0)
+          if (mat && (mat as any).isMeshStandardMaterial && NO_ENV.includes(mat.name)) {
+            mat.envMapIntensity = 0
+            mat.needsUpdate = true
           }
-          if (ADDITIVE.includes(mat.name)) {
-            mat.transparent = true
-            mat.blending = THREE.AdditiveBlending
-            mat.depthWrite = false
-          }
-          mat.needsUpdate = true
         })
 
         holeGroup = normalize(hole.scene, 64)
@@ -242,6 +238,19 @@ export default function SpaceIntro() {
             mat.blending = THREE.AdditiveBlending
             mat.depthWrite = false
             mat.side = THREE.DoubleSide
+            // glow from its own texture only — the asset ships as a perfect mirror
+            // (metalness 1 / roughness 0) which reflects the env into a white ball
+            mat.metalness = 0
+            mat.roughness = 1
+            mat.envMapIntensity = 0
+            if (mat.map) {
+              mat.emissiveMap = mat.map
+              mat.emissive = new THREE.Color(0xffffff)
+              mat.emissiveIntensity = 0.06 // near-invisible at idle; ramped up in the dive
+            }
+            mat.opacity = 0.6
+            mat.needsUpdate = true
+            fxMats.push(mat)
           }
         })
         fxGroup = normalize(fx.scene, cSphere.radius * 2.3)
@@ -254,6 +263,8 @@ export default function SpaceIntro() {
 
         /* ----- scene 2: the computer inside the singularity ----- */
         scene2.add(makeStars(1400, 0.35))
+        scene2.environment = envMap
+        ;(scene2 as any).environmentIntensity = 0.35
         scene2.add(new THREE.AmbientLight(0x8899bb, 0.5))
         const key = new THREE.DirectionalLight(0xffe8cc, 1.8)
         key.position.set(14, 22, 18)
@@ -310,6 +321,8 @@ export default function SpaceIntro() {
           const sH = sBox.getSize(new THREE.Vector3()).y
           dollyEndDist = (sH * 1.12) / (2 * Math.tan(THREE.MathUtils.degToRad(camera2.fov / 2)))
         }
+
+        if (process.env.NODE_ENV !== 'production') (window as any).__dbgScene1 = scene1
 
         setPhase('ready')
         setProgress(100)
@@ -489,6 +502,11 @@ export default function SpaceIntro() {
       tl.to(p3, { roll: 0.5, duration: 2.8, ease: 'sine.inOut' }, 'dive')
       tl.to(p3, { roll: -0.18, duration: 2.8, ease: 'sine.inOut' }, 'dive+=2.8')
       tl.to(spin, { hole: 0.7, fx: -2.4, duration: 5.2, ease: 'power2.in' }, 'dive')
+      const fxGlow = { e: 0.06 }
+      tl.to(fxGlow, {
+        e: 0.85, duration: 5.2, ease: 'power2.in',
+        onUpdate: () => fxMats.forEach(m => { m.emissiveIntensity = fxGlow.e }),
+      }, 'dive')
       tl.to(camera1, {
         fov: 105, duration: 1.7, ease: 'power3.in',
         onUpdate: () => camera1.updateProjectionMatrix(),
