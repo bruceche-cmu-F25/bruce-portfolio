@@ -11,7 +11,8 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 // ─── 婚礼信息 ───────────────────────────────────────────────────────
 const DATE = '二零二六年 六月二十二日'
-const TRANSITION_WORDS = ['and', 'then,', 'we', 'stepped', 'outside…']
+const TRANSITION_WORDS = ['into', 'the', 'sunlight,', 'hand', 'in', 'hand']
+const TRANSITION_ZH = '执子之手，踏进阳光里'
 const TRANSITION_SUB = 'The Water Temple · 水神殿'
 
 const TEAL = '#47837C'
@@ -22,16 +23,17 @@ type Photo = { id: string; w: number; h: number }
 
 const DIMS: Record<string, [number, number]> = {
   '1':  [6063, 9094], '2':  [6153, 9235], '3':  [4160, 6240], '4':  [6102, 9152],
-  '5':  [4160, 6240], '6':  [6289, 9434], '7':  [6336, 9504], '8':  [4160, 6240],
-  '9':  [4160, 6240], '10': [6336, 9504], '11': [4160, 6240], '12': [4160, 6240],
+  '5':  [4160, 6240], '6':  [6289, 9434], '7':  [3875, 5813], '8':  [4160, 6240],
+  '9':  [4160, 6240], '10': [6336, 9504], '11': [4160, 6334], '12': [4160, 6240],
   '13': [4160, 6240], '14': [6336, 9504], '15': [6336, 9504], '16': [6336, 9504],
   '17': [6094, 9141], '18': [6262, 9393], '19': [5920, 8879], '20': [6336, 9504],
   '21': [4160, 6240], '22': [6219, 9329], '23': [6336, 9504], '24': [5996, 8994],
   '25': [6167, 9250], '26': [6159, 9238], '27': [6336, 9504], '28': [6336, 9504],
-  '29': [6336, 9504], '30': [6336, 9504], '31': [6258, 9387], '32': [6115, 9172],
+  '29': [6336, 9504], '30': [6336, 9504], '31': [6258, 9387], '32': [4160, 6240],
   '33': [6252, 9378], '34': [6336, 9504], '35': [6336, 9504], '36': [6336, 9504],
-  '37': [6054, 9082], '38': [5754, 8631], '39': [6248, 9373], '40': [6336, 9504],
-  '41': [6240, 4160], '42': [5999, 9000], '43': [6240, 4160],
+  '37': [4160, 6240], '38': [6240, 4160], '39': [6248, 9373], '40': [1206, 2622],
+  // 44 的原始像素是 6240×4160，但带 EXIF 旋转标记，浏览器按竖构图显示
+  '41': [6336, 9504], '42': [6240, 4160], '43': [5999, 9000], '44': [4160, 6240],
   '001o': [6376, 4403], '002o': [3316, 5120], '003o': [3305, 4957], '004o': [5120, 3413],
   '005o': [7008, 4672], '006o': [2464, 3552], '007o': [6300, 4200], '008o': [5120, 3413],
   '009o': [7008, 4672], '010o': [3115, 4672], '011o': [2591, 3886], '012o': [7008, 4672],
@@ -41,12 +43,16 @@ const P = (id: string): Photo => ({ id, w: DIMS[id][0], h: DIMS[id][1] })
 
 // 拼版行：12 列宽度单位，h = 行高（列单位）。行内高度严格一致 →
 // 不会出现空洞；格子比例和原图的偏差由轻微裁切消化（lightbox 永远是全图）
-type CollageRow = { h: number; cells: { id: string; span: number }[] }
+// cell.drop: 单格轻微下沉，让上缘有一点错落（下缘保持对齐）
+type CollageRow = {
+  h: number
+  cells: { id: string; span: number; drop?: boolean }[]
+}
 
 type Block =
   | { type: 'collage'; rows: CollageRow[] }
   | { type: 'solo';    photos: Photo[] }
-  | { type: 'duo';     photos: Photo[] }
+  | { type: 'duo';     photos: Photo[]; large?: boolean }
   | { type: 'feature'; photos: Photo[] }
 
 const blockPhotos = (b: Block): Photo[] =>
@@ -55,42 +61,44 @@ const blockPhotos = (b: Block): Photo[] =>
 const INDOOR_BLOCKS: Block[] = [
   { type: 'solo', photos: [P('1')] },
   { type: 'collage', rows: [
-    { h: 9,   cells: [{ id: '2',  span: 7 }, { id: '3',  span: 5 }] },
-    { h: 6,   cells: [{ id: '4',  span: 4 }, { id: '5',  span: 4 }, { id: '6',  span: 4 }] },
-    { h: 8.6, cells: [{ id: '7',  span: 5 }, { id: '8',  span: 7 }] },
-    { h: 6,   cells: [{ id: '9',  span: 5 }, { id: '10', span: 4 }, { id: '11', span: 3 }] },
-    { h: 6.2, cells: [{ id: '12', span: 4 }, { id: '13', span: 4 }, { id: '14', span: 4 }] },
+    { h: 6.2, cells: [{ id: '2',  span: 4 }, { id: '3',  span: 4, drop: true }, { id: '4', span: 4 }] },
+    { h: 9,   cells: [{ id: '5',  span: 7 }, { id: '6',  span: 5, drop: true }] },
+    { h: 6,   cells: [{ id: '7',  span: 4 }, { id: '8',  span: 4, drop: true }, { id: '9', span: 4 }] },
+    { h: 8.6, cells: [{ id: '10', span: 5, drop: true }, { id: '11', span: 7 }] },
+    { h: 6.4, cells: [{ id: '12', span: 4 }, { id: '13', span: 4, drop: true }, { id: '14', span: 4 }] },
   ] },
   { type: 'duo', photos: [P('15'), P('16')] },
   { type: 'collage', rows: [
-    { h: 6,   cells: [{ id: '17', span: 4 }, { id: '18', span: 4 }, { id: '19', span: 4 }] },
-    { h: 9,   cells: [{ id: '20', span: 7 }, { id: '21', span: 5 }] },
-    { h: 6,   cells: [{ id: '22', span: 3 }, { id: '23', span: 4 }, { id: '24', span: 5 }] },
-    { h: 8.6, cells: [{ id: '25', span: 5 }, { id: '26', span: 7 }] },
-    { h: 9,   cells: [{ id: '27', span: 7 }, { id: '28', span: 5 }] },
+    { h: 9,   cells: [{ id: '17', span: 7 }, { id: '18', span: 5, drop: true }] },
+    { h: 6.2, cells: [{ id: '19', span: 4 }, { id: '20', span: 4, drop: true }, { id: '21', span: 4 }] },
+    { h: 8.6, cells: [{ id: '22', span: 5 }, { id: '23', span: 7, drop: true }] },
+    { h: 6,   cells: [{ id: '24', span: 4 }, { id: '25', span: 4, drop: true }, { id: '26', span: 4 }] },
+    { h: 7.8, cells: [{ id: '27', span: 6, drop: true }, { id: '28', span: 6 }] },
   ] },
-  { type: 'feature', photos: [P('41')] },
+  { type: 'feature', photos: [P('42')] },
   { type: 'collage', rows: [
-    { h: 8.6, cells: [{ id: '29', span: 5 }, { id: '30', span: 7 }] },
-    { h: 6,   cells: [{ id: '31', span: 4 }, { id: '32', span: 4 }, { id: '33', span: 4 }] },
-    { h: 9,   cells: [{ id: '34', span: 7 }, { id: '35', span: 5 }] },
-    { h: 6.2, cells: [{ id: '36', span: 5 }, { id: '37', span: 4 }, { id: '38', span: 3 }] },
-    { h: 9,   cells: [{ id: '39', span: 5 }, { id: '40', span: 7 }] },
+    { h: 6.2, cells: [{ id: '29', span: 4 }, { id: '30', span: 4, drop: true }, { id: '31', span: 4 }] },
+    // 38 是横构图，配一张竖图同排（span8/h5.6 ≈ 3:2）
+    { h: 5.6, cells: [{ id: '38', span: 8 }, { id: '32', span: 4, drop: true }] },
+    // 40 是超窄长图（0.46），span3/h6.5 正好贴合原始比例
+    { h: 6.5, cells: [{ id: '33', span: 5 }, { id: '34', span: 4, drop: true }, { id: '40', span: 3 }] },
+    { h: 9,   cells: [{ id: '35', span: 7 }, { id: '36', span: 5, drop: true }] },
+    { h: 6.3, cells: [{ id: '37', span: 4 }, { id: '39', span: 4, drop: true }, { id: '41', span: 4 }] },
   ] },
-  { type: 'solo', photos: [P('42')] },
-  { type: 'feature', photos: [P('43')] },
+  // 43、44 都是竖构图 → 加大版双联幅收章（44 带 EXIF 旋转，按竖图显示）
+  { type: 'duo', photos: [P('43'), P('44')], large: true },
 ]
 
 const OUTDOOR_BLOCKS: Block[] = [
   { type: 'solo', photos: [P('001o')] },
   { type: 'collage', rows: [
-    { h: 5.6, cells: [{ id: '004o', span: 8 }, { id: '002o', span: 4 }] },
-    { h: 5.0, cells: [{ id: '006o', span: 4 }, { id: '007o', span: 8 }] },
+    { h: 5.6, cells: [{ id: '004o', span: 8 }, { id: '002o', span: 4, drop: true }] },
+    { h: 5.0, cells: [{ id: '006o', span: 4, drop: true }, { id: '007o', span: 8 }] },
   ] },
   { type: 'solo', photos: [P('003o')] },
   { type: 'collage', rows: [
-    { h: 5.2, cells: [{ id: '008o', span: 8 }, { id: '010o', span: 4 }] },
-    { h: 5.6, cells: [{ id: '011o', span: 4 }, { id: '009o', span: 8 }] },
+    { h: 5.2, cells: [{ id: '008o', span: 8 }, { id: '010o', span: 4, drop: true }] },
+    { h: 5.6, cells: [{ id: '011o', span: 4, drop: true }, { id: '009o', span: 8 }] },
   ] },
   { type: 'solo', photos: [P('005o')] },
   { type: 'feature', photos: [P('012o')] },
@@ -198,7 +206,7 @@ function Collage({ rows, offset, onOpen }: {
             return (
               <div
                 key={cell.id}
-                className={`${styles.ccell} wg-cell`}
+                className={`${styles.ccell} ${cell.drop ? styles.cellDrop : ''} wg-cell`}
                 style={{ flex: `${cell.span} ${cell.span} 0%`, '--car': `${w} / ${h}` } as CSSProperties}
                 onClick={() => onOpen(at)}
               >
@@ -252,9 +260,14 @@ function Solo({ photo, index, onOpen }: { photo: Photo; index: number; onOpen: (
   )
 }
 
-function Duo({ photos, offset, onOpen }: { photos: Photo[]; offset: number; onOpen: (i: number) => void }) {
+function Duo({ photos, offset, large, onOpen }: {
+  photos: Photo[]
+  offset: number
+  large?: boolean
+  onOpen: (i: number) => void
+}) {
   return (
-    <div className={styles.duo}>
+    <div className={`${styles.duo} ${large ? styles.duoLarge : ''}`}>
       {photos.map((p, i) => (
         <div key={p.id} className={`${styles.duoItem} wg-feature`}>
           <SpotlightMat photo={p} index={offset + i} onOpen={onOpen} />
@@ -299,7 +312,7 @@ function ChapterBlocks({ blocks, start, onOpen }: {
           case 'solo':
             return <Solo key={bi} photo={block.photos[0]} index={at} onOpen={onOpen} />
           case 'duo':
-            return <Duo key={bi} photos={block.photos} offset={at} onOpen={onOpen} />
+            return <Duo key={bi} photos={block.photos} offset={at} large={block.large} onOpen={onOpen} />
           case 'feature':
             return <Feature key={bi} photo={block.photos[0]} index={at} onOpen={onOpen} />
         }
@@ -579,11 +592,11 @@ export default function Gallery() {
         <div className={styles.tText}>
           <span className={`${styles.tFleuron} wg-t-word`} aria-hidden="true">❧</span>
           <p className={styles.tWords}>
-            {TRANSITION_WORDS.map(word => (
-              <span key={word} className={`${styles.tWord} wg-t-word`}>{word}</span>
+            {TRANSITION_WORDS.map((word, i) => (
+              <span key={i} className={`${styles.tWord} wg-t-word`}>{word}</span>
             ))}
           </p>
-          <p className={`${styles.tZh} wg-t-word`}>随后，我们来到了户外</p>
+          <p className={`${styles.tZh} wg-t-word`}>{TRANSITION_ZH}</p>
           <p className={`${styles.tSub} wg-t-sub`}>{TRANSITION_SUB}</p>
         </div>
       </section>

@@ -341,6 +341,7 @@
   position: relative;
   text-align: center;
   padding: 6.5rem 1rem 3.2rem;
+  overflow: hidden; /* backdrop art can never bleed into neighbours */
 }
 
 .chapterGhost {
@@ -362,10 +363,10 @@
    element opacity to 1, so it must not carry the fade itself. */
 .domeArt {
   position: absolute;
-  top: 48%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: min(460px, 60vw);
+  width: min(400px, 52vw);
   color: var(--accent);
   pointer-events: none;
   user-select: none;
@@ -437,6 +438,10 @@
   margin-bottom: 14px;
   aspect-ratio: var(--rh);
 }
+
+/* gentle stagger: a dropped cell breaks the straight top edge
+   (flex stretch keeps bottoms aligned, so no holes appear) */
+.cellDrop { margin-top: clamp(8px, 1.4vw, 18px); }
 
 .ccell {
   position: relative;
@@ -523,6 +528,10 @@
 }
 
 .duoItem:nth-child(2) { margin-top: 4rem; }
+
+/* grand duo — the chapter's closing pair, noticeably larger */
+.duoLarge { max-width: 1320px; }
+.duoLarge .duoItem { max-width: 620px; }
 
 /* ── Feature — full-width chapter finale ───────────────────────── */
 .feature {
