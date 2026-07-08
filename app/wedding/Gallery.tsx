@@ -392,6 +392,14 @@ export default function Gallery() {
         scrollTrigger: { start: 0, end: 'max', scrub: 0.3 },
       })
 
+      // ── Section background patterns ease in with the chapter ─────
+      gsap.utils.toArray<HTMLElement>('.wg-pattern').forEach(pattern => {
+        gsap.fromTo(pattern,
+          { autoAlpha: 0 },
+          { autoAlpha: 1, duration: 1.8, ease: 'power1.inOut',
+            scrollTrigger: { trigger: pattern.parentElement, start: 'top 72%' } })
+      })
+
       // ── Chapter headers ──────────────────────────────────────────
       gsap.utils.toArray<HTMLElement>('.wg-chapter-head').forEach(head => {
         const tl = gsap.timeline({
@@ -517,6 +525,7 @@ export default function Gallery() {
     <div ref={rootRef} className={styles.page}>
       <LenisInit />
       <div className={styles.grain} aria-hidden="true" />
+      <div className={styles.pageEdges} aria-hidden="true" />
       <div className={`${styles.progress} wg-progress`} aria-hidden="true" />
 
       {/* Opening curtains */}
@@ -555,7 +564,8 @@ export default function Gallery() {
       </header>
 
       {/* ── Chapter Ⅰ · City Hall ── */}
-      <section className={styles.hallTexture}>
+      <section className={styles.patternedSection}>
+        <div className={`${styles.sectionPattern} ${styles.hallPattern} wg-pattern`} aria-hidden="true" />
         <ChapterHead art="dome" kicker="Chapter One" title="City Hall" />
         <ChapterBlocks blocks={INDOOR_BLOCKS} start={0} onOpen={setActive} />
       </section>
@@ -576,7 +586,8 @@ export default function Gallery() {
       </section>
 
       {/* ── Chapter Ⅱ · Water Temple (teal) ── */}
-      <section className={styles.themeTeal}>
+      <section className={`${styles.themeTeal} ${styles.patternedSection}`}>
+        <div className={`${styles.sectionPattern} ${styles.tealPattern} wg-pattern`} aria-hidden="true" />
         <ChapterHead ghost="II" kicker="Chapter Two" title="Water Temple" />
         <ChapterBlocks blocks={OUTDOOR_BLOCKS} start={OUTDOOR_START} onOpen={setActive} />
 

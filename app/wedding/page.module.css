@@ -35,10 +35,56 @@
   background: #EDF3F0;
 }
 
-/* City Hall — coffered-ceiling rosette lattice, whisper quiet */
-.hallTexture {
-  background-image: radial-gradient(rgba(172, 133, 86, 0.055) 1px, transparent 1.3px);
-  background-size: 26px 26px;
+/* ── Section background patterns (real divs so GSAP can fade them) ── */
+.patternedSection {
+  position: relative;
+  isolation: isolate; /* keep the z:-1 pattern above the section bg but below content */
+}
+
+.sectionPattern {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* City Hall — octagonal coffer tiles with rosette centres,
+   the beaux-arts ceiling grammar of the rotunda */
+.hallPattern {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'><path d='M18 0 L46 0 L64 18 L64 46 L46 64 L18 64 L0 46 L0 18 Z' fill='none' stroke='%23AC8556' stroke-opacity='0.10'/><circle cx='32' cy='32' r='1.4' fill='%23AC8556' fill-opacity='0.13'/></svg>");
+  background-size: 64px 64px;
+}
+
+/* Water Temple — quiet cosine waves */
+.tealPattern {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='26' viewBox='0 0 120 26'><path d='M0 13 c20 -12 40 -12 60 0 s40 12 60 0' fill='none' stroke='%2347837C' stroke-opacity='0.10'/></svg>");
+  background-size: 120px 26px;
+}
+
+/* page-edge engraved hairlines — wide screens only */
+.pageEdges {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+}
+.pageEdges::before,
+.pageEdges::after {
+  content: '';
+  position: absolute;
+  top: 18px;
+  bottom: 18px;
+  width: 5px;
+}
+.pageEdges::before {
+  left: 22px;
+  border-left: 1px solid rgba(172, 133, 86, 0.18);
+  border-right: 1px solid rgba(172, 133, 86, 0.10);
+}
+.pageEdges::after {
+  right: 22px;
+  border-right: 1px solid rgba(172, 133, 86, 0.18);
+  border-left: 1px solid rgba(172, 133, 86, 0.10);
 }
 
 /* ── Film grain ────────────────────────────────────────────────── */
@@ -168,10 +214,27 @@
   justify-content: center;
   padding: 4rem 1.25rem 5rem;
   position: relative;
+  overflow: hidden;
 }
+
+/* halo rings behind the invitation card */
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(172, 133, 86, 0.12);
+  pointer-events: none;
+}
+.hero::before { width: 620px;  height: 620px; }
+.hero::after  { width: 760px;  height: 760px; border-color: rgba(172, 133, 86, 0.07); }
 
 .heroCard {
   position: relative;
+  z-index: 1; /* above the halo rings */
   text-align: center;
   max-width: 620px;
   width: 100%;
@@ -541,7 +604,9 @@
 
 /* ── Closing block ─────────────────────────────────────────────── */
 .closing {
-  background: var(--accent);
+  background-color: var(--accent);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='26' viewBox='0 0 120 26'><path d='M0 13 c20 -12 40 -12 60 0 s40 12 60 0' fill='none' stroke='%23FFF8EA' stroke-opacity='0.06'/></svg>");
+  background-size: 120px 26px;
   color: var(--cream);
   padding: 6rem 1.25rem;
 }
@@ -698,18 +763,30 @@
 
   .tWords { max-width: 18ch; }
   .tText { gap: 1rem; }
+
+  .hero::before { width: 420px; height: 420px; }
+  .hero::after  { width: 520px; height: 520px; }
+}
+
+@media (max-width: 1100px) {
+  /* edge hairlines collide with photo mats on narrow screens */
+  .pageEdges { display: none; }
 }
 
 @media (max-width: 500px) {
-  /* rows stack; each photo returns to its native ratio */
-  .crow { display: block; aspect-ratio: auto; margin-bottom: 0; }
-  .ccell { margin-bottom: 10px; }
-  .ccellInner { aspect-ratio: var(--car); flex: none; width: 100%; }
-  .collage { padding: 0 0.9rem 1.6rem; }
-  .feature { padding: 0 0.9rem 3.5rem; }
-  .showcase { padding: 1rem 0.9rem 3rem; }
-  .duo { flex-direction: column; align-items: center; padding: 1rem 0.9rem 3rem; }
-  .duoItem:nth-child(2) { margin-top: 0; }
+  /* keep the desktop row composition — just tighter mats and gaps,
+     so the phone shows the same multi-photo collage, scaled down */
+  .crow { gap: 6px; margin-bottom: 6px; }
+  .ccell { padding: 4px; border-width: 1px; }
+  .collage { padding: 0 0.7rem 1.6rem; }
+  .feature { padding: 0 0.7rem 3.5rem; }
+  .featureMat { padding: 6px; }
+  .showcase { padding: 1rem 0.9rem 2.6rem; }
+  .showcaseMat { padding: 8px; }
+  .showcaseMat::before { inset: 4px; }
+  .showcasePortrait { max-width: 320px; } /* spotlight stays special but not one-per-screen */
+  .duo { gap: 0.7rem; padding: 1rem 0.7rem 2.6rem; }
+  .duoItem:nth-child(2) { margin-top: 1.6rem; }
   .lbArrow { font-size: 2.4rem; padding: 0 0.7rem; }
   .lbImg { border-width: 4px; }
 }
