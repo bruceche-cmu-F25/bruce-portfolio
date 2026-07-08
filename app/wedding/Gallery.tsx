@@ -10,9 +10,9 @@ import styles from './page.module.css'
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 // ─── 婚礼信息 ───────────────────────────────────────────────────────
-const DATE = 'July 2026'
+const DATE = '二零二六年 六月二十二日'
 const TRANSITION_WORDS = ['and', 'then,', 'we', 'stepped', 'outside…']
-const TRANSITION_SUB = 'The Water Temple'
+const TRANSITION_SUB = 'The Water Temple · 水神殿'
 
 const TEAL = '#47837C'
 const TEAL_PAPER = '#EDF3F0'
@@ -308,11 +308,12 @@ function ChapterBlocks({ blocks, start, onOpen }: {
   )
 }
 
-function ChapterHead({ ghost, art, kicker, title }: {
+function ChapterHead({ ghost, art, kicker, title, titleZh }: {
   ghost?: string
   art?: 'dome'
   kicker: string
   title: string
+  titleZh: string
 }) {
   return (
     <div className={`${styles.chapterHead} wg-chapter-head`}>
@@ -324,6 +325,7 @@ function ChapterHead({ ghost, art, kicker, title }: {
         <Ornament className={styles.chapterOrnament} />
       </div>
       <h2 className={`${styles.chapterTitle} wg-chapter-item`}>{title}</h2>
+      <p className={`${styles.chapterZh} wg-chapter-item`}>{titleZh}</p>
       {art === 'dome' && <Arcade />}
     </div>
   )
@@ -535,22 +537,22 @@ export default function Gallery() {
       {/* Preloader — on the closed curtains while all photos load */}
       <div className={`${styles.preloader} wg-preloader`} role="status" aria-live="polite">
         <span className={styles.preFleuron} aria-hidden="true">❦</span>
-        <p className={styles.preNames}>Bruce &amp; Christy</p>
+        <p className={styles.preNames}>Bruce  &amp; Christy</p>
         <div className={styles.preTrack}>
           <div className={styles.preFill} style={{ width: `${progress}%` }} />
         </div>
-        <p className={styles.prePct}>{progress}%</p>
+        <p className={styles.prePct}>照片加载中 · {progress}%</p>
       </div>
 
       {/* ── Hero — invitation card ── */}
       <header className={styles.hero}>
         <div className={`${styles.heroCard} wg-hero-card`}>
           <Corners />
-          <p className={`${styles.heroKicker} wg-hero-item`}>The Wedding Of</p>
+          <p className={`${styles.heroKicker} wg-hero-item`}>Our Marriage Ceremony</p>
           <h1 className={styles.heroName}>
-            <span className={styles.mask}><span className={`${styles.heroLine} wg-hero-line`}>Bruce</span></span>
+            <span className={styles.mask}><span className={`${styles.heroLine} wg-hero-line`}>Bruce <span className={styles.cnName}>程驰</span></span></span>
             <span className={styles.mask}><span className={`${styles.heroAmp} wg-hero-line`}>&amp;</span></span>
-            <span className={styles.mask}><span className={`${styles.heroLine} wg-hero-line`}>Christy</span></span>
+            <span className={styles.mask}><span className={`${styles.heroLine} wg-hero-line`}>Christy <span className={styles.cnName}>欧阳安怡</span></span></span>
           </h1>
           <div className="wg-hero-item">
             <Ornament className={styles.heroOrnament} />
@@ -558,7 +560,7 @@ export default function Gallery() {
           <p className={`${styles.heroDate} wg-hero-item`}>{DATE}</p>
         </div>
         <div className={`${styles.scrollCue} wg-cue`}>
-          <span className={styles.scrollCueText}>Scroll</span>
+          <span className={styles.scrollCueText}>下滑</span>
           <span className={styles.scrollCueLine} />
         </div>
       </header>
@@ -566,7 +568,7 @@ export default function Gallery() {
       {/* ── Chapter Ⅰ · City Hall ── */}
       <section className={styles.patternedSection}>
         <div className={`${styles.sectionPattern} ${styles.hallPattern} wg-pattern`} aria-hidden="true" />
-        <ChapterHead art="dome" kicker="Chapter One" title="City Hall" />
+        <ChapterHead art="dome" kicker="Chapter One · 第一章" title="City Hall" titleZh="旧金山市政厅" />
         <ChapterBlocks blocks={INDOOR_BLOCKS} start={0} onOpen={setActive} />
       </section>
 
@@ -581,6 +583,7 @@ export default function Gallery() {
               <span key={word} className={`${styles.tWord} wg-t-word`}>{word}</span>
             ))}
           </p>
+          <p className={`${styles.tZh} wg-t-word`}>随后，我们来到了户外</p>
           <p className={`${styles.tSub} wg-t-sub`}>{TRANSITION_SUB}</p>
         </div>
       </section>
@@ -588,18 +591,19 @@ export default function Gallery() {
       {/* ── Chapter Ⅱ · Water Temple (teal) ── */}
       <section className={`${styles.themeTeal} ${styles.patternedSection}`}>
         <div className={`${styles.sectionPattern} ${styles.tealPattern} wg-pattern`} aria-hidden="true" />
-        <ChapterHead ghost="II" kicker="Chapter Two" title="Water Temple" />
+        <ChapterHead ghost="II" kicker="Chapter Two · 第二章" title="Water Temple" titleZh="水神殿" />
         <ChapterBlocks blocks={OUTDOOR_BLOCKS} start={OUTDOOR_START} onOpen={setActive} />
 
         {/* ── Closing (teal) ── */}
         <footer className={`${styles.closing} wg-closing`}>
           <div className={styles.closingFrame}>
             <Corners />
-            <p className={`${styles.closingMono} wg-closing-item`}>Bruce <em>&amp;</em> Christy</p>
+            <p className={`${styles.closingMono} wg-closing-item`}>Bruce 程驰 <em>&amp;</em> Christy 欧阳安怡</p>
             <div className="wg-closing-item">
               <Ornament className={styles.closingOrnament} light />
             </div>
             <p className={`${styles.closingText} wg-closing-item`}>Thank you for celebrating with us ♥</p>
+            <p className={`${styles.closingZh} wg-closing-item`}>感谢您与我们共同见证这一刻</p>
             <p className={`${styles.closingDate} wg-closing-item`}>{DATE}</p>
           </div>
         </footer>

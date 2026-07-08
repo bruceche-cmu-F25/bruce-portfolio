@@ -19,7 +19,9 @@
   min-height: 100vh;
   background: var(--paper);
   color: var(--ink);
-  font-family: Georgia, 'Times New Roman', serif;
+  /* Latin renders in Georgia; CJK falls through to Noto Serif SC
+     (self-hosted via next/font), then system serif fallbacks */
+  font-family: Georgia, 'Times New Roman', var(--font-serif-sc, 'Songti SC'), 'Songti SC', 'STSong', serif;
   overflow-x: hidden;
 }
 
@@ -276,8 +278,17 @@
 
 .heroLine {
   display: block;
-  font-size: clamp(2.4rem, 6.5vw, 4.4rem);
+  font-size: clamp(1.8rem, 4.6vw, 3.1rem);
   letter-spacing: 0.09em;
+  white-space: nowrap; /* mixed EN+CN lines must never break mid-name */
+}
+
+/* Chinese name beside the Latin one — CJK glyphs run visually larger,
+   so pull them down slightly to sit on the same optical line */
+.cnName {
+  font-size: 0.86em;
+  letter-spacing: 0.14em;
+  font-weight: 600;
 }
 
 .heroAmp {
@@ -388,6 +399,17 @@
   font-weight: 400;
   font-style: italic;
   letter-spacing: 0.05em;
+}
+
+/* Chinese subtitle under the English chapter title */
+.chapterZh {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.85rem;
+  font-size: 0.92rem;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  color: var(--ink-soft);
 }
 
 /* beaux-arts arcade divider under the chapter head */
@@ -593,6 +615,14 @@
   margin: 0 0.17em;
 }
 
+/* Chinese translation of the transition line */
+.tZh {
+  font-size: clamp(1rem, 2.2vw, 1.35rem);
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  color: rgba(255, 248, 234, 0.88);
+}
+
 .tSub {
   font-family: -apple-system, 'Helvetica Neue', sans-serif;
   font-size: 0.66rem;
@@ -641,6 +671,14 @@
   font-size: 0.98rem;
   letter-spacing: 0.06em;
   color: rgba(255, 248, 234, 0.92);
+  margin-bottom: 0.7rem;
+}
+
+.closingZh {
+  font-size: 0.95rem;
+  letter-spacing: 0.22em;
+  text-indent: 0.22em;
+  color: rgba(255, 248, 234, 0.9);
   margin-bottom: 1.1rem;
 }
 
