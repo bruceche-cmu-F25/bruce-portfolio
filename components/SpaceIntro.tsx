@@ -7,7 +7,9 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js'
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import gsap from 'gsap'
 
 type Phase = 'loading' | 'ready' | 'dive' | 'boot' | 'cli' | 'done'
@@ -96,12 +98,9 @@ export default function SpaceIntro() {
 
     /* ---------- shared state ---------- */
     const clock = new THREE.Clock()
-    const spin = { hole: 0.06, fx: -0.25 }
+    const spin = { hole: 0.06 }
     let holeGroup: THREE.Group | null = null
-    let fxGroup: THREE.Group | null = null
-    const fxMats: THREE.MeshStandardMaterial[] = []
-    let idleFloat = true
-    let camBaseY = 0
+    let controls: OrbitControls | null = null
 
     /* terminal state */
     type Mode = 'off' | 'boot' | 'cli' | 'launch'
@@ -159,11 +158,37 @@ export default function SpaceIntro() {
     const camera1 = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.05, 2000)
     const camera2 = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.05, 2000)
 
-    /* post-processing: bloom gives the accretion disk its glow */
+    /* post-processing: bloom gives the accretion disk its glow, and a warm
+       desaturating grade reproduces Sketchfab's golden "final render" filter */
+    const GoldenGradeShader = {
+      uniforms: {
+        tDiffuse: { value: null },
+        tint: { value: new THREE.Color(1.0, 0.86, 0.62) },
+        desat: { value: 0.4 },
+      },
+      vertexShader: /* glsl */ `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }`,
+      fragmentShader: /* glsl */ `
+        uniform sampler2D tDiffuse;
+        uniform vec3 tint;
+        uniform float desat;
+        varying vec2 vUv;
+        void main() {
+          vec4 c = texture2D(tDiffuse, vUv);
+          float l = dot(c.rgb, vec3(0.2126, 0.7152, 0.0722));
+          vec3 g = mix(c.rgb, vec3(l), desat) * tint;
+          gl_FragColor = vec4(g, c.a);
+        }`,
+    }
     const res = new THREE.Vector2(window.innerWidth, window.innerHeight)
     const composer1 = new EffectComposer(renderer)
     composer1.addPass(new RenderPass(scene1, camera1))
-    composer1.addPass(new UnrealBloomPass(res.clone(), 0.9, 0.75, 0.62))
+    composer1.addPass(new UnrealBloomPass(res.clone(), 0.45, 0.6, 0.75))
+    composer1.addPass(new ShaderPass(GoldenGradeShader))
     composer1.addPass(new OutputPass())
     const composer2 = new EffectComposer(renderer)
     composer2.addPass(new RenderPass(scene2, camera2))
@@ -180,8 +205,8 @@ export default function SpaceIntro() {
     let planetMeshRef: THREE.Mesh | null = null
     let planetRadius = 0
 
-    Promise.all([load('/models/black_hole.glb'), load('/models/blackhole_effect.glb'), load('/models/commodore_64.glb')])
-      .then(([hole, fx, c64]) => {
+    Promise.all([load('/models/black_hole.glb'), load('/models/commodore_64.glb')])
+      .then(([hole, c64]) => {
         if (finished || disposed) return
 
         /* ----- scene 1: black hole ----- */
@@ -191,34 +216,34 @@ export default function SpaceIntro() {
         // + studio environment lighting + bloom post-processing. Keep the materials
         // untouched and reproduce the env + post instead.
         scene1.environment = envMap
-        ;(scene1 as any).environmentIntensity = 1.1
-        // …except the horizon spheres: they must stay pure black, not reflect the env
+        ;(scene1 as any).environmentIntensity = 0.55
+        // a warm point light at the singularity does the heavy lifting: its inverse-square
+        // falloff makes the inner disk blaze and the outer rings fade to dark amber
+        const coreLight = new THREE.PointLight(0xffdca8, 260, 0, 2)
+        scene1.add(coreLight)
+        // horizon spheres stay pure black — no env reflection; light bands are dimmed
         const NO_ENV = ['black_hole_center', 'black_hole_distortion', 'black_hole_blackoutside']
+        const BANDS = ['black_hole_light1', 'black_hole_light2', 'black_hole_light3']
         hole.scene.traverse(o => {
           const m = o as THREE.Mesh
           if (!m.isMesh) return
           const mat = m.material as THREE.MeshStandardMaterial
-          if (mat && (mat as any).isMeshStandardMaterial && NO_ENV.includes(mat.name)) {
-            mat.envMapIntensity = 0
-            mat.needsUpdate = true
-          }
+          if (!mat || !(mat as any).isMeshStandardMaterial) return
+          if (NO_ENV.includes(mat.name)) mat.envMapIntensity = 0
+          if (BANDS.includes(mat.name)) mat.emissiveIntensity = Math.min(mat.emissiveIntensity, 0.5)
+          mat.needsUpdate = true
         })
 
         holeGroup = normalize(hole.scene, 64)
         scene1.add(holeGroup)
         holeGroup.updateMatrixWorld(true)
 
-        let centerMesh: THREE.Mesh | null = null
         let planetMesh: THREE.Mesh | null = null
         holeGroup.traverse(o => {
           const m = o as THREE.Mesh
           if (!m.isMesh) return
-          const name = (m.material as THREE.Material)?.name
-          if (name === 'black_hole_center') centerMesh = m
-          if (name === 'Planet') planetMesh = m
+          if ((m.material as THREE.Material)?.name === 'Planet') planetMesh = m
         })
-        const cSphere = new THREE.Sphere(new THREE.Vector3(), 4)
-        if (centerMesh) new THREE.Box3().setFromObject(centerMesh).getBoundingSphere(cSphere)
         if (planetMesh) {
           const pSphere = new THREE.Sphere()
           new THREE.Box3().setFromObject(planetMesh).getBoundingSphere(pSphere)
@@ -230,36 +255,21 @@ export default function SpaceIntro() {
           }
         }
 
-        fx.scene.traverse(o => {
-          const m = o as THREE.Mesh
-          if (m.isMesh) {
-            const mat = m.material as THREE.MeshStandardMaterial
-            mat.transparent = true
-            mat.blending = THREE.AdditiveBlending
-            mat.depthWrite = false
-            mat.side = THREE.DoubleSide
-            // glow from its own texture only — the asset ships as a perfect mirror
-            // (metalness 1 / roughness 0) which reflects the env into a white ball
-            mat.metalness = 0
-            mat.roughness = 1
-            mat.envMapIntensity = 0
-            if (mat.map) {
-              mat.emissiveMap = mat.map
-              mat.emissive = new THREE.Color(0xffffff)
-              mat.emissiveIntensity = 0.06 // near-invisible at idle; ramped up in the dive
-            }
-            mat.opacity = 0.6
-            mat.needsUpdate = true
-            fxMats.push(mat)
-          }
-        })
-        fxGroup = normalize(fx.scene, cSphere.radius * 2.3)
-        fxGroup.position.copy(cSphere.center)
-        scene1.add(fxGroup)
-
-        camBaseY = 14
-        camera1.position.set(0, camBaseY, 48)
-        camera1.lookAt(0, 0, 0)
+        // low grazing angle; target pushed right so the hole sits on the left of frame
+        camera1.position.set(-6, 6, 46)
+        controls = new OrbitControls(camera1, renderer.domElement)
+        controls.target.set(20, 0, 0)
+        controls.enableDamping = true
+        controls.dampingFactor = 0.06
+        controls.enablePan = false
+        controls.minDistance = 24
+        controls.maxDistance = 88
+        controls.minPolarAngle = Math.PI * 0.18
+        controls.maxPolarAngle = Math.PI * 0.62
+        controls.rotateSpeed = 0.45
+        controls.autoRotate = true
+        controls.autoRotateSpeed = 0.35
+        controls.update()
 
         /* ----- scene 2: the computer inside the singularity ----- */
         scene2.add(makeStars(1400, 0.35))
@@ -424,7 +434,7 @@ export default function SpaceIntro() {
     /* ---------- phase transitions ---------- */
     const startDive = () => {
       setPhase('dive')
-      idleFloat = false
+      if (controls) { controls.enabled = false; controls.autoRotate = false }
 
       const tl = gsap.timeline({ onComplete: enterComputer })
       tweens.push(tl)
@@ -501,12 +511,7 @@ export default function SpaceIntro() {
       }, 'dive')
       tl.to(p3, { roll: 0.5, duration: 2.8, ease: 'sine.inOut' }, 'dive')
       tl.to(p3, { roll: -0.18, duration: 2.8, ease: 'sine.inOut' }, 'dive+=2.8')
-      tl.to(spin, { hole: 0.7, fx: -2.4, duration: 5.2, ease: 'power2.in' }, 'dive')
-      const fxGlow = { e: 0.06 }
-      tl.to(fxGlow, {
-        e: 0.85, duration: 5.2, ease: 'power2.in',
-        onUpdate: () => fxMats.forEach(m => { m.emissiveIntensity = fxGlow.e }),
-      }, 'dive')
+      tl.to(spin, { hole: 0.7, duration: 5.2, ease: 'power2.in' }, 'dive')
       tl.to(camera1, {
         fov: 105, duration: 1.7, ease: 'power3.in',
         onUpdate: () => camera1.updateProjectionMatrix(),
@@ -564,14 +569,7 @@ export default function SpaceIntro() {
       const t = clock.elapsedTime
 
       if (holeGroup) holeGroup.rotation.y += spin.hole * dt
-      if (fxGroup) {
-        fxGroup.rotation.y += spin.fx * dt
-        fxGroup.rotation.x = Math.sin(t * 0.4) * 0.08
-      }
-      if (idleFloat && activeComposer === composer1) {
-        camera1.position.y = camBaseY + Math.sin(t * 0.6) * 0.8
-        camera1.lookAt(0, 0, 0)
-      }
+      if (controls?.enabled && activeComposer === composer1) controls.update()
       if (mode !== 'off') {
         if (mode === 'boot') {
           bootTimer += dt
@@ -629,6 +627,7 @@ export default function SpaceIntro() {
       window.removeEventListener('resize', onResize)
       window.removeEventListener('keydown', onKey)
       renderer.domElement.removeEventListener('pointerdown', onPointer)
+      controls?.dispose()
       draco.dispose()
       composer1.dispose()
       composer2.dispose()
@@ -656,11 +655,13 @@ export default function SpaceIntro() {
           )}
           {phase === 'ready' && (
             <div className="si-title">
+              <p className="si-eyebrow">PORTFOLIO</p>
               <h1>BRUCE CHENG</h1>
               <p>SOFTWARE ENGINEER · MS @ CMU SILICON VALLEY</p>
               <button className="si-enter" onClick={() => actions.current.enter?.()}>
                 ENTER THE EVENT HORIZON
               </button>
+              <span className="si-drag-hint">◍ DRAG TO LOOK AROUND</span>
             </div>
           )}
           {phase !== 'loading' && (
