@@ -11,8 +11,8 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 // ─── 婚礼信息 ───────────────────────────────────────────────────────
 const DATE = '二零二六年 六月二十二日'
-const TRANSITION_WORDS = ['into', 'the', 'sunlight,', 'hand', 'in', 'hand']
-const TRANSITION_ZH = '执子之手，踏进阳光里'
+const TRANSITION_WORDS = ['forever,', 'hand', 'in', 'hand']
+const TRANSITION_ZH = '第二站，水神殿'
 const TRANSITION_SUB = 'The Water Temple · 水神殿'
 
 const TEAL = '#47837C'
@@ -23,17 +23,17 @@ type Photo = { id: string; w: number; h: number }
 
 const DIMS: Record<string, [number, number]> = {
   '1':  [6063, 9094], '2':  [6153, 9235], '3':  [4160, 6240], '4':  [6102, 9152],
-  '5':  [4160, 6240], '6':  [6289, 9434], '7':  [3875, 5813], '8':  [4160, 6240],
+  '5':  [5996, 8994], '6':  [6289, 9434], '7':  [3875, 5813], '8':  [4160, 6240],
   '9':  [4160, 6240], '10': [6336, 9504], '11': [4160, 6334], '12': [4160, 6240],
-  '13': [4160, 6240], '14': [6336, 9504], '15': [6336, 9504], '16': [6336, 9504],
-  '17': [6094, 9141], '18': [6262, 9393], '19': [5920, 8879], '20': [6336, 9504],
-  '21': [4160, 6240], '22': [6219, 9329], '23': [6336, 9504], '24': [5996, 8994],
-  '25': [6167, 9250], '26': [6159, 9238], '27': [6336, 9504], '28': [6336, 9504],
-  '29': [6336, 9504], '30': [6336, 9504], '31': [6258, 9387], '32': [4160, 6240],
-  '33': [6252, 9378], '34': [6336, 9504], '35': [6336, 9504], '36': [6336, 9504],
-  '37': [4160, 6240], '38': [6240, 4160], '39': [6248, 9373], '40': [1206, 2622],
-  // 44 的原始像素是 6240×4160，但带 EXIF 旋转标记，浏览器按竖构图显示
-  '41': [6336, 9504], '42': [6240, 4160], '43': [5999, 9000], '44': [4160, 6240],
+  '13': [4160, 6240], '14': [6094, 9141], '15': [6336, 9504], '16': [6336, 9504],
+  '17': [6336, 9504], '18': [6262, 9393], '19': [5920, 8879], '20': [6336, 9504],
+  '21': [4160, 6240], '22': [6336, 9504], '23': [5386, 8079], '24': [4160, 6306],
+  '25': [6159, 9238], '26': [6336, 9504], '27': [3834, 5730], '28': [6336, 9504],
+  '29': [6336, 9504], '30': [6258, 9387], '31': [4160, 6240], '32': [6252, 9378],
+  '33': [6336, 9504], '34': [6187, 9280], '35': [6336, 9504], '36': [4160, 6240],
+  '37': [6240, 4160], '38': [6248, 9373], '39': [4160, 6363], '40': [6336, 9504],
+  // 43 的原始像素是横向的，但带 EXIF 旋转标记，浏览器按竖构图显示
+  '41': [6240, 4160], '42': [5999, 9000], '43': [4160, 6240],
   '001o': [6376, 4403], '002o': [3316, 5120], '003o': [3305, 4957], '004o': [5120, 3413],
   '005o': [7008, 4672], '006o': [2464, 3552], '007o': [6300, 4200], '008o': [5120, 3413],
   '009o': [7008, 4672], '010o': [3115, 4672], '011o': [2591, 3886], '012o': [7008, 4672],
@@ -75,18 +75,17 @@ const INDOOR_BLOCKS: Block[] = [
     { h: 6,   cells: [{ id: '24', span: 4 }, { id: '25', span: 4, drop: true }, { id: '26', span: 4 }] },
     { h: 7.8, cells: [{ id: '27', span: 6, drop: true }, { id: '28', span: 6 }] },
   ] },
-  { type: 'feature', photos: [P('42')] },
+  { type: 'feature', photos: [P('41')] },
   { type: 'collage', rows: [
-    { h: 6.2, cells: [{ id: '29', span: 4 }, { id: '30', span: 4, drop: true }, { id: '31', span: 4 }] },
-    // 38 是横构图，配一张竖图同排（span8/h5.6 ≈ 3:2）
-    { h: 5.6, cells: [{ id: '38', span: 8 }, { id: '32', span: 4, drop: true }] },
-    // 40 是超窄长图（0.46），span3/h6.5 正好贴合原始比例
-    { h: 6.5, cells: [{ id: '33', span: 5 }, { id: '34', span: 4, drop: true }, { id: '40', span: 3 }] },
-    { h: 9,   cells: [{ id: '35', span: 7 }, { id: '36', span: 5, drop: true }] },
-    { h: 6.3, cells: [{ id: '37', span: 4 }, { id: '39', span: 4, drop: true }, { id: '41', span: 4 }] },
+    // 37 是横构图，配一张竖图同排（span8/h5.6 ≈ 3:2）
+    { h: 5.6, cells: [{ id: '37', span: 8 }, { id: '29', span: 4, drop: true }] },
+    { h: 6.2, cells: [{ id: '30', span: 4 }, { id: '31', span: 4, drop: true }, { id: '32', span: 4 }] },
+    { h: 9,   cells: [{ id: '33', span: 7 }, { id: '34', span: 5, drop: true }] },
+    { h: 6,   cells: [{ id: '35', span: 4 }, { id: '36', span: 4, drop: true }, { id: '38', span: 4 }] },
+    { h: 8.6, cells: [{ id: '39', span: 5 }, { id: '40', span: 7 }] },
   ] },
-  // 43、44 都是竖构图 → 加大版双联幅收章（44 带 EXIF 旋转，按竖图显示）
-  { type: 'duo', photos: [P('43'), P('44')], large: true },
+  // 42、43 都是竖构图 → 加大版双联幅收章（43 带 EXIF 旋转，按竖图显示）
+  { type: 'duo', photos: [P('42'), P('43')], large: true },
 ]
 
 const OUTDOOR_BLOCKS: Block[] = [
@@ -565,7 +564,7 @@ export default function Gallery() {
           <h1 className={styles.heroName}>
             <span className={styles.mask}><span className={`${styles.heroLine} wg-hero-line`}>Bruce <span className={styles.cnName}>程驰</span></span></span>
             <span className={styles.mask}><span className={`${styles.heroAmp} wg-hero-line`}>&amp;</span></span>
-            <span className={styles.mask}><span className={`${styles.heroLine} wg-hero-line`}>Christy <span className={styles.cnName}>欧阳安怡</span></span></span>
+            <span className={styles.mask}><span className={`${styles.heroLine} wg-hero-line`}>Christy <span className={styles.cnName}>歐陽安怡</span></span></span>
           </h1>
           <div className="wg-hero-item">
             <Ornament className={styles.heroOrnament} />
@@ -611,7 +610,7 @@ export default function Gallery() {
         <footer className={`${styles.closing} wg-closing`}>
           <div className={styles.closingFrame}>
             <Corners />
-            <p className={`${styles.closingMono} wg-closing-item`}>Bruce 程驰 <em>&amp;</em> Christy 欧阳安怡</p>
+            <p className={`${styles.closingMono} wg-closing-item`}>Bruce 程驰 <em>&amp;</em> Christy 歐陽安怡</p>
             <div className="wg-closing-item">
               <Ornament className={styles.closingOrnament} light />
             </div>
