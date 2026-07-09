@@ -699,7 +699,10 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 }
 
 /* ── Space Intro ────────────────────────────────────────────────── */
-.space-intro { position: fixed; inset: 0; z-index: 10000; background: #000; }
+/* scroll track: the stage stays pinned while the camera dollies in, then
+   the whole scene slides away to reveal the site */
+.space-intro { position: relative; height: 240vh; z-index: 10000; background: #000; }
+.si-stage { position: sticky; top: 0; height: 100vh; width: 100%; overflow: hidden; background: #000; }
 .si-canvas, .si-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .si-flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
 .si-loading {
@@ -711,8 +714,9 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .si-title {
   position: absolute; top: 50%; right: 8vw; transform: translateY(-50%);
   display: flex; flex-direction: column; align-items: flex-end; gap: 0.7rem;
-  text-align: right; animation: si-fade-up 1.2s ease both;
-  pointer-events: none; /* let drags reach the canvas underneath */
+  text-align: right;
+  /* opacity is driven by the scroll dolly (fades in on approach); starts hidden */
+  pointer-events: none;
 }
 .si-eyebrow {
   font-family: 'JetBrains Mono', monospace; font-size: 0.7rem !important;
@@ -728,27 +732,12 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.32em;
   color: rgba(220,230,255,0.65);
 }
-.si-drag-hint {
+.si-scroll-hint {
   margin-top: 1.4rem; font-family: 'JetBrains Mono', monospace;
   font-size: 0.62rem; letter-spacing: 0.28em; color: rgba(220,230,255,0.4);
   animation: si-hint-pulse 2.4s ease-in-out infinite;
 }
 @keyframes si-hint-pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 0.7; } }
-.si-enter {
-  pointer-events: auto;
-  margin-top: 0.6rem; padding: 0.85rem 2.2rem; cursor: pointer;
-  font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.28em;
-  color: var(--lime); background: rgba(0,196,167,0.06);
-  border: 1px solid rgba(0,196,167,0.55); border-radius: 2px;
-  text-shadow: 0 0 12px rgba(0,196,167,0.7);
-  box-shadow: 0 0 22px rgba(0,196,167,0.18), inset 0 0 18px rgba(0,196,167,0.08);
-  transition: background 0.25s, box-shadow 0.25s, transform 0.25s;
-  animation: si-pulse 2.6s ease-in-out infinite;
-}
-.si-enter:hover {
-  background: rgba(0,196,167,0.16); transform: translateY(-2px);
-  box-shadow: 0 0 34px rgba(0,196,167,0.4), inset 0 0 24px rgba(0,196,167,0.14);
-}
 .si-skip {
   position: absolute; top: 1.4rem; right: 1.6rem; padding: 0.5rem 1rem; cursor: pointer;
   font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.22em;
@@ -757,8 +746,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   transition: color 0.25s, border-color 0.25s;
 }
 .si-skip:hover { color: #fff; border-color: rgba(220,230,255,0.5); }
-@keyframes si-fade-up { from { opacity: 0; transform: translate(-50%, 24px); } to { opacity: 1; transform: translate(-50%, 0); } }
-@keyframes si-pulse { 0%,100% { box-shadow: 0 0 22px rgba(0,196,167,0.18), inset 0 0 18px rgba(0,196,167,0.08); } 50% { box-shadow: 0 0 38px rgba(0,196,167,0.4), inset 0 0 26px rgba(0,196,167,0.16); } }
+@keyframes si-fade-in { from { opacity: 0; } }
 
 /* ── CRT retro filter over the site ─────────────────────────────── */
 .crt-filter { position: fixed; inset: 0; z-index: 9000; pointer-events: none; }
