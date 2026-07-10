@@ -18,28 +18,7 @@ const TRANSITION_SUB = 'The Water Temple · 水神殿'
 const TEAL = '#47837C'
 const TEAL_PAPER = '#EDF3F0'
 
-// 真实像素尺寸（sips 测量）
-type Photo = { id: string; w: number; h: number }
-
-const DIMS: Record<string, [number, number]> = {
-  '1':  [6063, 9094], '2':  [6153, 9235], '3':  [4160, 6240], '4':  [6102, 9152],
-  '5':  [5996, 8994], '6':  [6289, 9434], '7':  [3875, 5813], '8':  [4160, 6240],
-  '9':  [4160, 6240], '10': [6336, 9504], '11': [4160, 6334], '12': [4160, 6240],
-  '13': [4160, 6240], '14': [6094, 9141], '15': [6336, 9504], '16': [6336, 9504],
-  '17': [6336, 9504], '18': [6262, 9393], '19': [5920, 8879], '20': [6336, 9504],
-  '21': [4160, 6240], '22': [6336, 9504], '23': [5386, 8079], '24': [4160, 6306],
-  '25': [6159, 9238], '26': [6336, 9504], '27': [3834, 5730], '28': [6336, 9504],
-  '29': [6336, 9504], '30': [6258, 9387], '31': [4160, 6240], '32': [6252, 9378],
-  '33': [6336, 9504], '34': [6187, 9280], '35': [6336, 9504], '36': [4160, 6240],
-  '37': [6240, 4160], '38': [6248, 9373], '39': [4160, 6363], '40': [6336, 9504],
-  // 43 的原始像素是横向的，但带 EXIF 旋转标记，浏览器按竖构图显示
-  '41': [6240, 4160], '42': [5999, 9000], '43': [4160, 6240],
-  '001o': [6376, 4403], '002o': [3316, 5120], '003o': [3305, 4957], '004o': [5120, 3413],
-  '005o': [7008, 4672], '006o': [2464, 3552], '007o': [6300, 4200], '008o': [5120, 3413],
-  '009o': [7008, 4672], '010o': [3115, 4672], '011o': [2591, 3886], '012o': [7008, 4672],
-}
-
-const P = (id: string): Photo => ({ id, w: DIMS[id][0], h: DIMS[id][1] })
+import { DIMS, P, pageSrc, largeSrc, type Photo } from './photos'
 
 // 拼版行：12 列宽度单位，h = 行高（列单位）。行内高度严格一致 →
 // 不会出现空洞；格子比例和原图的偏差由轻微裁切消化（lightbox 永远是全图）
@@ -53,7 +32,7 @@ type Block =
   | { type: 'collage'; rows: CollageRow[] }
   | { type: 'solo';    photos: Photo[] }
   | { type: 'duo';     photos: Photo[]; large?: boolean }
-  | { type: 'feature'; photos: Photo[] }
+  | { type: 'feature'; photos: Photo[]; large?: boolean }
 
 const blockPhotos = (b: Block): Photo[] =>
   b.type === 'collage' ? b.rows.flatMap(r => r.cells.map(c => P(c.id))) : b.photos
@@ -64,7 +43,8 @@ const INDOOR_BLOCKS: Block[] = [
     { h: 6.2, cells: [{ id: '2',  span: 4 }, { id: '3',  span: 4, drop: true }, { id: '4', span: 4 }] },
     { h: 9,   cells: [{ id: '5',  span: 7 }, { id: '6',  span: 5, drop: true }] },
     { h: 6,   cells: [{ id: '7',  span: 4 }, { id: '8',  span: 4, drop: true }, { id: '9', span: 4 }] },
-    { h: 8.6, cells: [{ id: '10', span: 5, drop: true }, { id: '11', span: 7 }] },
+    // 6+6 等宽、h9 → 两格都是 2:3 原始比例，零裁切
+    { h: 9,   cells: [{ id: '10', span: 6, drop: true }, { id: '11', span: 6 }] },
     { h: 6.4, cells: [{ id: '12', span: 4 }, { id: '13', span: 4, drop: true }, { id: '14', span: 4 }] },
   ] },
   { type: 'duo', photos: [P('15'), P('16')] },
@@ -75,42 +55,45 @@ const INDOOR_BLOCKS: Block[] = [
     { h: 6,   cells: [{ id: '24', span: 4 }, { id: '25', span: 4, drop: true }, { id: '26', span: 4 }] },
     { h: 7.8, cells: [{ id: '27', span: 6, drop: true }, { id: '28', span: 6 }] },
   ] },
-  { type: 'feature', photos: [P('41')] },
   { type: 'collage', rows: [
     // 37 是横构图，配一张竖图同排（span8/h5.6 ≈ 3:2）
-    { h: 5.6, cells: [{ id: '37', span: 8 }, { id: '29', span: 4, drop: true }] },
-    { h: 6.2, cells: [{ id: '30', span: 4 }, { id: '31', span: 4, drop: true }, { id: '32', span: 4 }] },
-    { h: 9,   cells: [{ id: '33', span: 7 }, { id: '34', span: 5, drop: true }] },
-    { h: 6,   cells: [{ id: '35', span: 4 }, { id: '36', span: 4, drop: true }, { id: '38', span: 4 }] },
-    { h: 8.6, cells: [{ id: '39', span: 5 }, { id: '40', span: 7 }] },
+    { h: 6.2, cells: [{ id: '29', span: 4 }, { id: '30', span: 4, drop: true }, { id: '31', span: 4 }] },
+    { h: 9,   cells: [{ id: '32', span: 6 }, { id: '33', span: 6, drop: true }] },
+    { h: 9,   cells: [{ id: '34', span: 6 }, { id: '35', span: 6, drop: true }] },
+    { h: 5.6, cells: [{ id: '36', span: 4, drop: true }, { id: '37', span: 8 }] },
+    { h: 6.2, cells: [{ id: '38', span: 4 }, { id: '39', span: 4, drop: true }, { id: '40', span: 4 }] },
   ] },
-  // 42、43 都是竖构图 → 加大版双联幅收章（43 带 EXIF 旋转，按竖图显示）
-  { type: 'duo', photos: [P('42'), P('43')], large: true },
+  { type: 'feature', photos: [P('41')] },
+  { type: 'feature', photos: [P('42')] },
+  // 43、44 竖幅并排收章
+  { type: 'duo', photos: [P('43'), P('44')], large: true },
 ]
 
 const OUTDOOR_BLOCKS: Block[] = [
-  { type: 'solo', photos: [P('001o')] },
+  { type: 'solo', photos: [P('01o')] },
   { type: 'collage', rows: [
-    { h: 5.6, cells: [{ id: '004o', span: 8 }, { id: '002o', span: 4, drop: true }] },
-    { h: 5.0, cells: [{ id: '006o', span: 4, drop: true }, { id: '007o', span: 8 }] },
+    { h: 9, cells: [{ id: '02o', span: 6, drop: true }, { id: '03o', span: 6 }] },
   ] },
-  { type: 'solo', photos: [P('003o')] },
+  { type: 'feature', photos: [P('04o')] },
   { type: 'collage', rows: [
-    { h: 5.2, cells: [{ id: '008o', span: 8 }, { id: '010o', span: 4, drop: true }] },
-    { h: 5.6, cells: [{ id: '011o', span: 4, drop: true }, { id: '009o', span: 8 }] },
+    { h: 5.6, cells: [{ id: '05o', span: 4, drop: true }, { id: '06o', span: 8 }] },
+    { h: 5.6, cells: [{ id: '08o', span: 8 }, { id: '09o', span: 4, drop: true }] },
+    { h: 4.3, cells: [{ id: '10o', span: 6 }, { id: '12o', span: 6, drop: true }] },
   ] },
-  { type: 'solo', photos: [P('005o')] },
-  { type: 'feature', photos: [P('012o')] },
+  { type: 'collage', rows: [
+    { h: 4.3, cells: [{ id: '13o', span: 6, drop: true }, { id: '14o', span: 6 }] },
+    { h: 5.6, cells: [{ id: '15o', span: 8 }, { id: '16o', span: 4, drop: true }] },
+  ] },
+  { type: 'feature', photos: [P('17o')] },
+  { type: 'collage', rows: [
+    { h: 5.6, cells: [{ id: '18o', span: 4, drop: true }, { id: '19o', span: 8 }] },
+  ] },
 ]
 // ────────────────────────────────────────────────────────────────────
 
 const ALL: Photo[] = [...INDOOR_BLOCKS, ...OUTDOOR_BLOCKS].flatMap(blockPhotos)
 const OUTDOOR_START = INDOOR_BLOCKS.reduce((n, b) => n + blockPhotos(b).length, 0)
 
-// 两档尺寸：页面显示 1600px/q85（~330KB/张），lightbox 2600px/q88（~850KB/张）。
-// 相机原图在项目根目录 wedding_originals/（gitignore，不参与部署）。
-const pageSrc  = (id: string) => `/wedding/page/${id}.jpg`
-const largeSrc = (id: string) => `/wedding/large/${id}.jpg`
 
 function Ornament({ className, light }: { className?: string; light?: boolean }) {
   return (
@@ -276,9 +259,15 @@ function Duo({ photos, offset, large, onOpen }: {
   )
 }
 
-function Feature({ photo, index, onOpen }: { photo: Photo; index: number; onOpen: (i: number) => void }) {
+function Feature({ photo, index, large, onOpen }: {
+  photo: Photo
+  index: number
+  large?: boolean
+  onOpen: (i: number) => void
+}) {
+  const orientation = photo.w > photo.h ? styles.featureLandscape : styles.featurePortrait
   return (
-    <div className={`${styles.feature} wg-feature`}>
+    <div className={`${styles.feature} ${large ? styles.featureLarge : ''} ${orientation} wg-feature`}>
       <div className={styles.featureMat} onClick={() => onOpen(index)}>
         <div className={styles.featureInner} style={{ aspectRatio: `${photo.w} / ${photo.h}` }}>
           <img
@@ -313,7 +302,7 @@ function ChapterBlocks({ blocks, start, onOpen }: {
           case 'duo':
             return <Duo key={bi} photos={block.photos} offset={at} large={block.large} onOpen={onOpen} />
           case 'feature':
-            return <Feature key={bi} photo={block.photos[0]} index={at} onOpen={onOpen} />
+            return <Feature key={bi} photo={block.photos[0]} index={at} large={block.large} onOpen={onOpen} />
         }
       })}
     </>
@@ -348,6 +337,48 @@ export default function Gallery() {
   const [active, setActive] = useState<number | null>(null)
   const [progress, setProgress] = useState(0)
   const [loaded, setLoaded] = useState(false)
+  const audioRef = useRef<HTMLAudioElement>(null)
+  const bgmStarted = useRef(false)
+  const [bgmOn, setBgmOn] = useState(true)
+
+  // ── BGM：入场后渐入；被浏览器拦截时等第一次交互 ────────────────────
+  const startBgm = useCallback(() => {
+    const a = audioRef.current
+    if (!a || bgmStarted.current) return
+    a.volume = 0
+    a.play().then(() => {
+      bgmStarted.current = true
+      gsap.to(a, { volume: 0.5, duration: 4, ease: 'power1.inOut' })
+    }).catch(() => { /* 无手势，等用户第一次点击/按键 */ })
+  }, [])
+
+  useEffect(() => {
+    if (!loaded) return
+    startBgm()
+    const onGesture = () => startBgm()
+    window.addEventListener('pointerdown', onGesture)
+    window.addEventListener('keydown', onGesture)
+    return () => {
+      window.removeEventListener('pointerdown', onGesture)
+      window.removeEventListener('keydown', onGesture)
+    }
+  }, [loaded, startBgm])
+
+  const toggleBgm = useCallback(() => {
+    const a = audioRef.current
+    if (!a) return
+    if (bgmOn && bgmStarted.current) {
+      gsap.to(a, { volume: 0, duration: 0.8, ease: 'power1.out', onComplete: () => a.pause() })
+    } else if (!bgmOn) {
+      if (bgmStarted.current) {
+        a.play()
+        gsap.to(a, { volume: 0.5, duration: 1.2, ease: 'power1.inOut' })
+      } else {
+        startBgm()
+      }
+    }
+    setBgmOn(v => !v)
+  }, [bgmOn, startBgm])
 
   const close = useCallback(() => setActive(null), [])
   const prev  = useCallback(() => setActive(i => (i !== null && i > 0) ? i - 1 : i), [])
@@ -538,6 +569,12 @@ export default function Gallery() {
   return (
     <div ref={rootRef} className={styles.page}>
       <LenisInit />
+      <audio ref={audioRef} src={encodeURI('/晴天.mp3')} loop preload="auto" />
+      <button
+        className={`${styles.bgmBtn} ${bgmOn ? '' : styles.bgmOff}`}
+        onClick={toggleBgm}
+        aria-label={bgmOn ? '关闭背景音乐' : '播放背景音乐'}
+      >♪</button>
       <div className={styles.grain} aria-hidden="true" />
       <div className={styles.pageEdges} aria-hidden="true" />
       <div className={`${styles.progress} wg-progress`} aria-hidden="true" />
