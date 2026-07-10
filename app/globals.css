@@ -701,7 +701,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 /* ── Space Intro ────────────────────────────────────────────────── */
 /* scroll track: the stage stays pinned while the camera dollies in, then
    the whole scene slides away to reveal the site */
-.space-intro { position: relative; height: 240vh; z-index: 10000; background: #000; }
+.space-intro { position: relative; height: 360vh; z-index: 10000; background: #000; }
 .si-stage { position: sticky; top: 0; height: 100vh; width: 100%; overflow: hidden; background: #000; }
 .si-canvas, .si-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .si-flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }

@@ -28,7 +28,7 @@ const GOLDIFY_RINGS = false
 
 // Show an on-screen slider panel (dev only) for tuning the grade/bloom/lights
 // live, with a button that copies the current values so they can be baked in.
-const SHOW_PANEL = true
+const SHOW_PANEL = false
 
 // Enable drag-to-orbit on the FULL lit/graded model (independent of DEBUG_BARE)
 // so the camera angle can be found interactively; the panel's COPY captures the
@@ -236,14 +236,14 @@ export default function SpaceIntro() {
     // near the hole = original colourful; farther out = desaturated, gold, darker.
     // Shared uniforms so both ring materials and the dev panel drive the same set.
     const diskGrade = {
-      uRInner:    { value: 8 },    // world radius: within → fully original colour
-      uROuter:    { value: 30 },   // world radius: beyond → fully graded (dark gold)
-      uDesatNear: { value: 0.22 },
-      uDesatFar:  { value: 1.0 },
-      uDarkFar:   { value: 0.18 }, // brightness multiplier at the rim
-      uSatBoost:  { value: 1.0 },
-      uGold:      { value: new THREE.Color(1.12, 1.14, 0.96) },
-      uGain:      { value: 1.0 },  // overall disk brightness (all rings, incl. the mid ones)
+      uRInner:    { value: 7 },    // world radius: within → fully original colour
+      uROuter:    { value: 29 },   // world radius: beyond → fully graded (dark gold)
+      uDesatNear: { value: 0.12 },
+      uDesatFar:  { value: 0.62 },
+      uDarkFar:   { value: 0.36 }, // brightness multiplier at the rim
+      uSatBoost:  { value: 1.28 },
+      uGold:      { value: new THREE.Color(1.3, 0.88, 0.3) },
+      uGain:      { value: 1.18 }, // overall disk brightness (all rings, incl. the mid ones)
     }
     const applyDiskGrade = (mat: THREE.MeshStandardMaterial) => {
       mat.onBeforeCompile = (shader) => {
@@ -275,7 +275,7 @@ export default function SpaceIntro() {
     const res = new THREE.Vector2(window.innerWidth, window.innerHeight)
     const composer1 = new EffectComposer(renderer)
     composer1.addPass(new RenderPass(scene1, camera1))
-    const bloom1 = new UnrealBloomPass(res.clone(), 0.34, 0.09, 0)
+    const bloom1 = new UnrealBloomPass(res.clone(), 0.42, 0.16, 0)
     if (!DEBUG_BARE) composer1.addPass(bloom1)
     composer1.addPass(new OutputPass())
     const composer2 = new EffectComposer(renderer)
@@ -312,10 +312,10 @@ export default function SpaceIntro() {
         // bare mode: dim neutral env — matches the official model's already-dark
         // base (its saturated red/green bands are baked into the ring albedo, not
         // added by light; env=1.0 just blows them out). lit mode adds the core light.
-        ;(scene1 as any).environmentIntensity = DEBUG_BARE ? 0.3 : 0.25
+        ;(scene1 as any).environmentIntensity = DEBUG_BARE ? 0.3 : 0.2
         // a warm point light at the singularity does the heavy lifting: its inverse-square
         // falloff makes the inner disk blaze and the outer rings fade to dark amber
-        const coreLight = new THREE.PointLight(0xffdca8, 340, 0, 1.0)
+        const coreLight = new THREE.PointLight(0xffc46f, 410, 0, 1.0)
         if (!DEBUG_BARE) scene1.add(coreLight)
         // horizon spheres stay pure black — no env reflection; light bands are dimmed
         const NO_ENV = ['black_hole_center', 'black_hole_distortion', 'black_hole_blackoutside']
@@ -361,7 +361,7 @@ export default function SpaceIntro() {
           // light1 = the bright blue-white photon ring hugging the horizon (the
           // "key" bright band); light2/3 = the warmer lensed arcs above it. Push
           // light1 hard so bloom blazes it; keep the others moderate.
-          if (mat.name === 'black_hole_light1') mat.emissiveIntensity = 8.0
+          if (mat.name === 'black_hole_light1') mat.emissiveIntensity = 7.2
           if (mat.name === 'black_hole_light2') mat.emissiveIntensity = 0.0
           if (mat.name === 'black_hole_light3') m.visible = false // the red edge arc — removed
           if (RINGS.includes(mat.name)) { mat.envMapIntensity = 0.8; applyDiskGrade(mat) }
@@ -441,9 +441,12 @@ export default function SpaceIntro() {
         const camFar  = new THREE.Vector3(253.8, 76, 1073.4)
         const upFar   = new THREE.Vector3(-0.4, 0.7, 0.5).normalize()
         const tgtFar  = new THREE.Vector3(21.2, -11.4, -14.6)
-        const camNear = new THREE.Vector3(-0.2, 3, 24.9)
-        const upNear  = new THREE.Vector3(-0.2, 1, 0).normalize()
-        const tgtNear = new THREE.Vector3(26, -15, -12)
+        const camNear = new THREE.Vector3(-1.2, 2.2, 22.4)
+        const upNear  = new THREE.Vector3(-0.28, 1, 0.03).normalize()
+        const tgtNear = new THREE.Vector3(22, -5.2, -10.5)
+        const camSettle = camNear.clone().add(new THREE.Vector3(0.18, -0.06, -0.38))
+        const upSettle  = upNear.clone().add(new THREE.Vector3(-0.008, 0, 0.003)).normalize()
+        const tgtSettle = tgtNear.clone().add(new THREE.Vector3(0.45, 0.18, -0.18))
         const lookTarget = tgtNear // panel/trackball reference (tunes the near framing)
         camera1.up.copy(upFar)
         camera1.position.copy(camFar)
@@ -478,26 +481,36 @@ export default function SpaceIntro() {
            far establishing shot to the near hero framing; fade the stars out and
            the name in as we approach. */
         const _cp = new THREE.Vector3(), _cu = new THREE.Vector3(), _ct = new THREE.Vector3()
+        const _sp = new THREE.Vector3(), _su = new THREE.Vector3(), _st = new THREE.Vector3()
         const dolly = { u: 0 }
         let announced = false
+        const APPROACH_END = 0.86
+        const SITE_READY_AT = 0.975
         const scrollTween = gsap.to(dolly, {
           u: 1, ease: 'none',
           scrollTrigger: {
             trigger: rootRef.current,
             start: 'top top',
             end: 'bottom bottom',
-            scrub: 1,
+            scrub: 1.15,
           },
           onUpdate: () => {
             if (DEBUG_BARE || ORBIT) return // let TrackballControls drive the camera
-            camera1.position.copy(_cp.lerpVectors(camFar, camNear, dolly.u))
-            camera1.up.copy(_cu.lerpVectors(upFar, upNear, dolly.u).normalize())
-            camera1.lookAt(_ct.lerpVectors(tgtFar, tgtNear, dolly.u))
-            starMat.opacity = 0.9 * (1 - smoother(0.35, 0.8, dolly.u)) // fade stars on approach
+            const approachT = Math.min(1, dolly.u / APPROACH_END)
+            const cameraU = 1 - Math.pow(1 - approachT, 2.4)
+            const settleU = smoother(APPROACH_END, SITE_READY_AT, dolly.u)
+            _sp.lerpVectors(camNear, camSettle, settleU)
+            _su.lerpVectors(upNear, upSettle, settleU).normalize()
+            _st.lerpVectors(tgtNear, tgtSettle, settleU)
+            camera1.position.copy(_cp.lerpVectors(camFar, _sp, cameraU))
+            camera1.up.copy(_cu.lerpVectors(upFar, _su, cameraU).normalize())
+            _ct.lerpVectors(tgtFar, _st, cameraU)
+            camera1.lookAt(_ct)
+            starMat.opacity = 0.9 * (1 - smoother(0.35, 0.8, cameraU)) // fade stars on approach
             if (titleRef.current) {
-              titleRef.current.style.opacity = String(smoother(0.2, 0.6, dolly.u)) // fade name in
+              titleRef.current.style.opacity = String(smoother(0.2, 0.6, cameraU)) // fade name in
             }
-            if (!announced && dolly.u > 0.9) {
+            if (!announced && dolly.u > SITE_READY_AT) {
               announced = true
               document.dispatchEvent(new Event('loaderDone'))
             }
@@ -671,6 +684,10 @@ goldTint (${g('gold R')}, ${g('gold G')}, ${g('gold B')})`
 
         setPhase('ready')
         setProgress(100)
+        requestAnimationFrame(() => {
+          ScrollTrigger.refresh()
+          ScrollTrigger.update()
+        })
       })
       .catch(err => {
         if (disposed) return
