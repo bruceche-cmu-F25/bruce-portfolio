@@ -11,13 +11,14 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useLoader } from '@/lib/LoaderContext'
 
 gsap.registerPlugin(ScrollTrigger)
 
 // DEBUG: when true, render the raw model with environment light only —
 // no core point light, no bloom, no color grade, no material overrides —
 // and enable drag-to-orbit so we can find the camera angle. Set false to
-// restore the full lit + graded intro.
+// restore the full lit + graded hero.
 const DEBUG_BARE = false
 
 // Approach (b): recolor the ring albedo texture in-memory at load — desaturate
@@ -35,71 +36,38 @@ const SHOW_PANEL = false
 // resulting camera. Set false to lock the fixed hero camera + scroll dolly.
 const ORBIT = false
 
-type Phase = 'loading' | 'ready' | 'dive' | 'boot' | 'cli' | 'done'
+type Phase = 'loading' | 'ready' | 'fallback'
 
-const BOOT_LINES = [
-  '**** BRUCE OS 64 — BASIC V2 ****',
-  '64K RAM SYSTEM  38911 BASIC BYTES FREE',
-  '',
-  'LOAD "PORTFOLIO",8,1',
-  'SEARCHING FOR PORTFOLIO',
-  'FOUND BRUCE.CHENG',
-  '',
-  'READY.',
-]
-
-const CLI_HELP = [
-  'AVAILABLE COMMANDS:',
-  '  RUN       LAUNCH PORTFOLIO',
-  '  PROJECTS  RECENT WORK',
-  '  WHOAMI    ABOUT ME',
-  '  CONTACT   REACH OUT',
-  '  CLEAR     CLEAR SCREEN',
-]
-
-export default function SpaceIntro() {
-  const rootRef  = useRef<HTMLDivElement>(null)
-  const mountRef = useRef<HTMLDivElement>(null)
-  const flashRef = useRef<HTMLDivElement>(null)
-  const titleRef = useRef<HTMLDivElement>(null)
+export default function SpaceHero() {
+  const rootRef     = useRef<HTMLElement>(null)
+  const mountRef    = useRef<HTMLDivElement>(null)
+  const titleRef    = useRef<HTMLDivElement>(null)
+  const blackoutRef = useRef<HTMLDivElement>(null)
   const [phase, setPhase] = useState<Phase>('loading')
-  const [progress, setProgress] = useState(0)
-  const actions = useRef<{ enter?: () => void; skip?: () => void }>({})
+  const { setProgress, setReady } = useLoader()
 
   useEffect(() => {
-    let finished = false
     let disposed = false
+    let fallen = false
     let raf = 0
     const tweens: gsap.core.Animation[] = []
     let teardownFn: () => void = () => {}
+    let killScroll: () => void = () => {}
 
-    const finish = () => {
-      if (finished) return
-      finished = true
-      document.dispatchEvent(new Event('loaderDone'))
+    // static fallback: no WebGL — show the title over the CSS starfield
+    const toFallback = () => {
+      if (fallen || disposed) return
+      fallen = true
       killScroll()
       tweens.forEach(t => t.kill())
-      const root = rootRef.current
-      if (root) {
-        gsap.to(root, {
-          autoAlpha: 0, duration: 0.9, ease: 'power2.out',
-          onComplete: () => {
-            setPhase('done')
-            teardownFn()
-            // the 240vh scroll track unmounts with the intro — land at the top of the page
-            window.scrollTo(0, 0)
-          },
-        })
-      } else {
-        setPhase('done')
-        teardownFn()
-        window.scrollTo(0, 0)
-      }
+      teardownFn()
+      setPhase('fallback')
+      setProgress(100)
+      setReady(true)
     }
-    actions.current.skip = finish
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      finish()
+      toFallback()
       return
     }
 
@@ -107,7 +75,7 @@ export default function SpaceIntro() {
     try {
       renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' })
     } catch {
-      finish()
+      toFallback()
       return
     }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -126,21 +94,38 @@ export default function SpaceIntro() {
     const clock = new THREE.Clock()
     const spin = { hole: 0.06 }
     let holeGroup: THREE.Group | null = null
-    let killScroll: () => void = () => {}
     let dbgControls: TrackballControls | null = null // free-tumble controls (ORBIT / DEBUG_BARE)
     let panelEl: HTMLElement | null = null // dev tuning panel
-
-    /* terminal state */
-    type Mode = 'off' | 'boot' | 'cli' | 'launch'
-    let mode: Mode = 'off'
-    let screenTex: THREE.CanvasTexture | null = null
-    let screenCtx: CanvasRenderingContext2D | null = null
-    let screenLight: THREE.PointLight | null = null
-    const term: string[] = []
-    let input = ''
-    let bootIdx = 0
-    let bootChar = 0
-    let bootTimer = 0
+    let cameraLogRaf: number | null = null
+    let cameraLogLast = 0
+    let currentCameraScroll = 0
+    const urlParams = new URLSearchParams(window.location.search)
+    const installSpaceApi = (api: Record<string, unknown>, getCamera?: () => unknown) => {
+      if (getCamera) {
+        Object.defineProperty(api, 'cameraNow', {
+          get: getCamera,
+          enumerable: true,
+          configurable: true,
+        })
+      }
+      ;(window as any).__space = api
+      ;(window as any).space = api
+    }
+    const cameraNotReady = () => {
+      // eslint-disable-next-line no-console
+      console.warn('[SpaceHero] camera not ready yet. Wait for the black hole model to finish loading.')
+    }
+    installSpaceApi({
+      status: 'loading',
+      printCamera: cameraNotReady,
+      startCameraLog: cameraNotReady,
+      stopCameraLog: () => {},
+      copyCamera: cameraNotReady,
+    })
+    const spaceDebugEnabled =
+      process.env.NODE_ENV !== 'production' ||
+      urlParams.has('spaceDebug') ||
+      window.localStorage.getItem('spaceDebug') === '1'
 
     const makeStars = (count: number, opacity: number) => {
       const geo = new THREE.BufferGeometry()
@@ -225,9 +210,55 @@ export default function SpaceIntro() {
     const load = (url: string) => new Promise<GLTF>((res, rej) => loader.load(url, res, undefined, rej))
 
     const scene1 = new THREE.Scene()
-    const scene2 = new THREE.Scene()
     const camera1 = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.05, 2000)
-    const camera2 = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.05, 2000)
+    const currentCameraTarget = new THREE.Vector3()
+    const cameraState = () => {
+      const p = camera1.position
+      const up = camera1.up
+      const tg = dbgControls ? dbgControls.target : currentCameraTarget
+      const round = (n: number) => Number(n.toFixed(2))
+      return {
+        cam: { x: round(p.x), y: round(p.y), z: round(p.z) },
+        up: { x: round(up.x), y: round(up.y), z: round(up.z) },
+        target: { x: round(tg.x), y: round(tg.y), z: round(tg.z) },
+        fov: round(camera1.fov),
+        scroll: round(currentCameraScroll),
+      }
+    }
+    const cameraSnippet = (label = 'camera') => {
+      const p = camera1.position
+      const up = camera1.up
+      const tg = dbgControls ? dbgControls.target : currentCameraTarget
+      const f = (n: number) => Number(n).toFixed(2)
+      const text =
+`// ${label}
+cam:    new THREE.Vector3(${f(p.x)}, ${f(p.y)}, ${f(p.z)})
+up:     new THREE.Vector3(${f(up.x)}, ${f(up.y)}, ${f(up.z)})
+target: new THREE.Vector3(${f(tg.x)}, ${f(tg.y)}, ${f(tg.z)})
+fov:    ${f(camera1.fov)}
+scroll: ${f(currentCameraScroll)}`
+      // eslint-disable-next-line no-console
+      console.log(text)
+      return text
+    }
+    const startCameraLog = (ms = 500) => {
+      stopCameraLog()
+      cameraLogLast = 0
+      const loop = (now: number) => {
+        cameraLogRaf = window.requestAnimationFrame(loop)
+        if (now - cameraLogLast < ms) return
+        cameraLogLast = now
+        cameraSnippet('camera live')
+      }
+      cameraSnippet('camera start')
+      cameraLogRaf = window.requestAnimationFrame(loop)
+    }
+    const stopCameraLog = () => {
+      if (cameraLogRaf !== null) {
+        window.cancelAnimationFrame(cameraLogRaf)
+        cameraLogRaf = null
+      }
+    }
 
     // GEOMETRY-LOCKED radial grade. Instead of a screen-space post pass (which
     // slides against the disk as the camera dollies), the grade lives IN the ring
@@ -278,26 +309,11 @@ export default function SpaceIntro() {
     const bloom1 = new UnrealBloomPass(res.clone(), 0.42, 0.16, 0)
     if (!DEBUG_BARE) composer1.addPass(bloom1)
     composer1.addPass(new OutputPass())
-    const composer2 = new EffectComposer(renderer)
-    composer2.addPass(new RenderPass(scene2, camera2))
-    composer2.addPass(new UnrealBloomPass(res.clone(), 0.35, 0.4, 0.85))
-    composer2.addPass(new OutputPass())
-    let activeComposer = composer1
 
-    /* scene-2 targets, computed after the C64 loads */
-    const screenCenter = new THREE.Vector3()
-    const screenNormal = new THREE.Vector3(0, 0, 1)
-    let dollyEndDist = 3
+    load('/models/black_hole.glb')
+      .then(hole => {
+        if (disposed || fallen) return
 
-    /* planet vantage — the planet orbits with the rotating group, so track the mesh itself */
-    let planetMeshRef: THREE.Mesh | null = null
-    let planetRadius = 0
-
-    Promise.all([load('/models/black_hole.glb'), load('/models/commodore_64.glb')])
-      .then(([hole, c64]) => {
-        if (finished || disposed) return
-
-        /* ----- scene 1: black hole ----- */
         // starfield visible at the far establishing shot; fades out on approach
         const starField = makeStars(2600, 0.9)
         scene1.add(starField)
@@ -418,38 +434,26 @@ export default function SpaceIntro() {
           holeGroup.updateMatrixWorld(true)
         }
 
+        // the planet stays put while the disk spins — detach it from the group
         let planetMesh: THREE.Mesh | null = null
         holeGroup.traverse(o => {
           const m = o as THREE.Mesh
           if (!m.isMesh) return
           if ((m.material as THREE.Material)?.name === 'Planet') planetMesh = m
         })
-        if (planetMesh) {
-          const pSphere = new THREE.Sphere()
-          new THREE.Box3().setFromObject(planetMesh).getBoundingSphere(pSphere)
-          planetRadius = pSphere.radius
-          if (planetRadius > 0.01) {
-            planetMeshRef = planetMesh
-            // detach from the spinning group so the dive path can't collide with it
-            scene1.attach(planetMesh)
-          }
-        }
+        if (planetMesh) scene1.attach(planetMesh)
 
-        // two camera keyframes (found by tumbling): a FAR establishing shot in deep
-        // space → the NEAR hero framing. Scroll dollies between them. The disk grade
-        // is world-locked so it stays correct across the whole move.
+        // Default positions used for initial render and the optional orbit tuner.
+        // The scroll camera below is driven by the three explicit K1/K2/K3 keys.
         const camFar  = new THREE.Vector3(253.8, 76, 1073.4)
-        const upFar   = new THREE.Vector3(-0.4, 0.7, 0.5).normalize()
+        const upFar   = new THREE.Vector3(-0.42, 0.74, 0.53).normalize()
         const tgtFar  = new THREE.Vector3(21.2, -11.4, -14.6)
-        const camNear = new THREE.Vector3(-1.2, 2.2, 22.4)
-        const upNear  = new THREE.Vector3(-0.28, 1, 0.03).normalize()
-        const tgtNear = new THREE.Vector3(22, -5.2, -10.5)
-        const camSettle = camNear.clone().add(new THREE.Vector3(0.18, -0.06, -0.38))
-        const upSettle  = upNear.clone().add(new THREE.Vector3(-0.008, 0, 0.003)).normalize()
-        const tgtSettle = tgtNear.clone().add(new THREE.Vector3(0.45, 0.18, -0.18))
+        const camNear = new THREE.Vector3(0.57, 2.71, 29.7)
+        const tgtNear = new THREE.Vector3(21.99, -5.24, -10.53)
         const lookTarget = tgtNear // panel/trackball reference (tunes the near framing)
         camera1.up.copy(upFar)
         camera1.position.copy(camFar)
+        currentCameraTarget.copy(tgtFar)
         camera1.lookAt(tgtFar)
 
         // DEBUG: free-tumble the whole view (no up-vector lock, so the disk can be
@@ -469,6 +473,7 @@ export default function SpaceIntro() {
             if (now - logT < 250) return
             logT = now
             const p = camera1.position, up = camera1.up, tg = tb.target
+            currentCameraTarget.copy(tg)
             const f = (n: number) => n.toFixed(1)
             // eslint-disable-next-line no-console
             console.log(
@@ -477,15 +482,56 @@ export default function SpaceIntro() {
           })
         }
 
-        /* scroll-driven dolly: interpolate camera position + up + target from the
-           far establishing shot to the near hero framing; fade the stars out and
-           the name in as we approach. */
-        const _cp = new THREE.Vector3(), _cu = new THREE.Vector3(), _ct = new THREE.Vector3()
-        const _sp = new THREE.Vector3(), _su = new THREE.Vector3(), _st = new THREE.Vector3()
+        /* scroll-driven camera through three hand-picked keyframes captured
+           with the console camera log. The first leg eases into the hero frame,
+           then holds with a tiny drift before the final dive. This avoids the
+           Catmull-Rom mid-curve overshoot that can skim the white-hot core too
+           early and wash the frame out.
+             K1 u=0     far establishing shot
+             K2 u=0.44  beside the planet — hero framing, the name holds here
+             K3 u=0.85  final approach at the event horizon, fov stretched. */
+        const K1 = { cam: new THREE.Vector3(253.8, 76.0, 1073.4), up: new THREE.Vector3(-0.42, 0.74, 0.53).normalize(), tgt: new THREE.Vector3(21.2, -11.4, -14.6), fov: 55 }
+        const K2 = { cam: new THREE.Vector3(0.57, 2.71, 29.7),    up: new THREE.Vector3(-0.27, 0.96, 0.03).normalize(), tgt: new THREE.Vector3(21.99, -5.24, -10.53), fov: 55 }
+        const K3 = { cam: new THREE.Vector3(2.38, 0.92, 1.82),    up: new THREE.Vector3(0.04, 1, 0.01).normalize(),     tgt: new THREE.Vector3(4.55, -0.84, -4.82), fov: 77.1 }
+        const K2_U = 0.44
+        const K3_U = 0.85
+        const BLACKOUT_START_U = 0.82
+        const K4_DIR = K3.tgt.clone().sub(K3.cam).normalize()
+        const K4 = {
+          cam: K3.cam.clone().addScaledVector(K4_DIR, 0.95),
+          up: K3.up.clone(),
+          tgt: K3.tgt.clone().addScaledVector(K4_DIR, 0.38),
+          fov: 79,
+        }
+        const _cam = new THREE.Vector3(), _up = new THREE.Vector3(), _ct = new THREE.Vector3()
         const dolly = { u: 0 }
-        let announced = false
-        const APPROACH_END = 0.86
-        const SITE_READY_AT = 0.975
+        const sampleCamera = (u: number) => {
+          if (u <= K2_U) {
+            const t = u / K2_U
+            _cam.lerpVectors(K1.cam, K2.cam, t)
+            _up.lerpVectors(K1.up, K2.up, t).normalize()
+            _ct.lerpVectors(K1.tgt, K2.tgt, t)
+            camera1.fov = THREE.MathUtils.lerp(K1.fov, K2.fov, t)
+          } else if (u <= K3_U) {
+            const t = (u - K2_U) / (K3_U - K2_U)
+            _cam.lerpVectors(K2.cam, K3.cam, t)
+            _up.lerpVectors(K2.up, K3.up, t).normalize()
+            _ct.lerpVectors(K2.tgt, K3.tgt, t)
+            camera1.fov = THREE.MathUtils.lerp(K2.fov, K3.fov, smoother(0.18, 1, t))
+          } else {
+            const t = smoother(K3_U, 1, u)
+            _cam.lerpVectors(K3.cam, K4.cam, t)
+            _up.lerpVectors(K3.up, K4.up, t).normalize()
+            _ct.lerpVectors(K3.tgt, K4.tgt, t)
+            camera1.fov = THREE.MathUtils.lerp(K3.fov, K4.fov, t)
+          }
+
+          camera1.position.copy(_cam)
+          camera1.up.copy(_up)
+          currentCameraTarget.copy(_ct)
+          camera1.lookAt(_ct)
+        }
+
         const scrollTween = gsap.to(dolly, {
           u: 1, ease: 'none',
           scrollTrigger: {
@@ -495,105 +541,56 @@ export default function SpaceIntro() {
             scrub: 1.15,
           },
           onUpdate: () => {
+            currentCameraScroll = dolly.u
             if (DEBUG_BARE || ORBIT) return // let TrackballControls drive the camera
-            const approachT = Math.min(1, dolly.u / APPROACH_END)
-            const cameraU = 1 - Math.pow(1 - approachT, 2.4)
-            const settleU = smoother(APPROACH_END, SITE_READY_AT, dolly.u)
-            _sp.lerpVectors(camNear, camSettle, settleU)
-            _su.lerpVectors(upNear, upSettle, settleU).normalize()
-            _st.lerpVectors(tgtNear, tgtSettle, settleU)
-            camera1.position.copy(_cp.lerpVectors(camFar, _sp, cameraU))
-            camera1.up.copy(_cu.lerpVectors(upFar, _su, cameraU).normalize())
-            _ct.lerpVectors(tgtFar, _st, cameraU)
-            camera1.lookAt(_ct)
-            starMat.opacity = 0.9 * (1 - smoother(0.35, 0.8, cameraU)) // fade stars on approach
+            sampleCamera(dolly.u)
+            const approachT = smoother(0, K2_U, dolly.u)
+            const diveT = smoother(K2_U, K3_U, dolly.u)
+            const swallowT = smoother(BLACKOUT_START_U, 1, dolly.u)
+            spin.hole = 0.06 + 0.42 * diveT + 0.08 * swallowT
+            coreLight.intensity = 410 * (1 - 0.72 * smoother(0.55, 1, diveT))
+            renderer.toneMappingExposure = 0.85 - 0.28 * smoother(0.45, 1, diveT) - 0.06 * swallowT
+            camera1.updateProjectionMatrix()
+            starMat.opacity = 0.9 * (1 - smoother(0.25, 1, approachT))
             if (titleRef.current) {
-              titleRef.current.style.opacity = String(smoother(0.2, 0.6, cameraU)) // fade name in
+              const fadeIn  = smoother(0.14, K2_U, dolly.u)
+              const fadeOut = 1 - smoother(K2_U + 0.04, K2_U + 0.16, dolly.u)
+              titleRef.current.style.opacity = String(fadeIn * fadeOut)
             }
-            if (!announced && dolly.u > SITE_READY_AT) {
-              announced = true
-              document.dispatchEvent(new Event('loaderDone'))
+            if (blackoutRef.current) {
+              blackoutRef.current.style.opacity = String(swallowT)
             }
           },
         })
         tweens.push(scrollTween)
         killScroll = () => scrollTween.scrollTrigger?.kill()
 
-        /* ----- scene 2: the computer inside the singularity ----- */
-        scene2.add(makeStars(1400, 0.35))
-        scene2.environment = envMap
-        ;(scene2 as any).environmentIntensity = 0.35
-        scene2.add(new THREE.AmbientLight(0x8899bb, 0.5))
-        const key = new THREE.DirectionalLight(0xffe8cc, 1.8)
-        key.position.set(14, 22, 18)
-        scene2.add(key)
-        const rim = new THREE.PointLight(0x66d9ff, 900, 0, 2)
-        rim.position.set(-18, 10, -20)
-        scene2.add(rim)
-
-        const c64Group = normalize(c64.scene, 26)
-        scene2.add(c64Group)
-        c64Group.updateMatrixWorld(true)
-
-        let screenMesh: THREE.Mesh | null = null
-        c64Group.traverse(o => {
-          const m = o as THREE.Mesh
-          if (m.isMesh && (m.material as THREE.Material)?.name === 'monitor_screen') screenMesh = m
-        })
-
-        if (screenMesh) {
-          const sm = screenMesh as THREE.Mesh
-          new THREE.Box3().setFromObject(sm).getCenter(screenCenter)
-
-          // average the geometry normals in world space to get the screen's facing direction
-          const nAttr = sm.geometry.attributes.normal as THREE.BufferAttribute
-          const nm = new THREE.Matrix3().getNormalMatrix(sm.matrixWorld)
-          const acc = new THREE.Vector3()
-          const tmp = new THREE.Vector3()
-          const step = Math.max(1, Math.floor(nAttr.count / 500))
-          for (let i = 0; i < nAttr.count; i += step) {
-            acc.add(tmp.fromBufferAttribute(nAttr, i).applyMatrix3(nm))
-          }
-          if (acc.lengthSq() > 1e-6) screenNormal.copy(acc.normalize())
-          // the screen faces away from the rest of the pack
-          const away = screenCenter.clone().setY(0)
-          if (away.lengthSq() > 1e-4 && screenNormal.dot(away.normalize()) < 0) screenNormal.negate()
-          screenNormal.y = 0
-          screenNormal.normalize()
-
-          const canvas = document.createElement('canvas')
-          canvas.width = 1024
-          canvas.height = 768
-          screenCtx = canvas.getContext('2d')
-          screenTex = new THREE.CanvasTexture(canvas)
-          screenTex.flipY = false // glTF UV convention
-          screenTex.colorSpace = THREE.SRGBColorSpace
-          sm.material = new THREE.MeshBasicMaterial({ map: screenTex, toneMapped: false })
-          drawScreen(0)
-
-          screenLight = new THREE.PointLight(0x66ff88, 60, 0, 2)
-          screenLight.position.copy(screenCenter).addScaledVector(screenNormal, 3)
-          scene2.add(screenLight)
-
-          const sBox = new THREE.Box3().setFromObject(sm)
-          const sH = sBox.getSize(new THREE.Vector3()).y
-          dollyEndDist = (sH * 1.12) / (2 * Math.tan(THREE.MathUtils.degToRad(camera2.fov / 2)))
-        }
-
-        // dev-only live tuning: tweak from the browser console without reloading, e.g.
-        //   __space.grade.highlightTint.value.setRGB(1.3, 0.9, 0.4)
-        //   __space.grade.desat.value = 0.9
-        //   __space.coreLight.intensity = 300
-        //   __space.bloom.strength = 0.7
-        //   __space.scene.environmentIntensity = 0.5
-        if (process.env.NODE_ENV !== 'production') {
-          ;(window as any).__space = {
-            grade: diskGrade,
-            coreLight,
-            bloom: bloom1,
-            scene: scene1,
-          }
-        }
+        // Console tuning/debug hooks. These are intentionally available in every
+        // build because camera framing is often checked from `next start`.
+        installSpaceApi({
+          status: 'ready',
+          grade: diskGrade,
+          coreLight,
+          bloom: bloom1,
+          scene: scene1,
+          camera: camera1,
+          target: currentCameraTarget,
+          getCamera: cameraState,
+          printCamera: cameraSnippet,
+          startCameraLog,
+          stopCameraLog,
+          copyCamera: () => navigator.clipboard?.writeText(cameraSnippet('camera copy')),
+        }, cameraState)
+        // eslint-disable-next-line no-console
+        console.info(
+          '[SpaceHero] camera console ready:',
+          'space.getCamera()',
+          'space.cameraNow',
+          'space.printCamera()',
+          'space.startCameraLog(500)',
+          'space.stopCameraLog()',
+        )
+        if (spaceDebugEnabled && urlParams.has('cameraLog')) startCameraLog(250)
 
         // ── on-screen dev tuning panel (sliders + copy button) ──
         if (process.env.NODE_ENV !== 'production' && SHOW_PANEL && !DEBUG_BARE) {
@@ -684,6 +681,7 @@ goldTint (${g('gold R')}, ${g('gold G')}, ${g('gold B')})`
 
         setPhase('ready')
         setProgress(100)
+        setReady(true)
         requestAnimationFrame(() => {
           ScrollTrigger.refresh()
           ScrollTrigger.update()
@@ -691,231 +689,12 @@ goldTint (${g('gold R')}, ${g('gold G')}, ${g('gold B')})`
       })
       .catch(err => {
         if (disposed) return
-        console.error('SpaceIntro: failed to load models', err)
-        finish()
+        console.error('SpaceHero: failed to load model', err)
+        toFallback()
       })
-
-    /* ---------- terminal ---------- */
-    const ROWS = 10
-    const pushLines = (...ls: string[]) => {
-      term.push(...ls)
-      if (term.length > 200) term.splice(0, term.length - 200)
-    }
-
-    const launch = () => {
-      pushLines('LOADING PORTFOLIO . . .')
-      mode = 'launch'
-      setTimeout(finish, 900)
-    }
-
-    const execute = () => {
-      const cmd = input.trim().toUpperCase()
-      pushLines('> ' + input)
-      input = ''
-      if (cmd === '' || cmd === 'RUN' || cmd === 'ENTER' || cmd === 'START') { launch(); return }
-      switch (cmd) {
-        case 'HELP': case '?':
-          pushLines(...CLI_HELP); break
-        case 'PROJECTS': case 'LS':
-          pushLines('NIGHTYNIGHT.TSX    RESEARCH-AGENT.TS', 'CAPITAWISE.TS      PARKING-LOCATOR.PY', 'TYPE "RUN" TO SEE THEM ALL'); break
-        case 'WHOAMI': case 'ABOUT':
-          pushLines('BRUCE CHENG', 'SOFTWARE ENGINEER · AI BUILDER', 'MS @ CMU SILICON VALLEY'); break
-        case 'CONTACT': case 'EMAIL':
-          pushLines('BRUCECHE@ANDREW.CMU.EDU', 'GITHUB.COM/BRUCECHE-CMU-F25'); break
-        case 'CLEAR': case 'CLS':
-          term.length = 0; break
-        case 'SUDO':
-          pushLines('NICE TRY.'); break
-        default:
-          pushLines('?SYNTAX ERROR')
-      }
-    }
-
-    const finishBoot = () => {
-      for (; bootIdx < BOOT_LINES.length; bootIdx++) pushLines(BOOT_LINES[bootIdx])
-      mode = 'cli'
-      setPhase('cli')
-    }
-
-    function drawScreen(t: number) {
-      if (!screenCtx || !screenTex) return
-      const ctx = screenCtx
-      const W = 1024, H = 768
-      // compensate the monitor mesh's rotated/flipped UVs: content x → texture -y, content y → texture -x
-      ctx.setTransform(0, -H / W, -W / H, 0, W, H)
-      ctx.fillStyle = '#071204'
-      ctx.fillRect(0, 0, W, H)
-      ctx.save()
-      ctx.font = 'bold 30px "JetBrains Mono", "Courier New", monospace'
-      ctx.fillStyle = '#86ff9e'
-      ctx.shadowColor = '#3aff6b'
-      ctx.shadowBlur = 14
-      // the glass only shows texture rows below ~v=210 — keep text inside that window
-      const x0 = 64, y0 = 262, lh = 44
-
-      let active = ''
-      if (mode === 'boot') active = BOOT_LINES[bootIdx]?.slice(0, bootChar) ?? ''
-      else if (mode === 'cli') active = '> ' + input
-      const history = term.slice(-(ROWS - 1))
-      const rows = [...history, active]
-      rows.forEach((line, i) => ctx.fillText(line, x0, y0 + i * lh))
-
-      if (mode !== 'launch' && Math.floor(t / 0.53) % 2 === 0) {
-        const cy = y0 + (rows.length - 1) * lh
-        const cx = x0 + ctx.measureText(active).width
-        ctx.fillRect(cx + 6, cy - 26, 20, 32)
-      }
-      if (mode === 'cli') {
-        ctx.font = '20px "JetBrains Mono", "Courier New", monospace'
-        ctx.fillStyle = 'rgba(134,255,158,0.4)'
-        ctx.shadowBlur = 0
-        ctx.fillText('"HELP" FOR COMMANDS · "RUN" OR CLICK TO LAUNCH', x0, 706)
-      }
-      ctx.restore()
-      // scanlines + vignette baked into the texture
-      ctx.fillStyle = 'rgba(0,0,0,0.22)'
-      for (let y = 0; y < H; y += 4) ctx.fillRect(0, y, W, 1)
-      const g = ctx.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.78)
-      g.addColorStop(0, 'rgba(0,0,0,0)')
-      g.addColorStop(1, 'rgba(0,0,0,0.55)')
-      ctx.fillStyle = g
-      ctx.fillRect(0, 0, W, H)
-      screenTex.needsUpdate = true
-    }
-
-    /* ---------- phase transitions ---------- */
-    const startDive = () => {
-      setPhase('dive')
-      killScroll()
-
-      const tl = gsap.timeline({ onComplete: enterComputer })
-      tweens.push(tl)
-      const UP = new THREE.Vector3(0, 1, 0)
-      const look = new THREE.Vector3()
-      const origin = new THREE.Vector3(0, 0, 0)
-      const pPos = new THREE.Vector3()
-      const startPos = camera1.position.clone()
-      const leg2LookFrom = origin.clone()
-
-      if (planetMeshRef) {
-        const planet = planetMeshRef
-        const dist = THREE.MathUtils.clamp(planetRadius * 3.5, 3, 14)
-        const lift = Math.max(planetRadius * 0.6, 1)
-
-        // ── leg 1: swing over to the planet ──
-        const side = new THREE.Vector3()
-        const vantage = new THREE.Vector3()
-        const p1 = { u: 0 }
-        tl.to(p1, {
-          u: 1, duration: 3.6, ease: 'power2.inOut',
-          onUpdate: () => {
-            planet.getWorldPosition(pPos)
-            const dir = pPos.clone().normalize()
-            vantage.copy(pPos).addScaledVector(dir, dist).add(new THREE.Vector3(0, lift, 0))
-            side.crossVectors(dir, UP).setLength(16)
-            camera1.position.lerpVectors(startPos, vantage, p1.u)
-              .addScaledVector(side, Math.sin(Math.PI * p1.u))
-              .y += Math.sin(Math.PI * p1.u) * 5
-            look.copy(origin).lerp(pPos, Math.min(1, p1.u * 1.4))
-            camera1.lookAt(look)
-          },
-        }, 0)
-
-        // ── hold: drift around the planet ──
-        const p2 = { a: 0 }
-        tl.to(p2, {
-          a: 0.55, duration: 1.5, ease: 'sine.inOut',
-          onUpdate: () => {
-            planet.getWorldPosition(pPos)
-            const offset = pPos.clone().normalize().multiplyScalar(dist).add(new THREE.Vector3(0, lift, 0))
-            camera1.position.copy(pPos).add(offset.applyAxisAngle(UP, p2.a))
-            camera1.lookAt(pPos)
-          },
-        })
-      }
-
-      // ── leg 2: swing back and dive into the hole (path built when it starts) ──
-      tl.addLabel('dive')
-      const p3 = { u: 0, roll: 0 }
-      let path2: THREE.CatmullRomCurve3 | null = null
-      tl.to(p3, {
-        u: 1, duration: 5.6, ease: 'power2.inOut',
-        onStart: () => {
-          const leg2Start = camera1.position.clone()
-          if (planetMeshRef) planetMeshRef.getWorldPosition(leg2LookFrom)
-          const wide = leg2Start.clone().setY(Math.max(leg2Start.y, 6)).applyAxisAngle(UP, 0.8).setLength(38)
-          path2 = new THREE.CatmullRomCurve3([
-            leg2Start,
-            wide,
-            wide.clone().multiplyScalar(0.45).setY(2.2),
-            new THREE.Vector3(-6, 0.8, -1.8),
-            new THREE.Vector3(0, 0.15, 0),
-          ])
-        },
-        onUpdate: () => {
-          if (!path2) return
-          path2.getPoint(p3.u, camera1.position)
-          camera1.up.set(Math.sin(p3.roll), 1, 0).normalize()
-          look.copy(leg2LookFrom).lerp(origin, Math.min(1, p3.u * 1.8))
-          if (p3.u > 0.85) look.lerp(new THREE.Vector3(6, -0.5, -4), (p3.u - 0.85) * 4)
-          camera1.lookAt(look)
-        },
-      }, 'dive')
-      tl.to(p3, { roll: 0.5, duration: 2.8, ease: 'sine.inOut' }, 'dive')
-      tl.to(p3, { roll: -0.18, duration: 2.8, ease: 'sine.inOut' }, 'dive+=2.8')
-      tl.to(spin, { hole: 0.7, duration: 5.2, ease: 'power2.in' }, 'dive')
-      tl.to(camera1, {
-        fov: 105, duration: 1.7, ease: 'power3.in',
-        onUpdate: () => camera1.updateProjectionMatrix(),
-      }, 'dive+=3.7')
-      if (flashRef.current) {
-        tl.to(flashRef.current, { opacity: 1, duration: 0.5, ease: 'power3.in' }, 'dive+=4.9')
-      }
-    }
-    actions.current.enter = startDive
-
-    const enterComputer = () => {
-      if (finished || disposed) return
-      setPhase('boot')
-      activeComposer = composer2
-      mode = 'boot'
-
-      const right = new THREE.Vector3().crossVectors(screenNormal, new THREE.Vector3(0, 1, 0)).normalize()
-      const D0 = 30
-      const start = screenCenter.clone()
-        .addScaledVector(screenNormal, D0)
-        .addScaledVector(right, D0 * 0.55)
-        .add(new THREE.Vector3(0, D0 * 0.3, 0))
-      const mid = screenCenter.clone()
-        .addScaledVector(screenNormal, D0 * 0.45)
-        .addScaledVector(right, 2.5)
-        .add(new THREE.Vector3(0, 1.5, 0))
-      const end = screenCenter.clone().addScaledVector(screenNormal, dollyEndDist)
-      const path = new THREE.CatmullRomCurve3([start, mid, end])
-      const look = new THREE.Vector3()
-      const lookStart = new THREE.Vector3(0, 0, 0)
-      const prox = { u: 0 }
-
-      camera2.position.copy(start)
-      camera2.lookAt(lookStart)
-
-      if (flashRef.current) {
-        tweens.push(gsap.to(flashRef.current, { opacity: 0, duration: 1.4, ease: 'power2.out' }))
-      }
-      const tl = gsap.timeline()
-      tweens.push(tl)
-      tl.to(prox, {
-        u: 1, duration: 8.5, ease: 'power2.inOut',
-        onUpdate: () => {
-          path.getPoint(prox.u, camera2.position)
-          look.copy(lookStart).lerp(screenCenter, Math.min(1, prox.u * 2.2))
-          camera2.lookAt(look)
-        },
-      })
-    }
 
     /* ---------- main loop ---------- */
-    // stop burning GPU on bloom passes once the intro is scrolled out of view
+    // stop burning GPU on bloom passes once the hero is scrolled out of view
     let stageVisible = true
     const io = new IntersectionObserver(entries => { stageVisible = entries[0].isIntersecting })
     if (rootRef.current) io.observe(rootRef.current)
@@ -924,28 +703,9 @@ goldTint (${g('gold R')}, ${g('gold G')}, ${g('gold B')})`
       raf = requestAnimationFrame(tick)
       if (!stageVisible) return
       const dt = Math.min(clock.getDelta(), 0.05)
-      const t = clock.elapsedTime
-
       if (holeGroup) holeGroup.rotation.y += spin.hole * dt
       dbgControls?.update()
-      if (mode !== 'off') {
-        if (mode === 'boot') {
-          bootTimer += dt
-          const line = BOOT_LINES[bootIdx]
-          if (line === undefined) finishBoot()
-          else {
-            const interval = line.length === 0 ? 0.18 : bootChar >= line.length ? 0.32 : 0.045
-            if (bootTimer >= interval) {
-              bootTimer = 0
-              if (bootChar < line.length) bootChar++
-              else { pushLines(line); bootIdx++; bootChar = 0 }
-            }
-          }
-        }
-        drawScreen(t)
-        if (screenLight) screenLight.intensity = 55 + Math.sin(t * 11) * 8 + Math.random() * 6
-      }
-      activeComposer.render()
+      composer1.render()
     }
     tick()
 
@@ -954,28 +714,11 @@ goldTint (${g('gold R')}, ${g('gold G')}, ${g('gold B')})`
       const w = window.innerWidth, h = window.innerHeight
       renderer.setSize(w, h)
       composer1.setSize(w, h)
-      composer2.setSize(w, h)
-      for (const c of [camera1, camera2]) {
-        c.aspect = w / h
-        c.updateProjectionMatrix()
-      }
+      camera1.aspect = w / h
+      camera1.updateProjectionMatrix()
       dbgControls?.handleResize()
     }
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { finish(); return }
-      if (mode === 'boot' && e.key === 'Enter') { finishBoot(); e.preventDefault(); return }
-      if (mode !== 'cli') return
-      if (e.metaKey || e.ctrlKey || e.altKey) return
-      if (e.key === 'Enter') { execute(); e.preventDefault() }
-      else if (e.key === 'Backspace') { input = input.slice(0, -1); e.preventDefault() }
-      else if (e.key.length === 1 && input.length < 34) { input += e.key.toUpperCase(); e.preventDefault() }
-    }
-    const onPointer = () => {
-      if (mode === 'cli') { input = 'RUN'; execute() }
-    }
     window.addEventListener('resize', onResize)
-    window.addEventListener('keydown', onKey)
-    renderer.domElement.addEventListener('pointerdown', onPointer)
 
     let torndown = false
     teardownFn = () => {
@@ -986,13 +729,11 @@ goldTint (${g('gold R')}, ${g('gold G')}, ${g('gold B')})`
       killScroll()
       tweens.forEach(t => t.kill())
       window.removeEventListener('resize', onResize)
-      window.removeEventListener('keydown', onKey)
-      renderer.domElement.removeEventListener('pointerdown', onPointer)
       dbgControls?.dispose()
       panelEl?.remove()
+      stopCameraLog()
       draco.dispose()
       composer1.dispose()
-      composer2.dispose()
       renderer.dispose()
       renderer.domElement.remove()
     }
@@ -1001,37 +742,29 @@ goldTint (${g('gold R')}, ${g('gold G')}, ${g('gold B')})`
       disposed = true
       teardownFn()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-    <>
-      {phase !== 'done' && (
-        <div className="space-intro" ref={rootRef}>
-          <div className="si-stage">
-            <div className="si-canvas" ref={mountRef} />
-            {phase === 'loading' && (
-              <div className="si-loading">
-                <span className="si-blink">▋</span> ESTABLISHING UPLINK … {progress}%
-              </div>
-            )}
-            {phase === 'ready' && (
-              <div className="si-title" ref={titleRef} style={{ opacity: 0 }}>
-                <p className="si-eyebrow">PORTFOLIO</p>
-                <h1>BRUCE CHENG</h1>
-                <p>SOFTWARE ENGINEER · MS @ CMU SILICON VALLEY</p>
-                <span className="si-scroll-hint">SCROLL TO APPROACH ▼</span>
-              </div>
-            )}
-            {phase !== 'loading' && (
-              <button className="si-skip" onClick={() => actions.current.skip?.()}>
-                SKIP INTRO ⏭
-              </button>
-            )}
-            <div className="si-flash" ref={flashRef} />
-          </div>
+    <section
+      className={`space-hero${phase === 'fallback' ? ' is-static' : ''}`}
+      ref={rootRef}
+      aria-label="Bruce Cheng — introduction"
+    >
+      <div className="sh-stage">
+        {phase !== 'fallback' && <div className="sh-canvas" ref={mountRef} />}
+        <div
+          className="sh-title"
+          ref={titleRef}
+          style={phase === 'fallback' ? undefined : { opacity: 0 }}
+        >
+          <p className="sh-eyebrow">Portfolio</p>
+          <h1>Bruce Cheng</h1>
+          <p className="sh-sub">Software Engineer · MS @ CMU Silicon Valley</p>
+          {phase !== 'fallback' && <span className="sh-scroll-hint">Scroll to approach ↓</span>}
         </div>
-      )}
-      <div className="crt-filter" aria-hidden="true" />
-    </>
+        {phase !== 'fallback' && <div className="sh-blackout" ref={blackoutRef} aria-hidden="true" />}
+      </div>
+    </section>
   )
 }
