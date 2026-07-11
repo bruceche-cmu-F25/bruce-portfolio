@@ -503,6 +503,9 @@
 .showcasePortrait  { max-width: 500px; }
 .showcaseLandscape { max-width: 940px; }
 
+.showcaseLarge.showcasePortrait  { max-width: 640px; }
+.showcaseLarge.showcaseLandscape { max-width: 1100px; }
+
 .showcaseInner {
   position: relative;
   overflow: hidden;

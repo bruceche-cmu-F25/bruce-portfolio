@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 // ─── 婚礼信息 ───────────────────────────────────────────────────────
 const DATE = '二零二六年 六月二十二日'
-const TRANSITION_WORDS = ['forever,', 'hand', 'in', 'hand']
+const TRANSITION_WORDS = ['Through', 'thick', 'and', 'thin']
 const TRANSITION_ZH = '第二站，水神殿'
 const TRANSITION_SUB = 'The Water Temple · 水神殿'
 
@@ -30,7 +30,7 @@ type CollageRow = {
 
 type Block =
   | { type: 'collage'; rows: CollageRow[] }
-  | { type: 'solo';    photos: Photo[] }
+  | { type: 'solo';    photos: Photo[]; large?: boolean }
   | { type: 'duo';     photos: Photo[]; large?: boolean }
   | { type: 'feature'; photos: Photo[]; large?: boolean }
 
@@ -38,7 +38,7 @@ const blockPhotos = (b: Block): Photo[] =>
   b.type === 'collage' ? b.rows.flatMap(r => r.cells.map(c => P(c.id))) : b.photos
 
 const INDOOR_BLOCKS: Block[] = [
-  { type: 'solo', photos: [P('1')] },
+  { type: 'solo', photos: [P('1')], large: true },
   { type: 'collage', rows: [
     { h: 6.2, cells: [{ id: '2',  span: 4 }, { id: '3',  span: 4, drop: true }, { id: '4', span: 4 }] },
     { h: 9,   cells: [{ id: '5',  span: 7 }, { id: '6',  span: 5, drop: true }] },
@@ -210,14 +210,16 @@ function Collage({ rows, offset, onOpen }: {
   )
 }
 
-function SpotlightMat({ photo, index, onOpen }: {
+function SpotlightMat({ photo, index, large, onOpen }: {
   photo: Photo
   index: number
+  large?: boolean
   onOpen: (index: number) => void
 }) {
+  const orientation = photo.w > photo.h ? styles.showcaseLandscape : styles.showcasePortrait
   return (
     <div
-      className={`${styles.showcaseMat} ${photo.w > photo.h ? styles.showcaseLandscape : styles.showcasePortrait}`}
+      className={`${styles.showcaseMat} ${orientation} ${large ? styles.showcaseLarge : ''}`}
       onClick={() => onOpen(index)}
     >
       <Corners />
@@ -234,10 +236,10 @@ function SpotlightMat({ photo, index, onOpen }: {
   )
 }
 
-function Solo({ photo, index, onOpen }: { photo: Photo; index: number; onOpen: (i: number) => void }) {
+function Solo({ photo, index, large, onOpen }: { photo: Photo; index: number; large?: boolean; onOpen: (i: number) => void }) {
   return (
     <div className={`${styles.showcase} wg-feature`}>
-      <SpotlightMat photo={photo} index={index} onOpen={onOpen} />
+      <SpotlightMat photo={photo} index={index} large={large} onOpen={onOpen} />
     </div>
   )
 }
@@ -298,7 +300,7 @@ function ChapterBlocks({ blocks, start, onOpen }: {
           case 'collage':
             return <Collage key={bi} rows={block.rows} offset={at} onOpen={onOpen} />
           case 'solo':
-            return <Solo key={bi} photo={block.photos[0]} index={at} onOpen={onOpen} />
+            return <Solo key={bi} photo={block.photos[0]} index={at} large={block.large} onOpen={onOpen} />
           case 'duo':
             return <Duo key={bi} photos={block.photos} offset={at} large={block.large} onOpen={onOpen} />
           case 'feature':
@@ -367,18 +369,20 @@ export default function Gallery() {
   const toggleBgm = useCallback(() => {
     const a = audioRef.current
     if (!a) return
-    if (bgmOn && bgmStarted.current) {
+    const isPlaying = bgmStarted.current && !a.paused
+    if (isPlaying) {
       gsap.to(a, { volume: 0, duration: 0.8, ease: 'power1.out', onComplete: () => a.pause() })
-    } else if (!bgmOn) {
+      setBgmOn(false)
+    } else {
       if (bgmStarted.current) {
         a.play()
         gsap.to(a, { volume: 0.5, duration: 1.2, ease: 'power1.inOut' })
       } else {
         startBgm()
       }
+      setBgmOn(true)
     }
-    setBgmOn(v => !v)
-  }, [bgmOn, startBgm])
+  }, [startBgm])
 
   const close = useCallback(() => setActive(null), [])
   const prev  = useCallback(() => setActive(i => (i !== null && i > 0) ? i - 1 : i), [])
@@ -569,10 +573,11 @@ export default function Gallery() {
   return (
     <div ref={rootRef} className={styles.page}>
       <LenisInit />
-      <audio ref={audioRef} src={encodeURI('/晴天.mp3')} loop preload="auto" />
+      <audio ref={audioRef} src="/GoldenHour.mp3" loop preload="auto" />
       <button
         className={`${styles.bgmBtn} ${bgmOn ? '' : styles.bgmOff}`}
         onClick={toggleBgm}
+        onPointerDown={(e) => e.stopPropagation()}
         aria-label={bgmOn ? '关闭背景音乐' : '播放背景音乐'}
       >♪</button>
       <div className={styles.grain} aria-hidden="true" />
