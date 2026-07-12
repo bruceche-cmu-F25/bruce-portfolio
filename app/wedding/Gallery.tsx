@@ -41,11 +41,11 @@ const INDOOR_BLOCKS: Block[] = [
   { type: 'solo', photos: [P('1')], large: true },
   { type: 'collage', rows: [
     { h: 6.2, cells: [{ id: '2',  span: 4 }, { id: '3',  span: 4, drop: true }, { id: '4', span: 4 }] },
-    { h: 9,   cells: [{ id: '5',  span: 7 }, { id: '6',  span: 5, drop: true }] },
+    { h: 9,   cells: [{ id: '13', span: 7 }, { id: '6',  span: 5, drop: true }] },
     { h: 6,   cells: [{ id: '7',  span: 4 }, { id: '8',  span: 4, drop: true }, { id: '9', span: 4 }] },
     // 6+6 等宽、h9 → 两格都是 2:3 原始比例，零裁切
     { h: 9,   cells: [{ id: '10', span: 6, drop: true }, { id: '11', span: 6 }] },
-    { h: 6.4, cells: [{ id: '12', span: 4 }, { id: '13', span: 4, drop: true }, { id: '14', span: 4 }] },
+    { h: 6.4, cells: [{ id: '12', span: 4 }, { id: '5', span: 4, drop: true }, { id: '14', span: 4 }] },
   ] },
   { type: 'duo', photos: [P('15'), P('16')] },
   { type: 'collage', rows: [
@@ -57,14 +57,16 @@ const INDOOR_BLOCKS: Block[] = [
   ] },
   { type: 'collage', rows: [
     // 37 是横构图，配一张竖图同排（span8/h5.6 ≈ 3:2）
-    { h: 6.2, cells: [{ id: '29', span: 4 }, { id: '30', span: 4, drop: true }, { id: '31', span: 4 }] },
+    { h: 6.2, cells: [{ id: '29', span: 4 }, { id: '30', span: 4, drop: true }, { id: '39', span: 4 }] },
     { h: 9,   cells: [{ id: '32', span: 6 }, { id: '33', span: 6, drop: true }] },
-    { h: 9,   cells: [{ id: '34', span: 6 }, { id: '35', span: 6, drop: true }] },
-    { h: 5.6, cells: [{ id: '36', span: 4, drop: true }, { id: '37', span: 8 }] },
-    { h: 6.2, cells: [{ id: '38', span: 4 }, { id: '39', span: 4, drop: true }, { id: '40', span: 4 }] },
+    { h: 9,   cells: [{ id: '34', span: 6 }, { id: '31', span: 6, drop: true }] },
+    { h: 5.6, cells: [{ id: '40', span: 4, drop: true }, { id: '37', span: 8 }] },
+    { h: 6.2, cells: [{ id: '38', span: 4 }, { id: '35', span: 4, drop: true }, { id: '36', span: 4 }] },
   ] },
-  { type: 'feature', photos: [P('41')] },
-  { type: 'feature', photos: [P('42')] },
+  { type: 'collage', rows: [
+    // 41、42 都是 3:2 横构图，并排缩小、零裁切（span6/h4）
+    { h: 4, cells: [{ id: '41', span: 6 }, { id: '42', span: 6, drop: true }] },
+  ] },
   // 43、44 竖幅并排收章
   { type: 'duo', photos: [P('43'), P('44')], large: true },
 ]
@@ -84,9 +86,10 @@ const OUTDOOR_BLOCKS: Block[] = [
     { h: 4.3, cells: [{ id: '13o', span: 6, drop: true }, { id: '14o', span: 6 }] },
     { h: 5.6, cells: [{ id: '15o', span: 8 }, { id: '16o', span: 4, drop: true }] },
   ] },
-  { type: 'feature', photos: [P('17o')] },
   { type: 'collage', rows: [
-    { h: 5.6, cells: [{ id: '18o', span: 4, drop: true }, { id: '19o', span: 8 }] },
+    // 17o + 18o 都是 ~3:2 横构图，并排展示（span6/h4.1，接近零裁切）
+    { h: 4.1, cells: [{ id: '17o', span: 6 }, { id: '18o', span: 6, drop: true }] },
+    { h: 5.6, cells: [{ id: '19o', span: 4, drop: true }, { id: '20o', span: 8 }] },
   ] },
 ]
 // ────────────────────────────────────────────────────────────────────
@@ -113,58 +116,6 @@ function Corners() {
       <span className={`${styles.corner} ${styles.cBL}`} aria-hidden="true" />
       <span className={`${styles.corner} ${styles.cBR}`} aria-hidden="true" />
     </>
-  )
-}
-
-/* SF City Hall dome — beaux-arts line art */
-function DomeArt() {
-  return (
-    <svg className={`${styles.domeArt} wg-chapter-ghost`} viewBox="0 0 220 150" fill="none"
-      stroke="currentColor" strokeWidth="1.1" strokeOpacity="0.4" aria-hidden="true">
-      {/* lantern */}
-      <line x1="110" y1="6" x2="110" y2="16" />
-      <circle cx="110" cy="20" r="4" />
-      <path d="M100 32 Q110 24 120 32" />
-      <line x1="100" y1="32" x2="100" y2="40" />
-      <line x1="120" y1="32" x2="120" y2="40" />
-      <line x1="96" y1="40" x2="124" y2="40" />
-      {/* dome */}
-      <path d="M56 92 Q110 34 164 92" />
-      <path d="M68 92 Q110 44 152 92" />
-      {/* dome ribs */}
-      <path d="M110 41 L110 92" />
-      <path d="M88 50 Q92 70 84 92" />
-      <path d="M132 50 Q128 70 136 92" />
-      {/* drum with columns */}
-      <line x1="56" y1="92" x2="164" y2="92" />
-      <line x1="60" y1="112" x2="160" y2="112" />
-      {[66, 78, 90, 102, 114, 126, 138, 150].map(x => (
-        <line key={x} x1={x} y1="94" x2={x} y2="110" />
-      ))}
-      {/* pediment wings */}
-      <line x1="20" y1="112" x2="200" y2="112" />
-      <line x1="14" y1="132" x2="206" y2="132" />
-      {[28, 40, 52, 168, 180, 192].map(x => (
-        <line key={x} x1={x} y1="114" x2={x} y2="130" />
-      ))}
-      {/* steps */}
-      <line x1="24" y1="138" x2="196" y2="138" />
-      <line x1="34" y1="144" x2="186" y2="144" />
-    </svg>
-  )
-}
-
-/* arcade divider — a row of beaux-arts arches */
-function Arcade() {
-  return (
-    <svg className={`${styles.arcade} wg-chapter-item`} viewBox="0 0 300 30" fill="none"
-      stroke="currentColor" strokeWidth="1" aria-hidden="true">
-      {[0, 1, 2, 3, 4, 5, 6, 7].map(i => {
-        const x = 24 + i * 36
-        return <path key={i} d={`M${x} 28 L${x} 16 A14 14 0 0 1 ${x + 28} 16 L${x + 28} 28`} />
-      })}
-      <line x1="12" y1="28" x2="288" y2="28" />
-    </svg>
   )
 }
 
@@ -311,25 +262,24 @@ function ChapterBlocks({ blocks, start, onOpen }: {
   )
 }
 
-function ChapterHead({ ghost, art, kicker, title, titleZh }: {
-  ghost?: string
-  art?: 'dome'
+const CHAPTER_ART = {
+  dome: '/wedding/art/cityhall.png',
+  watertemple: '/wedding/art/watertemple.png',
+} as const
+
+function ChapterHead({ art, kicker, title, titleZh }: {
+  art: keyof typeof CHAPTER_ART
   kicker: string
   title: string
   titleZh: string
 }) {
   return (
     <div className={`${styles.chapterHead} wg-chapter-head`}>
-      {art === 'dome'
-        ? <DomeArt />
-        : <span className={`${styles.chapterGhost} wg-chapter-ghost`} aria-hidden="true">{ghost}</span>}
-      <p className={`${styles.chapterKicker} wg-chapter-item`}>{kicker}</p>
-      <div className="wg-chapter-item">
-        <Ornament className={styles.chapterOrnament} />
-      </div>
-      <h2 className={`${styles.chapterTitle} wg-chapter-item`}>{title}</h2>
-      <p className={`${styles.chapterZh} wg-chapter-item`}>{titleZh}</p>
-      {art === 'dome' && <Arcade />}
+      <img
+        src={CHAPTER_ART[art]}
+        alt={`${kicker} · ${title} · ${titleZh}`}
+        className={`${styles.chapterArt} wg-chapter-ghost`}
+      />
     </div>
   )
 }
@@ -449,18 +399,20 @@ export default function Gallery() {
             scrollTrigger: { trigger: pattern.parentElement, start: 'top 72%' } })
       })
 
+      // ── City ↔ Water line-art divider ─────────────────────────────
+      gsap.utils.toArray<HTMLElement>('.wg-city-art').forEach(art => {
+        gsap.fromTo(art,
+          { y: 20, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 1, ease: 'power2.out',
+            scrollTrigger: { trigger: art, start: 'top 88%' } })
+      })
+
       // ── Chapter headers ──────────────────────────────────────────
       gsap.utils.toArray<HTMLElement>('.wg-chapter-head').forEach(head => {
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: head, start: 'top 80%' },
-          defaults: { ease: 'power2.out' },
-        })
-        tl.fromTo(head.querySelector('.wg-chapter-ghost'),
-            { scale: 1.08, autoAlpha: 0 },
-            { scale: 1, autoAlpha: 1, duration: 1.1 })
-          .fromTo(head.querySelectorAll('.wg-chapter-item'),
-            { y: 20, autoAlpha: 0 },
-            { y: 0, autoAlpha: 1, duration: 0.7, stagger: 0.1 }, '-=0.75')
+        gsap.fromTo(head.querySelector('.wg-chapter-ghost'),
+          { scale: 1.08, autoAlpha: 0 },
+          { scale: 1, autoAlpha: 1, duration: 1.1, ease: 'power2.out',
+            scrollTrigger: { trigger: head, start: 'top 80%' } })
       })
 
       // ── Collage cells: gentle rise + image settle ────────────────
@@ -617,6 +569,7 @@ export default function Gallery() {
           <span className={styles.scrollCueText}>下滑</span>
           <span className={styles.scrollCueLine} />
         </div>
+        
       </header>
 
       {/* ── Chapter Ⅰ · City Hall ── */}
@@ -624,6 +577,12 @@ export default function Gallery() {
         <div className={`${styles.sectionPattern} ${styles.hallPattern} wg-pattern`} aria-hidden="true" />
         <ChapterHead art="dome" kicker="Chapter One · 第一章" title="City Hall" titleZh="旧金山市政厅" />
         <ChapterBlocks blocks={INDOOR_BLOCKS} start={0} onOpen={setActive} />
+        <img
+          src="/wedding/art/sf_sd.png"
+          alt=""
+          className={`${styles.cityArt} wg-city-art`}
+          aria-hidden="true"
+        />
       </section>
 
       {/* ── Curtain transition: camel → teal ── */}
@@ -645,7 +604,7 @@ export default function Gallery() {
       {/* ── Chapter Ⅱ · Water Temple (teal) ── */}
       <section className={`${styles.themeTeal} ${styles.patternedSection}`}>
         <div className={`${styles.sectionPattern} ${styles.tealPattern} wg-pattern`} aria-hidden="true" />
-        <ChapterHead ghost="II" kicker="Chapter Two · 第二章" title="Water Temple" titleZh="水神殿" />
+        <ChapterHead art="watertemple" kicker="Chapter Two · 第二章" title="Water Temple" titleZh="水神殿" />
         <ChapterBlocks blocks={OUTDOOR_BLOCKS} start={OUTDOOR_START} onOpen={setActive} />
 
         {/* ── Closing (teal) ── */}

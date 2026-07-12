@@ -344,85 +344,14 @@
   overflow: hidden; /* backdrop art can never bleed into neighbours */
 }
 
-.chapterGhost {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -52%);
-  font-size: clamp(8rem, 22vw, 15rem);
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1px var(--ghost-stroke);
-  user-select: none;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* City Hall dome line-art behind the chapter title.
-   Subtlety lives in the SVG's strokeOpacity — the reveal tween drives
-   element opacity to 1, so it must not carry the fade itself. */
-.domeArt {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: min(400px, 52vw);
-  color: var(--accent);
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-}
-
-.chapterKicker {
-  position: relative;
-  z-index: 1;
-  font-family: -apple-system, 'Helvetica Neue', sans-serif;
-  font-size: 0.62rem;
-  letter-spacing: 0.48em;
-  text-indent: 0.48em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 1rem;
-}
-
-.chapterOrnament {
-  position: relative;
-  z-index: 1;
-  margin-bottom: 1.1rem;
-}
-.chapterOrnament .ornamentLine { width: 34px; }
-.chapterOrnament .ornamentMark { font-size: 0.85rem; }
-
-.chapterTitle {
-  position: relative;
-  z-index: 1;
-  font-size: clamp(2.1rem, 5vw, 3.6rem);
-  font-weight: 400;
-  font-style: italic;
-  letter-spacing: 0.05em;
-}
-
-/* Chinese subtitle under the English chapter title */
-.chapterZh {
-  position: relative;
-  z-index: 1;
-  margin-top: 0.85rem;
-  font-size: 0.92rem;
-  letter-spacing: 0.42em;
-  text-indent: 0.42em;
-  color: var(--ink-soft);
-}
-
-/* beaux-arts arcade divider under the chapter head */
-.arcade {
-  position: relative;
-  z-index: 1;
+/* Chapter head — single flattened artwork (illustration + title +
+   subtitle + hint all baked into one alpha PNG) instead of layered CSS. */
+.chapterArt {
   display: block;
-  margin: 1.6rem auto 0;
-  width: 300px;
-  max-width: 70vw;
-  color: var(--accent);
-  opacity: 0.5;
+  width: min(620px, 46vw);
+  margin: 0 auto;
+  pointer-events: none;
+  user-select: none;
 }
 
 /* ── Collage — hand-set rows, aligned heights, varied widths ───── */
@@ -535,6 +464,14 @@
 /* grand duo — the chapter's closing pair, noticeably larger */
 .duoLarge { max-width: 1320px; }
 .duoLarge .duoItem { max-width: 620px; }
+
+/* San Diego → San Francisco line-art divider, closing out Chapter I */
+.cityArt {
+  display: block;
+  width: min(980px, 92%);
+  margin: 1rem auto 4.5rem;
+  opacity: 0.88;
+}
 
 /* ── Feature — full-width chapter finale ───────────────────────── */
 .feature {
@@ -838,17 +775,7 @@
   .heroCard { padding: 2.8rem 1.6rem 2.5rem; }
   .duoItem:nth-child(2) { margin-top: 2.4rem; }
 
-  /* dome becomes a small emblem in flow above the kicker
-     instead of a huge backdrop crashing into the title */
-  .domeArt {
-    position: static;
-    transform: none;
-    display: block;
-    width: 150px;
-    margin: 0 auto 1.4rem;
-  }
-
-  .arcade { width: 220px; }
+  .chapterArt { width: min(420px, 78vw); }
 
   /* the twin centre hairlines read as an artifact on narrow screens */
   .tLeft::after,
@@ -869,7 +796,7 @@
 @media (max-width: 500px) {
   /* keep the desktop row composition — just tighter mats and gaps,
      so the phone shows the same multi-photo collage, scaled down */
-  .crow { gap: 6px; margin-bottom: 6px; }
+  .crow { gap: 6px; margin-bottom: 11px; }
   .ccell { padding: 4px; border-width: 1px; }
   .collage { padding: 0 0.7rem 1.6rem; }
   .feature { padding: 0 0.7rem 3.5rem; }
@@ -880,6 +807,7 @@
   .showcasePortrait { max-width: 320px; } /* spotlight stays special but not one-per-screen */
   .duo { gap: 0.7rem; padding: 1rem 0.7rem 2.6rem; }
   .duoItem:nth-child(2) { margin-top: 1.6rem; }
+  .cityArt { width: 98%; margin: 0.5rem auto 2.8rem; }
   .lbArrow { font-size: 2.4rem; padding: 0 0.7rem; }
   .lbImg { border-width: 4px; }
 }
