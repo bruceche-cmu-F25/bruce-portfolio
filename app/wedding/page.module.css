@@ -57,12 +57,6 @@
   background-size: 64px 64px;
 }
 
-/* Water Temple — quiet cosine waves */
-.tealPattern {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='26' viewBox='0 0 120 26'><path d='M0 13 c20 -12 40 -12 60 0 s40 12 60 0' fill='none' stroke='%2347837C' stroke-opacity='0.10'/></svg>");
-  background-size: 120px 26px;
-}
-
 /* page-edge engraved hairlines — wide screens only */
 .pageEdges {
   position: fixed;
@@ -340,15 +334,28 @@
 .chapterHead {
   position: relative;
   text-align: center;
-  padding: 6.5rem 1rem 3.2rem;
+  padding: 4rem 1rem 2rem;
   overflow: hidden; /* backdrop art can never bleed into neighbours */
 }
 
+/* Chapter Two's in-flow header is for reduced-motion visitors only —
+   in motion mode the fixed curtain-reveal preview is the chapter art,
+   and a second in-flow copy would read as a duplicate right below it. */
+@media (prefers-reduced-motion: no-preference) {
+  .chapterHeadWater { display: none; }
+}
+
 /* Chapter head — single flattened artwork (illustration + title +
-   subtitle + hint all baked into one alpha PNG) instead of layered CSS. */
+   subtitle + hint all baked into one alpha PNG) instead of layered CSS.
+   It's a tall portrait poster (title + illustration + subtitle stacked),
+   so it's bounded by viewport height too — otherwise on shorter windows
+   it doesn't fully fit on screen and needs extra scrolling to reveal. */
 .chapterArt {
   display: block;
-  width: min(620px, 46vw);
+  max-width: min(620px, 46vw);
+  max-height: 72vh;
+  width: auto;
+  height: auto;
   margin: 0 auto;
   pointer-events: none;
   user-select: none;
@@ -461,6 +468,9 @@
 
 .duoItem:nth-child(2) { margin-top: 4rem; }
 
+/* slightly smaller second item, for an asymmetric pairing */
+.duoItemSmall { max-width: 370px; flex: 0.85; }
+
 /* grand duo — the chapter's closing pair, noticeably larger */
 .duoLarge { max-width: 1320px; }
 .duoLarge .duoItem { max-width: 620px; }
@@ -540,6 +550,35 @@
 }
 .tLeft::after  { right: 12px; }
 .tRight::after { left: 12px; }
+
+/* Water Temple preview: sits behind the curtains (z-index below .tCurtain)
+   so it's hidden while closed, then revealed as they part. It's `fixed`
+   so — unlike the section it lives in — it keeps its own screen position
+   even once the (now-empty) transition section scrolls away underneath it,
+   bridging the gap until the real chapter content scrolls into view. */
+.waterPreview {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  /* hidden by default — JS (a ticker gated to the curtain's pin phase)
+     is solely responsible for revealing it; this is just a safe fallback
+     for before that ever runs, and for reduced-motion (no JS opacity
+     control at all in that mode, so it must stay off) */
+  opacity: 0;
+  visibility: hidden;
+}
+
+.waterPreviewImg {
+  display: block;
+  max-width: min(620px, 46vw);
+  max-height: 72vh;
+  width: auto;
+  height: auto;
+}
 
 .tText {
   position: absolute;
@@ -771,11 +810,11 @@
   .ccell { padding: 7px; }
   .featureMat { padding: 9px; }
   .showcaseMat { padding: 11px; }
-  .chapterHead { padding: 4rem 1rem 2rem; }
   .heroCard { padding: 2.8rem 1.6rem 2.5rem; }
   .duoItem:nth-child(2) { margin-top: 2.4rem; }
 
-  .chapterArt { width: min(420px, 78vw); }
+  .chapterArt { max-width: min(420px, 78vw); max-height: 66vh; }
+  .waterPreviewImg { max-width: min(420px, 78vw); max-height: 66vh; }
 
   /* the twin centre hairlines read as an artifact on narrow screens */
   .tLeft::after,

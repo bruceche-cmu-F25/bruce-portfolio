@@ -31,7 +31,7 @@ type CollageRow = {
 type Block =
   | { type: 'collage'; rows: CollageRow[] }
   | { type: 'solo';    photos: Photo[]; large?: boolean }
-  | { type: 'duo';     photos: Photo[]; large?: boolean }
+  | { type: 'duo';     photos: Photo[]; large?: boolean; secondSmaller?: boolean }
   | { type: 'feature'; photos: Photo[]; large?: boolean }
 
 const blockPhotos = (b: Block): Photo[] =>
@@ -59,16 +59,16 @@ const INDOOR_BLOCKS: Block[] = [
     // 37 是横构图，配一张竖图同排（span8/h5.6 ≈ 3:2）
     { h: 6.2, cells: [{ id: '29', span: 4 }, { id: '30', span: 4, drop: true }, { id: '39', span: 4 }] },
     { h: 9,   cells: [{ id: '32', span: 6 }, { id: '33', span: 6, drop: true }] },
-    { h: 9,   cells: [{ id: '34', span: 6 }, { id: '31', span: 6, drop: true }] },
+    { h: 9,   cells: [{ id: '31', span: 6 }, { id: '34', span: 6, drop: true }] },
     { h: 5.6, cells: [{ id: '40', span: 4, drop: true }, { id: '37', span: 8 }] },
     { h: 6.2, cells: [{ id: '38', span: 4 }, { id: '35', span: 4, drop: true }, { id: '36', span: 4 }] },
   ] },
-  { type: 'collage', rows: [
-    // 41、42 都是 3:2 横构图，并排缩小、零裁切（span6/h4）
-    { h: 4, cells: [{ id: '41', span: 6 }, { id: '42', span: 6, drop: true }] },
-  ] },
-  // 43、44 竖幅并排收章
-  { type: 'duo', photos: [P('43'), P('44')], large: true },
+  // 41、43 都是竖幅，并排展示
+  { type: 'duo', photos: [P('41'), P('43')], secondSmaller: true },
+  // 44 拥抱照，独占一行、放大
+  { type: 'feature', photos: [P('44')] },
+  // 45（原 44）竖幅收章
+  { type: 'solo', photos: [P('45')], large: true },
 ]
 
 const OUTDOOR_BLOCKS: Block[] = [
@@ -195,16 +195,20 @@ function Solo({ photo, index, large, onOpen }: { photo: Photo; index: number; la
   )
 }
 
-function Duo({ photos, offset, large, onOpen }: {
+function Duo({ photos, offset, large, secondSmaller, onOpen }: {
   photos: Photo[]
   offset: number
   large?: boolean
+  secondSmaller?: boolean
   onOpen: (i: number) => void
 }) {
   return (
     <div className={`${styles.duo} ${large ? styles.duoLarge : ''}`}>
       {photos.map((p, i) => (
-        <div key={p.id} className={`${styles.duoItem} wg-feature`}>
+        <div
+          key={p.id}
+          className={`${styles.duoItem} ${secondSmaller && i === 1 ? styles.duoItemSmall : ''} wg-feature`}
+        >
           <SpotlightMat photo={p} index={offset + i} onOpen={onOpen} />
         </div>
       ))}
@@ -253,7 +257,7 @@ function ChapterBlocks({ blocks, start, onOpen }: {
           case 'solo':
             return <Solo key={bi} photo={block.photos[0]} index={at} large={block.large} onOpen={onOpen} />
           case 'duo':
-            return <Duo key={bi} photos={block.photos} offset={at} large={block.large} onOpen={onOpen} />
+            return <Duo key={bi} photos={block.photos} offset={at} large={block.large} secondSmaller={block.secondSmaller} onOpen={onOpen} />
           case 'feature':
             return <Feature key={bi} photo={block.photos[0]} index={at} large={block.large} onOpen={onOpen} />
         }
@@ -273,12 +277,22 @@ function ChapterHead({ art, kicker, title, titleZh }: {
   title: string
   titleZh: string
 }) {
+  // Chapter Two's in-flow header only exists for reduced-motion visitors:
+  // in motion mode the fixed `.wg-water-preview` (revealed by the curtain
+  // opening) *is* the chapter art, and photos follow directly — a second
+  // in-flow copy would show up right below it as a duplicate.
+  const isWater = art === 'watertemple'
   return (
-    <div className={`${styles.chapterHead} wg-chapter-head`}>
+    <div className={`${styles.chapterHead} ${isWater ? styles.chapterHeadWater : ''} wg-chapter-head ${isWater ? 'wg-chapter-head-water' : ''}`}>
       <img
         src={CHAPTER_ART[art]}
         alt={`${kicker} · ${title} · ${titleZh}`}
         className={`${styles.chapterArt} wg-chapter-ghost`}
+        // Not covered by the photo preloader, and sized by its own natural
+        // aspect ratio (no reserved space) — so it can still be loading
+        // when ScrollTrigger first measures the page, leaving every trigger
+        // below it miscalibrated until this fires.
+        onLoad={() => ScrollTrigger.refresh()}
       />
     </div>
   )
@@ -399,21 +413,65 @@ export default function Gallery() {
             scrollTrigger: { trigger: pattern.parentElement, start: 'top 72%' } })
       })
 
-      // ── City ↔ Water line-art divider ─────────────────────────────
+      // ── City ↔ Water line-art divider: rises into view, then fades away
+      //    across the *entire* curtain-close motion (not just a sliver of
+      //    it) so it visibly dissolves together with the curtains instead
+      //    of sitting at full opacity and snapping away at the last beat.
+      //    The two triggers meet exactly at ".wg-transition top bottom"
+      //    (both resolve to opacity 1 there), so they hand off cleanly
+      //    with no overlapping range and no competing tweens. ──────────
       gsap.utils.toArray<HTMLElement>('.wg-city-art').forEach(art => {
-        gsap.fromTo(art,
-          { y: 20, autoAlpha: 0 },
-          { y: 0, autoAlpha: 1, duration: 1, ease: 'power2.out',
-            scrollTrigger: { trigger: art, start: 'top 88%' } })
+        gsap.fromTo(art, { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ease: 'power2.out',
+          scrollTrigger: {
+            trigger: art, start: 'top 88%',
+            endTrigger: '.wg-transition', end: 'top bottom',
+            scrub: true,
+          } })
+        gsap.fromTo(art, { autoAlpha: 1 }, { autoAlpha: 0, ease: 'none',
+          scrollTrigger: { trigger: '.wg-transition', start: 'top bottom', end: 'top top', scrub: true } })
       })
 
-      // ── Chapter headers ──────────────────────────────────────────
-      gsap.utils.toArray<HTMLElement>('.wg-chapter-head').forEach(head => {
+      // ── Chapter headers (Chapter Two's is display:none in motion mode —
+      //    the fixed water preview plays its role — so skip it here) ────
+      gsap.utils.toArray<HTMLElement>('.wg-chapter-head:not(.wg-chapter-head-water)').forEach(head => {
         gsap.fromTo(head.querySelector('.wg-chapter-ghost'),
           { scale: 1.08, autoAlpha: 0 },
           { scale: 1, autoAlpha: 1, duration: 1.1, ease: 'power2.out',
             scrollTrigger: { trigger: head, start: 'top 80%' } })
       })
+
+      // ── Water Temple art: in motion mode the chapter has no in-flow
+      //    header at all — `.wg-water-preview` (fixed-position, revealed
+      //    by the curtains parting) *is* the chapter art. It stays put
+      //    through the emptied-out transition section's remaining scroll
+      //    (100vh that must pass before the photos arrive), then fades out
+      //    as the first photos scroll up over it.
+      //
+      //    Opacity is set from each relevant ScrollTrigger's own onUpdate
+      //    (never from a second independent scrubbed tween on the same
+      //    property, and never from a raw gsap.ticker callback — the latter
+      //    isn't tracked by useGSAP's context, so it survives React's
+      //    dev-mode double-invoke of effects as a leaked, stale closure).
+      //    Two scrub tweens on the same target can each get re-rendered by
+      //    an unrelated ScrollTrigger.refresh() (e.g. triggered by a
+      //    lazy-loaded image below shifting layout), and whichever renders
+      //    last that frame wins — which is exactly what caused the preview
+      //    to leak through the still-closing curtain and then get stuck at
+      //    full opacity, showing alongside the real art.
+      //
+      //    Note: the ScrollTrigger.create() for the hand-off (below, after
+      //    tTl) MUST be created after the pinned tTl timeline, not before.
+      //    Its trigger element sits after the pin in the DOM, so its
+      //    position depends on the pin's spacer (200% of a viewport tall)
+      //    already existing — creating it earlier measures the page before
+      //    that spacer is in place, silently shifting its start/end by
+      //    exactly that spacer's height. ─────────────────────────────────
+      let waterHandoff = 0
+      let curtainPinActive = false
+      const applyWaterPreviewOpacity = (curtainOpen: number) => {
+        const opacity = curtainPinActive ? Math.max(0, Math.min(curtainOpen, 1 - waterHandoff)) : 0
+        gsap.set('.wg-water-preview', { autoAlpha: opacity })
+      }
 
       // ── Collage cells: gentle rise + image settle ────────────────
       gsap.utils.toArray<HTMLElement>('.wg-cell').forEach(cell => {
@@ -442,7 +500,14 @@ export default function Gallery() {
             scrollTrigger: { trigger: feature, start: 'top bottom', end: 'bottom top', scrub: 0.6 } })
       })
 
-      // ── Transition: curtains close → words → colour morph → part ─
+      // ── Transition: curtains close as the section scrolls into view,
+      //    no dead gap before the pin engages ──────────────────────
+      gsap.fromTo('.wg-t-left',  { x: 0, xPercent: -101 }, { x: 0, xPercent: 0, ease: 'none',
+        scrollTrigger: { trigger: '.wg-transition', start: 'top bottom', end: 'top top', scrub: true } })
+      gsap.fromTo('.wg-t-right', { x: 0, xPercent: 101 },  { x: 0, xPercent: 0, ease: 'none',
+        scrollTrigger: { trigger: '.wg-transition', start: 'top bottom', end: 'top top', scrub: true } })
+
+      // ── Words → colour morph → part ────────────────────────────────
       const tTl = gsap.timeline({
         scrollTrigger: {
           trigger: '.wg-transition',
@@ -450,15 +515,27 @@ export default function Gallery() {
           end: '+=200%',
           pin: true,
           scrub: 1,
+          // Gate + drive the water-preview opacity above: only compute it
+          // once curtains have actually closed and the pin has engaged
+          // (stays active through the door-open + dead-scroll zone, resets
+          // only if the user scrolls back up above the whole transition).
+          // onUpdate fires throughout the pin, including exactly while the
+          // curtain-open tweens below are running, so reading the curtain's
+          // live xPercent here tracks the door opening in real time.
+          onEnter: () => { curtainPinActive = true },
+          onEnterBack: () => { curtainPinActive = true },
+          onLeaveBack: () => { curtainPinActive = false; applyWaterPreviewOpacity(0) },
+          onUpdate: () => {
+            const xPercent = Math.abs(gsap.getProperty('.wg-t-left', 'xPercent') as number)
+            applyWaterPreviewOpacity(Math.min(1, xPercent / 101))
+          },
         },
         defaults: { ease: 'power2.inOut' },
       })
       tTl
-        .fromTo('.wg-t-left',  { x: 0, xPercent: -101 }, { x: 0, xPercent: 0, duration: 1.0 })
-        .fromTo('.wg-t-right', { x: 0, xPercent: 101 },  { x: 0, xPercent: 0, duration: 1.0 }, '<')
         .fromTo('.wg-t-word',
           { y: 26, autoAlpha: 0 },
-          { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.07, ease: 'power2.out' }, '-=0.15')
+          { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.07, ease: 'power2.out' })
         .to({}, { duration: 0.3 })
         // camel → teal while the curtains hold the stage
         .to('.wg-t-curtain', { backgroundColor: TEAL, duration: 0.7, ease: 'power1.inOut' })
@@ -468,9 +545,21 @@ export default function Gallery() {
           { y: 0, autoAlpha: 1, duration: 0.45, ease: 'power2.out' }, '<+0.25')
         .to({}, { duration: 0.35 })
         .to('.wg-t-word, .wg-t-sub', { y: -18, autoAlpha: 0, duration: 0.35, stagger: 0.03 })
-        .to('.wg-t-left',  { xPercent: -101, duration: 1.0 })
+        // Water Temple preview's scale settles while still hidden behind the
+        // closed curtains — its opacity is owned entirely by tTl's own
+        // scrollTrigger.onUpdate above, not animated here
+        .fromTo('.wg-water-preview', { scale: 1.06 }, { scale: 1, duration: 0.6, ease: 'power2.out' }, '<+0.1')
+        .to('.wg-t-left',  { xPercent: -101, duration: 1.0 }, '+=0.1')
         .to('.wg-t-right', { xPercent: 101,  duration: 1.0 }, '<')
         .to({}, { duration: 0.15 })
+
+      // Created after tTl on purpose — see the note further up. Fades the
+      // preview out as Chapter Two's first photos scroll up to cover it.
+      ScrollTrigger.create({
+        trigger: '.wg-ch2', start: 'top 65%', end: 'top 20%', scrub: true,
+        onUpdate: self => { waterHandoff = self.progress; applyWaterPreviewOpacity(1) },
+        onLeaveBack: () => { waterHandoff = 0; applyWaterPreviewOpacity(1) },
+      })
 
       // ── Closing block ────────────────────────────────────────────
       gsap.fromTo('.wg-closing-item',
@@ -582,6 +671,7 @@ export default function Gallery() {
           alt=""
           className={`${styles.cityArt} wg-city-art`}
           aria-hidden="true"
+          onLoad={() => ScrollTrigger.refresh()}
         />
       </section>
 
@@ -599,11 +689,19 @@ export default function Gallery() {
           <p className={`${styles.tZh} wg-t-word`}>{TRANSITION_ZH}</p>
           <p className={`${styles.tSub} wg-t-sub`}>{TRANSITION_SUB}</p>
         </div>
+        <div className={`${styles.waterPreview} wg-water-preview`} aria-hidden="true">
+          <img
+            src={CHAPTER_ART.watertemple}
+            alt=""
+            className={styles.waterPreviewImg}
+            onLoad={() => ScrollTrigger.refresh()}
+          />
+        </div>
       </section>
 
       {/* ── Chapter Ⅱ · Water Temple (teal) ── */}
-      <section className={`${styles.themeTeal} ${styles.patternedSection}`}>
-        <div className={`${styles.sectionPattern} ${styles.tealPattern} wg-pattern`} aria-hidden="true" />
+      <section className={`${styles.themeTeal} ${styles.patternedSection} wg-ch2`}>
+        {/* In-flow header renders only for reduced-motion (see ChapterHead) */}
         <ChapterHead art="watertemple" kicker="Chapter Two · 第二章" title="Water Temple" titleZh="水神殿" />
         <ChapterBlocks blocks={OUTDOOR_BLOCKS} start={OUTDOOR_START} onOpen={setActive} />
 
