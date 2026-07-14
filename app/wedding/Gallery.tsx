@@ -89,8 +89,9 @@ const OUTDOOR_BLOCKS: Block[] = [
   { type: 'collage', rows: [
     // 17o + 18o 都是 ~3:2 横构图，并排展示（span6/h4.1，接近零裁切）
     { h: 4.1, cells: [{ id: '17o', span: 6 }, { id: '18o', span: 6, drop: true }] },
-    { h: 5.6, cells: [{ id: '19o', span: 4, drop: true }, { id: '20o', span: 8 }] },
   ] },
+  // 20o 横幅独占最后一排收章（19o 不再展示）
+  { type: 'feature', photos: [P('20o')] },
 ]
 // ────────────────────────────────────────────────────────────────────
 
