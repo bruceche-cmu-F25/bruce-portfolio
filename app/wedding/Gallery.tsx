@@ -533,9 +533,15 @@ export default function Gallery() {
         defaults: { ease: 'power2.inOut' },
       })
       tTl
+        // scroll cue up first and held through the whole pinned scene —
+        // elderly guests won't know a static-looking screen wants more
+        // scrolling, so this stays until the doors themselves take over
+        .fromTo('.wg-t-cue',
+          { autoAlpha: 0 },
+          { autoAlpha: 1, duration: 0.35, ease: 'power2.out' }, 0)
         .fromTo('.wg-t-word',
           { y: 26, autoAlpha: 0 },
-          { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.07, ease: 'power2.out' })
+          { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.07, ease: 'power2.out' }, 0)
         .to({}, { duration: 0.3 })
         // camel → teal while the curtains hold the stage
         .to('.wg-t-curtain', { backgroundColor: TEAL, duration: 0.7, ease: 'power1.inOut' })
@@ -551,6 +557,7 @@ export default function Gallery() {
         .fromTo('.wg-water-preview', { scale: 1.06 }, { scale: 1, duration: 0.6, ease: 'power2.out' }, '<+0.1')
         .to('.wg-t-left',  { xPercent: -101, duration: 1.0 }, '+=0.1')
         .to('.wg-t-right', { xPercent: 101,  duration: 1.0 }, '<')
+        .to('.wg-t-cue', { autoAlpha: 0, duration: 0.3 }, '<')
         .to({}, { duration: 0.15 })
 
       // Created after tTl on purpose — see the note further up. Fades the
@@ -688,6 +695,13 @@ export default function Gallery() {
           </p>
           <p className={`${styles.tZh} wg-t-word`}>{TRANSITION_ZH}</p>
           <p className={`${styles.tSub} wg-t-sub`}>{TRANSITION_SUB}</p>
+        </div>
+        {/* Scroll cue for guests who don't realise the pinned scene needs
+            more scrolling (grandparents!) — shown the whole time the
+            curtains hold the stage, dismissed only as the doors part */}
+        <div className={`${styles.tScrollCue} wg-t-cue`} aria-hidden="true">
+          <span className={styles.tCueText}>往下拉</span>
+          <span className={styles.tCueArrow}>↓</span>
         </div>
         <div className={`${styles.waterPreview} wg-water-preview`} aria-hidden="true">
           <img

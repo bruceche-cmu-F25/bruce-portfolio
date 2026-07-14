@@ -629,6 +629,42 @@
   color: rgba(255, 248, 234, 0.85);
 }
 
+/* 过场里的“往下拉”提示 — 给不熟悉滚动交互的长辈看的，
+   所以刻意比其他装饰性文字更大、更亮、更醒目 */
+.tScrollCue {
+  position: absolute;
+  bottom: 2.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--cream);
+  pointer-events: none;
+}
+
+.tCueText {
+  font-size: 1.05rem;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+}
+
+.tCueArrow {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tCueArrow { animation: tCueBob 1.5s ease-in-out infinite; }
+}
+
+@keyframes tCueBob {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50%      { transform: translateY(9px); opacity: 0.55; }
+}
+
 /* ── Closing block ─────────────────────────────────────────────── */
 .closing {
   background-color: var(--accent);
