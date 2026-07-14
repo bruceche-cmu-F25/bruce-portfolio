@@ -736,7 +736,7 @@ export default function Gallery() {
         <footer className={`${styles.closing} wg-closing`}>
           <div className={styles.closingFrame}>
             <Corners />
-            <p className={`${styles.closingMono} wg-closing-item`}>Bruce 程驰 <em>&amp;</em> Christy 歐陽安怡</p>
+            <p className={`${styles.closingMono} wg-closing-item`}>Bruce 程驰 <em>&amp;</em><br />Christy 歐陽安怡</p>
             <div className="wg-closing-item">
               <Ornament className={styles.closingOrnament} light />
             </div>

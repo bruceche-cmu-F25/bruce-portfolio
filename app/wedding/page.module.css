@@ -689,7 +689,7 @@
 .closingFrame .corner { color: rgba(255, 248, 234, 0.55); }
 
 .closingMono {
-  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-size: clamp(1.5rem, 3.6vw, 2.3rem);
   letter-spacing: 0.13em;
   font-weight: 400;
 }
