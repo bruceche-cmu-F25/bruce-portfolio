@@ -284,15 +284,15 @@ function ChapterHead({ art, kicker, title, titleZh }: {
   const isWater = art === 'watertemple'
   return (
     <div className={`${styles.chapterHead} ${isWater ? styles.chapterHeadWater : ''} wg-chapter-head ${isWater ? 'wg-chapter-head-water' : ''}`}>
+      {/* width/height reserve the box before the PNG arrives — without
+          them a late-loading art image grows the page mid-scroll, which
+          reads as the scrollbar jumping and the pinned scene stuttering */}
       <img
         src={CHAPTER_ART[art]}
         alt={`${kicker} · ${title} · ${titleZh}`}
+        width={857}
+        height={1200}
         className={`${styles.chapterArt} wg-chapter-ghost`}
-        // Not covered by the photo preloader, and sized by its own natural
-        // aspect ratio (no reserved space) — so it can still be loading
-        // when ScrollTrigger first measures the page, leaving every trigger
-        // below it miscalibrated until this fires.
-        onLoad={() => ScrollTrigger.refresh()}
       />
     </div>
   )
@@ -362,16 +362,24 @@ export default function Gallery() {
     let done = 0
     let finished = false
     const finish = () => { if (!finished) { finished = true; setLoaded(true) } }
-    ALL.forEach(p => {
+    // Line-art PNGs load alongside the photos — a late-arriving one would
+    // otherwise pop in mid-scroll (their boxes are reserved via width/height
+    // attributes, but the drawing itself would still appear abruptly)
+    const urls = [
+      ...ALL.map(p => pageSrc(p.id)),
+      ...Object.values(CHAPTER_ART),
+      '/wedding/art/sf_sd.png',
+    ]
+    urls.forEach(url => {
       const img = new Image()
       const tick = () => {
         done++
-        setProgress(Math.round((done / ALL.length) * 100))
-        if (done === ALL.length) finish()
+        setProgress(Math.round((done / urls.length) * 100))
+        if (done === urls.length) finish()
       }
       img.onload = tick
       img.onerror = tick
-      img.src = pageSrc(p.id)
+      img.src = url
     })
     // Safety valve: never trap a guest on a stalled connection
     const cap = setTimeout(finish, 45000)
@@ -590,7 +598,9 @@ export default function Gallery() {
       .fromTo('.wg-hero-card', { y: 26, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.9 }, '-=0.5')
       .fromTo('.wg-hero-line', { yPercent: 110 }, { yPercent: 0, duration: 0.9, stagger: 0.12 }, '-=0.55')
       .fromTo('.wg-hero-item', { y: 10, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.6, stagger: 0.09 }, '-=0.5')
-      .fromTo('.wg-cue', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, '-=0.15')
+      // hero cue only — the transition's cue (also .wg-cue for the shared
+      // bob) has its visibility owned by the pinned transition timeline
+      .fromTo('.wg-hero-cue', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, '-=0.15')
   }, { scope: rootRef, dependencies: [loaded] })
 
   // ── Lightbox keyboard nav ────────────────────────────────────────
@@ -661,7 +671,7 @@ export default function Gallery() {
           </div>
           <p className={`${styles.heroDate} wg-hero-item`}>{DATE}</p>
         </div>
-        <div className={`${styles.scrollCue} wg-cue`}>
+        <div className={`${styles.scrollCue} wg-cue wg-hero-cue`}>
           <span className={styles.scrollCueText}>下滑</span>
           <span className={styles.scrollCueLine} />
         </div>
@@ -676,9 +686,10 @@ export default function Gallery() {
         <img
           src="/wedding/art/sf_sd.png"
           alt=""
+          width={1874}
+          height={656}
           className={`${styles.cityArt} wg-city-art`}
           aria-hidden="true"
-          onLoad={() => ScrollTrigger.refresh()}
         />
       </section>
 
@@ -697,18 +708,20 @@ export default function Gallery() {
           <p className={`${styles.tSub} wg-t-sub`}>{TRANSITION_SUB}</p>
         </div>
         {/* Scroll cue for guests who don't realise the pinned scene needs
-            more scrolling (grandparents!) — shown the whole time the
+            more scrolling (grandparents!) — same look as the hero's cue
+            (wg-cue joins its bobbing tween), shown the whole time the
             curtains hold the stage, dismissed only as the doors part */}
-        <div className={`${styles.tScrollCue} wg-t-cue`} aria-hidden="true">
-          <span className={styles.tCueText}>往下拉</span>
-          <span className={styles.tCueArrow}>↓</span>
+        <div className={`${styles.tScrollCue} wg-t-cue wg-cue`} aria-hidden="true">
+          <span className={styles.tCueText}>下滑</span>
+          <span className={styles.tCueLine} />
         </div>
         <div className={`${styles.waterPreview} wg-water-preview`} aria-hidden="true">
           <img
             src={CHAPTER_ART.watertemple}
             alt=""
+            width={857}
+            height={1200}
             className={styles.waterPreviewImg}
-            onLoad={() => ScrollTrigger.refresh()}
           />
         </div>
       </section>

@@ -349,12 +349,17 @@
    subtitle + hint all baked into one alpha PNG) instead of layered CSS.
    It's a tall portrait poster (title + illustration + subtitle stacked),
    so it's bounded by viewport height too — otherwise on shorter windows
-   it doesn't fully fit on screen and needs extra scrolling to reveal. */
+   it doesn't fully fit on screen and needs extra scrolling to reveal.
+   The width must be fully definite (the 72vh height cap is folded into
+   the min() as its width-equivalent) so the box is identical before and
+   after the PNG loads: `max-height + auto` needs the image's intrinsic
+   size, which doesn't exist yet while it's loading — the box collapses
+   to 0 and then springs open ~650px mid-scroll, which reads as the
+   scrollbar thumb jumping and every ScrollTrigger below drifting. */
 .chapterArt {
   display: block;
-  max-width: min(620px, 46vw);
-  max-height: 72vh;
-  width: auto;
+  aspect-ratio: 857 / 1200;
+  width: min(620px, 46vw, calc(72vh * 857 / 1200));
   height: auto;
   margin: 0 auto;
   pointer-events: none;
@@ -475,10 +480,15 @@
 .duoLarge { max-width: 1320px; }
 .duoLarge .duoItem { max-width: 620px; }
 
-/* San Diego → San Francisco line-art divider, closing out Chapter I */
+/* San Diego → San Francisco line-art divider, closing out Chapter I.
+   height:auto is load-bearing: without it the height="656" attribute
+   (there for pre-load space reservation) becomes the rendered height
+   and stretches the drawing vertically. */
 .cityArt {
   display: block;
+  aspect-ratio: 1874 / 656;
   width: min(980px, 92%);
+  height: auto;
   margin: 1rem auto 4.5rem;
   opacity: 0.88;
 }
@@ -572,11 +582,11 @@
   visibility: hidden;
 }
 
+/* sized exactly like .chapterArt so the hand-off is seamless */
 .waterPreviewImg {
   display: block;
-  max-width: min(620px, 46vw);
-  max-height: 72vh;
-  width: auto;
+  aspect-ratio: 857 / 1200;
+  width: min(620px, 46vw, calc(72vh * 857 / 1200));
   height: auto;
 }
 
@@ -629,40 +639,33 @@
   color: rgba(255, 248, 234, 0.85);
 }
 
-/* 过场里的“往下拉”提示 — 给不熟悉滚动交互的长辈看的，
-   所以刻意比其他装饰性文字更大、更亮、更醒目 */
+/* 过场里的“下滑”提示 — 和首屏的下滑提示同款（同字号、同竖线），
+   整个定格期间常驻，长辈才知道这一屏还要继续滑 */
 .tScrollCue {
   position: absolute;
-  bottom: 2.4rem;
+  bottom: 2.2rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.45rem;
-  color: var(--cream);
+  gap: 0.55rem;
   pointer-events: none;
 }
 
 .tCueText {
-  font-size: 1.05rem;
-  letter-spacing: 0.3em;
-  text-indent: 0.3em;
+  font-family: -apple-system, sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.34em;
+  text-indent: 0.34em;
+  color: rgba(255, 248, 234, 0.85);
 }
 
-.tCueArrow {
-  font-size: 1.5rem;
-  line-height: 1;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .tCueArrow { animation: tCueBob 1.5s ease-in-out infinite; }
-}
-
-@keyframes tCueBob {
-  0%, 100% { transform: translateY(0); opacity: 1; }
-  50%      { transform: translateY(9px); opacity: 0.55; }
+.tCueLine {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--cream), transparent);
 }
 
 /* ── Closing block ─────────────────────────────────────────────── */
@@ -849,8 +852,8 @@
   .heroCard { padding: 2.8rem 1.6rem 2.5rem; }
   .duoItem:nth-child(2) { margin-top: 2.4rem; }
 
-  .chapterArt { max-width: min(420px, 78vw); max-height: 66vh; }
-  .waterPreviewImg { max-width: min(420px, 78vw); max-height: 66vh; }
+  .chapterArt,
+  .waterPreviewImg { width: min(420px, 78vw, calc(66vh * 857 / 1200)); }
 
   /* the twin centre hairlines read as an artifact on narrow screens */
   .tLeft::after,
