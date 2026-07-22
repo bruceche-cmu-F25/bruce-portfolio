@@ -1,5 +1,7 @@
 'use client'
+import Image from 'next/image'
 import dynamic from 'next/dynamic'
+import fifthDimension from '@/5thdimension.jpg'
 import { LoaderProvider } from '@/lib/LoaderContext'
 
 const SpaceLoader = dynamic(() => import('@/components/SpaceLoader'), { ssr: false })
@@ -28,8 +30,18 @@ export default function Page() {
       </div>
       <div className="scroll-progress" aria-hidden="true" />
       <SpaceHero />
-      <main className="site-main">
+      <div className="portfolio-entry-image">
+        <Image
+          src={fifthDimension}
+          alt="A layered multidimensional archive stretching into the distance"
+          fill
+          sizes="100vw"
+          className="portfolio-entry-image-media"
+        />
+        <div className="portfolio-entry-image-shade" aria-hidden="true" />
         <About />
+      </div>
+      <main className="site-main">
         <Experience />
         <Work />
         <Stack />
