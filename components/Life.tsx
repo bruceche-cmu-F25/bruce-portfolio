@@ -1,9 +1,7 @@
 'use client'
-import Image from 'next/image'
 import { useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import fifthDimensionTwo from '@/5thdimension2.png'
 
 const hobbies = [
   { icon: '📚', name: 'Reading',     desc: 'Tech, philosophy, and personal growth.' },
@@ -31,15 +29,6 @@ export default function Life() {
 
   return (
     <section id="life" className="section" aria-label="Life and interests">
-      <div className="life-section-background" aria-hidden="true">
-        <Image
-          src={fifthDimensionTwo}
-          alt=""
-          fill
-          sizes="100vw"
-          className="life-section-background-media"
-        />
-      </div>
       <div className="container">
         <p className="section-kicker">Beyond Code</p>
         <h2 className="section-heading">Life &amp; Interests</h2>

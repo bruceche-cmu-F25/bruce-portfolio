@@ -9,6 +9,7 @@ const SpaceHero   = dynamic(() => import('@/components/SpaceHero'),   { ssr: fal
 const TopBar      = dynamic(() => import('@/components/TopBar'),      { ssr: false })
 const PageEffects = dynamic(() => import('@/components/PageEffects'), { ssr: false })
 const Cursor      = dynamic(() => import('@/components/Cursor'),      { ssr: false })
+const Gravity     = dynamic(() => import('@/components/Gravity'),     { ssr: false })
 const LenisInit   = dynamic(() => import('@/components/LenisInit'),   { ssr: false })
 const About       = dynamic(() => import('@/components/About'),       { ssr: false })
 const Experience  = dynamic(() => import('@/components/Experience'),  { ssr: false })
@@ -22,6 +23,7 @@ export default function Page() {
     <LoaderProvider>
       <SpaceLoader />
       <Cursor />
+      <Gravity />
       <LenisInit />
       <PageEffects />
       <TopBar />

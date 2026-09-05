@@ -2,8 +2,10 @@
 import { useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { logoNeedsTile } from '@/lib/bentoData'
 
 const cards = [
+  { logo: '/images/CMULogo.jpg', logoAlt: 'CMU AGAI', live: true, badge: 'Research', badgeClass: 'badge-work', org: 'CMU Applied Generative AI', role: 'Graduate Researcher', date: 'Sep 2026 – Present', chips: [{ label: 'LLM reliability', cls: 'blue' }] },
   { logo: '/images/HelportLogo.jpg', logoAlt: 'Helport AI', badge: 'Work', badgeClass: 'badge-work', org: 'Helport AI', role: 'AI Product Developer / PM', date: 'Sep 2024 – Jun 2025', chips: [{ label: '35% AHT ↓', cls: 'green' }, { label: '6× cost ↓', cls: 'green' }] },
   { logo: '/images/convoloo_logo.jpeg', logoAlt: 'Convoloo', badge: 'Work', badgeClass: 'badge-work', org: 'Convoloo', role: 'SDE Intern', date: 'Jul 2024 – Sep 2024', chips: [{ label: '2.5s → 1.5s', cls: 'green' }] },
   { logo: '/images/CMULogo.jpg', logoAlt: 'CMU', badge: 'Project', badgeClass: 'badge-project', org: 'CMU 14-825', role: 'Research Assistant Agent', date: 'Jan 2026 – Mar 2026', chips: [{ label: '30+ papers indexed', cls: 'blue' }] },
@@ -18,7 +20,7 @@ function ExpCard({ card, hidden }: { card: typeof cards[0]; hidden?: boolean }) 
     <article className="exp-card" aria-hidden={hidden ? 'true' : undefined}>
       <div className="exp-card-head">
         {card.logo
-          ? <img src={card.logo} alt={hidden ? '' : card.logoAlt} className={`exp-logo${card.logo?.includes('ft_logo') ? ' exp-logo-ft' : ''}`} />
+          ? <img src={card.logo} alt={hidden ? '' : card.logoAlt} className={`exp-logo${logoNeedsTile(card.logo) ? ' exp-logo-ft logo-tile' : ''}`} />
           : card.live
             ? <span className="live-badge">● LIVE</span>
             : null}

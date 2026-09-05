@@ -2,6 +2,7 @@
 import { useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { SITE } from '@/lib/siteConfig'
 
 export default function About() {
   useEffect(() => {
@@ -45,11 +46,11 @@ export default function About() {
                 <span className="stat-label">GPA</span>
               </div>
               <div className="stat-tile">
-                <span className="stat-value" data-count="7" data-decimals="0">7</span>
+                <span className="stat-value" data-count="5" data-decimals="0">5</span>
                 <span className="stat-label">Projects</span>
               </div>
               <div className="stat-tile">
-                <span className="stat-value" data-count="2" data-decimals="0">2</span>
+                <span className="stat-value" data-count="3" data-decimals="0">3</span>
                 <span className="stat-label">Roles</span>
               </div>
               <div className="stat-tile">
@@ -63,7 +64,7 @@ export default function About() {
                 <div className="edu-info">
                   <strong>Carnegie Mellon University</strong>
                   <span>MS Software Engineering</span>
-                  <span className="edu-meta">GPA 3.6 · Silicon Valley · 2025–2026</span>
+                  <span className="edu-meta">GPA 3.6 · Silicon Valley · Dec 2026</span>
                 </div>
               </div>
               <div className="edu-card">
@@ -71,7 +72,7 @@ export default function About() {
                 <div className="edu-info">
                   <strong>UC San Diego</strong>
                   <span>BS Mathematics–Computer Science</span>
-                  <span className="edu-meta">GPA 3.6 · San Diego · 2021–2025</span>
+                  <span className="edu-meta">GPA 3.6 · San Diego · Apr 2025</span>
                 </div>
               </div>
             </div>
@@ -79,11 +80,11 @@ export default function About() {
           <div className="about-right">
             <p className="section-kicker">About</p>
             <h2 className="about-heading">Building at the<br />frontier of AI</h2>
-            <p className="about-body">MS student in Software Engineering at Carnegie Mellon University, Silicon Valley, with hands-on experience building AI systems and agentic workflows that ship to production. Previously at Helport AI — reduced intent-matching cost by 6× and average handling time by 35% across mortgage, healthcare, and insurance verticals. Actively seeking Summer 2026 internships in software engineering, AI/agentic systems, or product roles.</p>
+            <p className="about-body">Software engineer building AI systems, agentic pipelines, and full-stack applications. Currently a graduate researcher at Carnegie Mellon&apos;s Applied Generative AI lab, working on LLM hallucination detection, mitigation, and interpretability. Previously shipped production backend at Helport AI — 20ms response latency, 6× lower inference cost, 35% shorter handling time. MS in Software Engineering at CMU, Dec 2026; seeking Summer 2026 SWE internships.</p>
             <div className="about-links">
-              <a href="https://github.com/bruceche-cmu-F25" target="_blank" rel="noopener" className="about-link">GitHub ↗</a>
-              <a href="https://linkedin.com/in/chi-cheng-779b4a259/" target="_blank" rel="noopener" className="about-link">LinkedIn ↗</a>
-              <a href="/Chi Cheng-Resume-2026-May.pdf" download className="about-link">Resume ↓</a>
+              <a href={SITE.github} target="_blank" rel="noopener" className="about-link">GitHub ↗</a>
+              <a href={SITE.linkedin} target="_blank" rel="noopener" className="about-link">LinkedIn ↗</a>
+              <a href={SITE.resume} download className="about-link">Resume ↓</a>
             </div>
           </div>
         </div>

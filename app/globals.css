@@ -269,7 +269,8 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 }
 .stat-tile {
   background: rgba(12, 14, 21, 0.82); padding: 1.5rem;
-  display: flex; flex-direction: column; gap: 0.3rem; transition: background 0.2s;
+  display: flex; flex-direction: column; gap: 0.3rem;
+  transition: background 0.2s;
 }
 .stat-tile:hover { background: var(--bg-3); }
 .stat-value {
@@ -371,23 +372,50 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .work-card {
   background: rgba(12, 14, 21, 0.82); border: 1px solid var(--border);
   border-radius: 16px; padding: 1.75rem; cursor: pointer;
-  transition: transform 0.35s var(--ease), border-color 0.2s, box-shadow 0.3s, background 0.2s;
+  transition: border-color 0.2s, box-shadow 0.3s, background 0.2s;
   position: relative; overflow: hidden;
 }
+/* the light source Gravity.tsx moves with the pointer */
 .work-card::before {
   content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at top right, rgba(212,162,78,0.05), transparent 60%);
+  background: radial-gradient(340px circle at var(--px, 100%) var(--py, 0%),
+              rgba(243, 206, 139, 0.14), rgba(212, 162, 78, 0.05) 34%, transparent 62%);
+  opacity: 0.42;
+  transition: opacity 0.35s var(--ease);
   pointer-events: none;
 }
 .work-card:hover {
   border-color: var(--hairline); background: var(--bg-3);
   box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,162,78,0.12);
-  transform: translateY(-8px); z-index: 2;
+  z-index: 2;
 }
+.work-card:hover::before { opacity: 1; }
+/* a gold rim that catches the light on the edge nearest the pointer */
+.work-card::after {
+  content: ''; position: absolute; inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(220px circle at var(--px, 50%) var(--py, 50%),
+              rgba(243, 206, 139, 0.75), transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+  pointer-events: none;
+}
+.work-card:hover::after { opacity: 1; }
 .work-card-featured { grid-column: span 2; }
 
 .work-card-head    { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
 .work-card-logo    { width: 36px; height: 36px; border-radius: 8px; object-fit: contain; }
+/* Logos that arrive as dark ink on transparency need a light tile to read on the
+   dark cards; every other logo already has its own light background. The FT mark
+   is a wide wordmark, so let its tile widen rather than shrink to a square. */
+.logo-tile { background: #f2efe8; padding: 3px 5px; }
+.work-card-logo.logo-tile { width: auto; max-width: 92px; }
+.overlay-logo.logo-tile   { width: auto; max-width: 120px; }
 .work-card-badges  { display: flex; gap: 0.35rem; flex-wrap: wrap; }
 .work-card-org     { font-family: var(--font-mono); font-size: 0.67rem; color: var(--text-3); margin-bottom: 0.2rem; }
 .work-card-title   { font-size: 0.98rem; font-weight: 700; color: var(--text-1); line-height: 1.3; margin-bottom: 0.3rem; }
@@ -467,40 +495,17 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .stack-pills span:hover { border-color: var(--hairline); color: var(--accent-bright); background: var(--bg-3); }
 
 /* ── Life ───────────────────────────────────────────────────────── */
-#life { isolation: isolate; overflow: hidden; }
-.life-section-background {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.life-section-background::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background:
-    linear-gradient(180deg, var(--bg-0) 0%, rgba(3, 4, 8, 0.4) 14%, rgba(3, 4, 8, 0.3) 50%, rgba(3, 4, 8, 0.42) 86%, var(--bg-0) 100%),
-    linear-gradient(90deg, rgba(3, 4, 8, 0.18), rgba(3, 4, 8, 0.3));
-}
-.life-section-background-media {
-  object-fit: cover;
-  object-position: center;
-  filter: saturate(0.82) contrast(1.03) brightness(0.82);
-}
-#life > .container { position: relative; z-index: 1; }
 .hobbies-grid {
   display: grid; grid-template-columns: repeat(4,1fr); gap: 1px;
   background: var(--border); border: 1px solid var(--border);
   border-radius: 14px; overflow: hidden; margin-bottom: 4rem;
 }
 .hobby-card {
-  background: rgba(7, 8, 13, 0.78); padding: 1.5rem 1.25rem;
+  background: var(--bg-2); padding: 1.5rem 1.25rem;
   display: flex; flex-direction: column; gap: 0.5rem;
-  transition: background 0.2s; backdrop-filter: blur(8px);
+  position: relative; transition: background 0.2s;
 }
-.hobby-card:hover { background: rgba(18, 20, 29, 0.88); }
+.hobby-card:hover { background: var(--bg-3); }
 .hobby-icon { font-size: 1.5rem; }
 .hobby-card h3 { font-size: 0.86rem; font-weight: 600; color: var(--text-1); }
 .hobby-card p  { font-size: 0.76rem; color: var(--text-3); line-height: 1.5; }
@@ -519,8 +524,20 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .contact-heading { font-family: var(--font-display); font-size: clamp(2.2rem, 6vw, 4.5rem); font-weight: 500; color: var(--white); letter-spacing: 0.005em; line-height: 1.05; margin-bottom: 1rem; }
 .contact-sub { font-size: 1rem; color: var(--text-2); margin-bottom: 3rem; }
 .contact-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 3rem; }
-.contact-card { background: rgba(12, 14, 21, 0.82); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 0.4rem; text-decoration: none; transition: all 0.2s; }
-.contact-card:hover { border-color: var(--hairline); background: var(--bg-3); transform: translateY(-2px); }
+.contact-card {
+  background: rgba(12, 14, 21, 0.82); border: 1px solid var(--border); border-radius: 12px;
+  padding: 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 0.4rem;
+  text-decoration: none; position: relative; overflow: hidden;
+  transition: border-color 0.2s, background 0.2s;
+}
+.contact-card::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(220px circle at var(--px, 50%) var(--py, 50%),
+              rgba(243, 206, 139, 0.12), transparent 65%);
+  opacity: 0; transition: opacity 0.3s var(--ease);
+}
+.contact-card:hover { border-color: var(--hairline); background: var(--bg-3); }
+.contact-card:hover::before { opacity: 1; }
 .contact-icon  { font-size: 1.5rem; }
 .contact-label { font-family: var(--font-mono); font-size: 0.64rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em; }
 .contact-value { font-size: 0.76rem; color: var(--text-2); word-break: break-all; }

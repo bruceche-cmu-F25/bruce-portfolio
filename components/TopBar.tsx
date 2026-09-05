@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { useLoader } from '@/lib/LoaderContext'
+import { SITE } from '@/lib/siteConfig'
 
 const LINKS: [string, string][] = [
   ['#about', 'About'], ['#experience', 'Experience'],
@@ -83,7 +84,7 @@ export default function TopBar() {
             </li>
           ))}
           <li>
-            <a href="/Chi Cheng-Resume-2026-May.pdf" className="nav-resume" target="_blank" rel="noopener">
+            <a href={SITE.resume} className="nav-resume" target="_blank" rel="noopener">
               Resume ↗
             </a>
           </li>

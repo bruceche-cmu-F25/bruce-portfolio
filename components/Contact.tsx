@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { SITE } from '@/lib/siteConfig'
 
 export default function Contact() {
   const [submitting, setSubmitting] = useState(false)
@@ -30,7 +31,7 @@ export default function Contact() {
     setSubmitting(true)
     const subject = encodeURIComponent(`Contact from ${name}`)
     const body    = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)
-    window.location.href = `mailto:bruceche@andrew.cmu.edu?subject=${subject}&body=${body}`
+    window.location.href = `mailto:${SITE.email}?subject=${subject}&body=${body}`
     setTimeout(() => {
       form.reset()
       setSubmitting(false)
@@ -45,25 +46,25 @@ export default function Contact() {
         <h2 className="contact-heading">Let&apos;s Work<br />Together</h2>
         <p className="contact-sub">Open to internships, collaborations, and interesting conversations.</p>
         <div className="contact-cards">
-          <a href="mailto:bruceche@andrew.cmu.edu" className="contact-card">
+          <a href={`mailto:${SITE.email}`} className="contact-card">
             <span className="contact-icon">📧</span>
             <span className="contact-label">Email</span>
-            <span className="contact-value">bruceche@andrew.cmu.edu</span>
+            <span className="contact-value">{SITE.email}</span>
           </a>
-          <a href="https://linkedin.com/in/chi-cheng-779b4a259/" target="_blank" rel="noopener" className="contact-card">
+          <a href={SITE.linkedin} target="_blank" rel="noopener" className="contact-card">
             <span className="contact-icon">💼</span>
             <span className="contact-label">LinkedIn</span>
-            <span className="contact-value">chi-cheng-779b4a259</span>
+            <span className="contact-value">{SITE.linkedinHandle}</span>
           </a>
-          <a href="https://github.com/Bruce0921" target="_blank" rel="noopener" className="contact-card">
+          <a href={SITE.github} target="_blank" rel="noopener" className="contact-card">
             <span className="contact-icon">💻</span>
             <span className="contact-label">GitHub</span>
-            <span className="contact-value">Bruce0921</span>
+            <span className="contact-value">{SITE.githubHandle}</span>
           </a>
-          <a href="tel:+18583050278" className="contact-card">
+          <a href={SITE.phoneHref} className="contact-card">
             <span className="contact-icon">📱</span>
             <span className="contact-label">Phone</span>
-            <span className="contact-value">858-305-0278</span>
+            <span className="contact-value">{SITE.phone}</span>
           </a>
         </div>
         <form ref={formRef} className="contact-form" onSubmit={handleSubmit}>

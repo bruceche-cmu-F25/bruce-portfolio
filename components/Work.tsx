@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { bentoDetails, type BentoEntry } from '@/lib/bentoData'
+import { bentoDetails, logoNeedsTile, type BentoEntry } from '@/lib/bentoData'
 
 function WorkOverlay({ open, entry, onClose }: { open: boolean; entry: BentoEntry | null; onClose: () => void }) {
   const overlayRef = useRef<HTMLDivElement>(null)
@@ -33,7 +33,7 @@ function WorkOverlay({ open, entry, onClose }: { open: boolean; entry: BentoEntr
   if (!entry) return null
 
   const logoEl = entry.logo
-    ? <img src={entry.logo} alt={entry.org} className="overlay-logo" />
+    ? <img src={entry.logo} alt={entry.org} className={`overlay-logo${logoNeedsTile(entry.logo) ? ' logo-tile' : ''}`} />
     : entry.live
       ? <span className="live-badge" style={{ flexShrink: 0, padding: '0.4rem 0.75rem' }}>● LIVE</span>
       : null
@@ -74,16 +74,28 @@ function WorkOverlay({ open, entry, onClose }: { open: boolean; entry: BentoEntr
 
 const CARDS = [
   {
+    key: 'agai', featured: false,
+    badgeClass: 'badge-work', badgeLabel: 'Research',
+    logo: '/images/CMULogo.jpg', live: true,
+    org: 'CMU Applied Generative AI', title: 'Graduate Researcher', date: 'Sep 2026 – Present',
+    desc: 'Research under Dr. Mohamed Farag on LLM hallucination detection, mitigation and interpretability — improving the reliability of Generative AI systems.',
+    metrics: [
+      { label: 'Hallucination detection', color: 'blue' }, { label: 'Interpretability', color: 'blue' },
+    ],
+    tags: ['LLM Evaluation', 'Hallucination Detection', 'Interpretability', 'Generative AI'],
+    demo: undefined,
+  },
+  {
     key: 'helport', featured: true,
     badgeClass: 'badge-work', badgeLabel: 'Work',
     logo: '/images/HelportLogo.jpg', live: false,
     org: 'Helport AI', title: 'AI Product Developer / PM', date: 'Sep 2024 – Jun 2025',
-    desc: 'Led product strategy for an AI call assistant across mortgage, healthcare, insurance, and government. Migrated intent matching from Dialogflow to Gemini 2.0 + Vertex AI, cutting per-match cost 6×.',
+    desc: 'Backend systems for an AI call assistant across mortgage, healthcare, insurance and government — 20ms response latency. Rebuilt intent matching on Gemini 2.0 + Vertex AI, cutting inference cost 6× ($0.002 → $0.00031 per match).',
     metrics: [
       { label: '35% AHT ↓', color: 'green' }, { label: '6× cost reduction', color: 'green' },
       { label: '14d → 5d cycle', color: 'green' }, { label: '15% conversion ↑', color: 'green' },
     ],
-    tags: ['FastAPI', 'Gemini 2.0', 'Vertex AI', 'A/B Testing', 'Docker', 'Python'],
+    tags: ['Python', 'FastAPI', 'Gemini 2.0', 'Vertex AI', 'Docker', 'CI/CD'],
     demo: undefined,
   },
   {
@@ -103,11 +115,11 @@ const CARDS = [
     badgeClass: 'badge-work', badgeLabel: 'Work',
     logo: '/images/convoloo_logo.jpeg', live: false,
     org: 'Convoloo', title: 'SDE Intern', date: 'Jul – Sep 2024',
-    desc: 'AI event-matching with LangChain, GCP infra with Terraform. Powered 50+ confirmed bookings.',
+    desc: 'AI medical chatbot on FastAPI + LangChain identifying 50+ common diseases, with RAG retrieval cutting response time from 2.5s to 1.5s.',
     metrics: [
-      { label: '2.5s → 1.5s', color: 'green' }, { label: '50+ bookings', color: 'green' },
+      { label: '2.5s → 1.5s', color: 'green' }, { label: '50+ diseases', color: 'green' },
     ],
-    tags: ['LangChain', 'FastAPI', 'Terraform', 'MySQL', 'GCP'],
+    tags: ['LangChain', 'LangGraph', 'FastAPI', 'NestJS', 'Terraform', 'GCP'],
     demo: undefined,
   },
   {
@@ -127,9 +139,9 @@ const CARDS = [
     badgeClass: 'badge-project', badgeLabel: 'Project',
     logo: '/images/CMULogo.jpg', live: false,
     org: 'CMU × BOSCH', title: 'Parking Spot Locator', date: 'Aug – Dec 2025',
-    desc: 'Vision-language parking locator using VLMap + CLIP; 3× speed improvement over baselines.',
+    desc: 'Bosch-sponsored locator using vision-language models and CLIP embeddings for spatial reasoning over sensor data; 3× faster queries.',
     metrics: [{ label: '3× faster (45s → 15s)', color: 'green' }],
-    tags: ['VLMap', 'CLIP', 'AWS', 'FastAPI', 'Python'],
+    tags: ['Vision-Language', 'CLIP', 'AWS', 'FastAPI', 'Python'],
     demo: 'https://psl.fogx.link',
   },
   {
@@ -137,9 +149,9 @@ const CARDS = [
     badgeClass: 'badge-project', badgeLabel: 'Project',
     logo: '/images/ft_logo_pos_0119.png', live: false,
     org: 'Franklin Templeton Hackathon', title: 'Capitawise', date: 'Mar – Jun 2024',
-    desc: 'AI financial advisor — GPT-4o personalized investment recommendations.',
+    desc: 'AI banking chatbot on GPT-4o with Node.js and Flask — 40% faster replies, resolution up from 68% to 85%.',
     metrics: [{ label: '🏆 2nd Place · $7,000', color: 'amber' }],
-    tags: ['GPT-4o', 'React', 'Flask', 'OpenAI API'],
+    tags: ['GPT-4o', 'React', 'Node.js', 'Flask', 'OpenAI API'],
     demo: undefined,
   },
   {
@@ -183,7 +195,7 @@ export default function Work() {
             >
               <div className="work-card-head">
                 {card.logo
-                  ? <img src={card.logo} alt={card.org} className="work-card-logo" />
+                  ? <img src={card.logo} alt={card.org} className={`work-card-logo${logoNeedsTile(card.logo) ? ' logo-tile' : ''}`} />
                   : <span />}
                 <div className="work-card-badges">
                   <span className={`bento-badge ${card.badgeClass}`}>{card.badgeLabel}</span>
