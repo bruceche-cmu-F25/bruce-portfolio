@@ -47,10 +47,10 @@ export default function Life() {
             <h3 className="life-subheading">Digital Art</h3>
             <div className="artwork-grid">
               <figure className="artwork-card">
-                <img src="/Gwen.PNG" alt="Gwen-inspired digital artwork by Bruce Cheng" loading="lazy" />
+                <img src="/art/gwen.webp" alt="Gwen-inspired digital artwork by Bruce Cheng" loading="lazy" />
               </figure>
               <figure className="artwork-card">
-                <img src="/IMG_2629.PNG" alt="Sci-fi inspired digital artwork by Bruce Cheng" loading="lazy" />
+                <img src="/art/sci-fi.webp" alt="Sci-fi inspired digital artwork by Bruce Cheng" loading="lazy" />
               </figure>
             </div>
           </div>
