@@ -46,11 +46,11 @@ export default function About() {
                 <span className="stat-label">GPA</span>
               </div>
               <div className="stat-tile">
-                <span className="stat-value" data-count="5" data-decimals="0">5</span>
+                <span className="stat-value" data-count="6" data-decimals="0">6</span>
                 <span className="stat-label">Projects</span>
               </div>
               <div className="stat-tile">
-                <span className="stat-value" data-count="3" data-decimals="0">3</span>
+                <span className="stat-value" data-count="4" data-decimals="0">4</span>
                 <span className="stat-label">Roles</span>
               </div>
               <div className="stat-tile">

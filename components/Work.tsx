@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { bentoDetails, logoNeedsTile, type BentoEntry } from '@/lib/bentoData'
+import { setPageScrollLocked } from './LenisInit'
 
 function WorkOverlay({ open, entry, onClose }: { open: boolean; entry: BentoEntry | null; onClose: () => void }) {
   const overlayRef = useRef<HTMLDivElement>(null)
@@ -13,14 +14,25 @@ function WorkOverlay({ open, entry, onClose }: { open: boolean; entry: BentoEntr
     const panel   = panelRef.current
     if (!overlay || !panel) return
     if (open) {
-      document.body.style.overflow = 'hidden'
       overlay.setAttribute('aria-hidden', 'false')
       gsap.fromTo(overlay, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.22, ease: 'none' })
       gsap.fromTo(panel,   { y: 48, scale: 0.93, autoAlpha: 0 }, { y: 0, scale: 1, autoAlpha: 1, duration: 0.38, ease: 'power3.out' })
     } else {
       gsap.to(panel,   { y: 28, scale: 0.96, autoAlpha: 0, duration: 0.2, ease: 'power2.in' })
       gsap.to(overlay, { autoAlpha: 0, duration: 0.28, ease: 'none', delay: 0.06,
-        onComplete() { overlay.setAttribute('aria-hidden', 'true'); document.body.style.overflow = '' } })
+        onComplete() { overlay.setAttribute('aria-hidden', 'true') } })
+    }
+  }, [open])
+
+  /* Owned by its own effect so the cleanup always runs — including when the
+     panel unmounts, which is what the animation effect above cannot see. */
+  useEffect(() => {
+    if (!open) return
+    document.body.style.overflow = 'hidden'   // for the no-Lenis case
+    setPageScrollLocked(true)
+    return () => {
+      document.body.style.overflow = ''
+      setPageScrollLocked(false)
     }
   }, [open])
 
@@ -40,6 +52,9 @@ function WorkOverlay({ open, entry, onClose }: { open: boolean; entry: BentoEntr
 
   return (
     <div className="bento-overlay" ref={overlayRef} aria-hidden="true" role="dialog" aria-modal="true"
+         /* Lenis preventDefaults wheel events to drive the page itself, which
+            would also swallow this panel's own scrolling — this is its opt-out */
+         data-lenis-prevent
          onClick={e => { if (e.target === overlayRef.current) onClose() }}>
       <div className="bento-overlay-panel" ref={panelRef}>
         <button className="bento-close-btn" aria-label="Close" onClick={onClose}>✕</button>
@@ -59,12 +74,23 @@ function WorkOverlay({ open, entry, onClose }: { open: boolean; entry: BentoEntr
         <ul className="overlay-points">
           {entry.points.map((p, i) => <li key={i}>{p}</li>)}
         </ul>
+        {entry.shots?.map(shot => (
+          <figure key={shot.src} className="overlay-shot">
+            <img src={shot.src} alt={shot.alt} loading="lazy" />
+            <figcaption>{shot.caption}</figcaption>
+          </figure>
+        ))}
         <div className="overlay-tags">
           {entry.tags.map((t, i) => <span key={i}>{t}</span>)}
         </div>
-        {entry.demo && (
+        {(entry.demo || entry.repo) && (
           <div className="overlay-links">
-            <a href={entry.demo} target="_blank" rel="noopener" className="overlay-link">View Demo ↗</a>
+            {entry.demo && (
+              <a href={entry.demo} target="_blank" rel="noopener" className="overlay-link">View Demo ↗</a>
+            )}
+            {entry.repo && (
+              <a href={entry.repo} target="_blank" rel="noopener" className="overlay-link">Read the source ↗</a>
+            )}
           </div>
         )}
       </div>
@@ -73,6 +99,21 @@ function WorkOverlay({ open, entry, onClose }: { open: boolean; entry: BentoEntr
 }
 
 const CARDS = [
+  {
+    key: 'robin', featured: true,
+    badgeClass: 'badge-project', badgeLabel: 'Project',
+    logo: null, live: true,
+    org: 'Open source · fork of agegr/pi-web', title: 'Robin — Personal Agent Workspace', date: 'Aug 2026 – Present',
+    desc: 'A personal assistant built on the pi coding agent\'s web UI — same agent, but registered with a fixed tool allow-list instead of a shell. Todos and calendar, read-only Gmail triage, a scored job hunt with Telegram digests, and a coding coach that hints instead of answering.',
+    metrics: [
+      { label: '80 commits over upstream', color: 'blue' }, { label: 'Allow-list, no shell', color: 'blue' },
+      { label: 'Telegram bridge', color: 'blue' },
+    ],
+    tags: ['TypeScript', 'Next.js', 'pi-agent', 'Google APIs', 'Telegram', 'Bun'],
+    demo: undefined,
+    repo: 'https://github.com/bruceche-cmu-F25/pi-web-robin',
+    shot: { src: '/shots/robin-dashboard.webp', alt: 'The Robin dashboard: assistant box, agenda, todos and the job hunt on one page' },
+  },
   {
     key: 'agai', featured: false,
     badgeClass: 'badge-work', badgeLabel: 'Research',
@@ -84,6 +125,8 @@ const CARDS = [
     ],
     tags: ['LLM Evaluation', 'Hallucination Detection', 'Interpretability', 'Generative AI'],
     demo: undefined,
+    repo: undefined,
+    shot: undefined,
   },
   {
     key: 'helport', featured: true,
@@ -97,6 +140,8 @@ const CARDS = [
     ],
     tags: ['Python', 'FastAPI', 'Gemini 2.0', 'Vertex AI', 'Docker', 'CI/CD'],
     demo: undefined,
+    repo: undefined,
+    shot: undefined,
   },
   {
     key: 'nighty', featured: false,
@@ -109,6 +154,8 @@ const CARDS = [
     ],
     tags: ['LangGraph', 'FastAPI', 'React/TS', 'ElevenLabs', 'SSE'],
     demo: 'https://nightynight-1.onrender.com/',
+    repo: undefined,
+    shot: { src: '/shots/nightynight.webp', alt: 'The NightyNight landing page: a planet limb under a starfield' },
   },
   {
     key: 'convoloo', featured: false,
@@ -121,6 +168,20 @@ const CARDS = [
     ],
     tags: ['LangChain', 'LangGraph', 'FastAPI', 'NestJS', 'Terraform', 'GCP'],
     demo: undefined,
+    repo: undefined,
+    shot: undefined,
+  },
+  {
+    key: 'ucsdia', featured: false,
+    badgeClass: 'badge-work', badgeLabel: 'Work',
+    logo: null, live: false,
+    org: 'UC San Diego · Mathematics', title: 'Instructional Assistant', date: 'Sep 2023 – Apr 2024',
+    desc: 'Instructional assistant for MATH 20D (differential equations) — office hours, review sessions and grading for 100+ students.',
+    metrics: [{ label: '100+ students', color: 'green' }],
+    tags: ['MATH 20D', 'Differential Equations', 'Office Hours', 'Review Sessions', 'Grading'],
+    demo: undefined,
+    repo: undefined,
+    shot: undefined,
   },
   {
     key: 'research', featured: false,
@@ -133,6 +194,8 @@ const CARDS = [
     ],
     tags: ['LangGraph', 'RAG', 'Streamlit', 'GKE', 'Milvus'],
     demo: undefined,
+    repo: undefined,
+    shot: undefined,
   },
   {
     key: 'parking', featured: false,
@@ -143,6 +206,8 @@ const CARDS = [
     metrics: [{ label: '3× faster (45s → 15s)', color: 'green' }],
     tags: ['Vision-Language', 'CLIP', 'AWS', 'FastAPI', 'Python'],
     demo: 'https://psl.fogx.link',
+    repo: undefined,
+    shot: undefined,
   },
   {
     key: 'capitawise', featured: false,
@@ -153,6 +218,8 @@ const CARDS = [
     metrics: [{ label: '🏆 2nd Place · $7,000', color: 'amber' }],
     tags: ['GPT-4o', 'React', 'Node.js', 'Flask', 'OpenAI API'],
     demo: undefined,
+    repo: undefined,
+    shot: undefined,
   },
   {
     key: 'pawprints', featured: false,
@@ -163,6 +230,8 @@ const CARDS = [
     metrics: [{ label: '🥇 1st Place · $15,000', color: 'amber' }],
     tags: ['Web3', 'Express.js', 'React.js', 'MySQL', 'Blockchain'],
     demo: undefined,
+    repo: undefined,
+    shot: undefined,
   },
 ] as const
 
@@ -193,6 +262,11 @@ export default function Work() {
               onClick={() => setActiveKey(card.key)}
               onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveKey(card.key) } }}
             >
+              {card.shot && (
+                <figure className="work-card-shot">
+                  <img src={card.shot.src} alt={card.shot.alt} loading="lazy" />
+                </figure>
+              )}
               <div className="work-card-head">
                 {card.logo
                   ? <img src={card.logo} alt={card.org} className={`work-card-logo${logoNeedsTile(card.logo) ? ' logo-tile' : ''}`} />
@@ -214,10 +288,10 @@ export default function Work() {
               <div className="work-card-tags">
                 {card.tags.map(t => <span key={t}>{t}</span>)}
               </div>
-              {card.demo && (
-                <a href={card.demo} target="_blank" rel="noopener" className="work-card-demo"
+              {(card.demo || card.repo) && (
+                <a href={card.demo ?? card.repo} target="_blank" rel="noopener" className="work-card-demo"
                    onClick={e => e.stopPropagation()}>
-                  Demo ↗
+                  {card.demo ? 'Demo ↗' : 'Source ↗'}
                 </a>
               )}
             </article>

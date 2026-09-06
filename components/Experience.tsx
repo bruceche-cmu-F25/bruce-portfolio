@@ -5,14 +5,16 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { logoNeedsTile } from '@/lib/bentoData'
 
 const cards = [
-  { logo: '/images/CMULogo.jpg', logoAlt: 'CMU AGAI', live: true, badge: 'Research', badgeClass: 'badge-work', org: 'CMU Applied Generative AI', role: 'Graduate Researcher', date: 'Sep 2026 – Present', chips: [{ label: 'LLM reliability', cls: 'blue' }] },
-  { logo: '/images/HelportLogo.jpg', logoAlt: 'Helport AI', badge: 'Work', badgeClass: 'badge-work', org: 'Helport AI', role: 'AI Product Developer / PM', date: 'Sep 2024 – Jun 2025', chips: [{ label: '35% AHT ↓', cls: 'green' }, { label: '6× cost ↓', cls: 'green' }] },
-  { logo: '/images/convoloo_logo.jpeg', logoAlt: 'Convoloo', badge: 'Work', badgeClass: 'badge-work', org: 'Convoloo', role: 'SDE Intern', date: 'Jul 2024 – Sep 2024', chips: [{ label: '2.5s → 1.5s', cls: 'green' }] },
-  { logo: '/images/CMULogo.jpg', logoAlt: 'CMU', badge: 'Project', badgeClass: 'badge-project', org: 'CMU 14-825', role: 'Research Assistant Agent', date: 'Jan 2026 – Mar 2026', chips: [{ label: '30+ papers indexed', cls: 'blue' }] },
-  { logo: null, live: true, badge: 'Project', badgeClass: 'badge-project', org: 'Independent', role: 'NightyNight', date: 'Apr 2025 – Present', chips: [{ label: 'LangGraph', cls: 'blue' }, { label: 'ElevenLabs', cls: 'blue' }] },
-  { logo: '/images/ft_logo_pos_0119.png', logoAlt: 'Franklin Templeton', badge: 'Project', badgeClass: 'badge-project', org: 'Franklin Templeton', role: 'Capitawise', date: 'Mar – Jun 2024', chips: [{ label: '🏆 $7,000', cls: 'amber' }] },
-  { logo: '/images/ft_logo_pos_0119.png', logoAlt: 'Franklin Templeton', badge: 'Project', badgeClass: 'badge-project', org: 'Franklin Templeton', role: 'PawPrints', date: 'Mar – Jun 2023', chips: [{ label: '🥇 $15,000', cls: 'amber' }] },
-  { logo: '/images/bosch_logo.png', logoAlt: 'Bosch', badge: 'Project', badgeClass: 'badge-project', org: 'CMU × BOSCH', role: 'Parking Spot Locator', date: 'Aug – Dec 2025', chips: [{ label: '3× faster', cls: 'green' }] },
+  { logo: null, logoText: undefined, live: true, badge: 'Project', badgeClass: 'badge-project', org: 'Open source', role: 'Robin — Personal Agent', date: 'Aug 2026 – Present', chips: [{ label: 'Tool allow-list', cls: 'blue' }] },
+  { logo: '/images/CMULogo.jpg', logoText: undefined, logoAlt: 'CMU AGAI', live: true, badge: 'Research', badgeClass: 'badge-work', org: 'CMU Applied Generative AI', role: 'Graduate Researcher', date: 'Sep 2026 – Present', chips: [{ label: 'LLM reliability', cls: 'blue' }] },
+  { logo: '/images/HelportLogo.jpg', logoText: undefined, logoAlt: 'Helport AI', badge: 'Work', badgeClass: 'badge-work', org: 'Helport AI', role: 'AI Product Developer / PM', date: 'Sep 2024 – Jun 2025', chips: [{ label: '35% AHT ↓', cls: 'green' }, { label: '6× cost ↓', cls: 'green' }] },
+  { logo: '/images/convoloo_logo.jpeg', logoText: undefined, logoAlt: 'Convoloo', badge: 'Work', badgeClass: 'badge-work', org: 'Convoloo', role: 'SDE Intern', date: 'Jul 2024 – Sep 2024', chips: [{ label: '2.5s → 1.5s', cls: 'green' }] },
+  { logo: null, logoText: 'UCSD', badge: 'Work', badgeClass: 'badge-work', org: 'UC San Diego · MATH 20D', role: 'Instructional Assistant', date: 'Sep 2023 – Apr 2024', chips: [{ label: '100+ students', cls: 'green' }] },
+  { logo: '/images/CMULogo.jpg', logoText: undefined, logoAlt: 'CMU', badge: 'Project', badgeClass: 'badge-project', org: 'CMU 14-825', role: 'Research Assistant Agent', date: 'Jan 2026 – Mar 2026', chips: [{ label: '30+ papers indexed', cls: 'blue' }] },
+  { logo: null, logoText: undefined, live: true, badge: 'Project', badgeClass: 'badge-project', org: 'Independent', role: 'NightyNight', date: 'Apr 2025 – Present', chips: [{ label: 'LangGraph', cls: 'blue' }, { label: 'ElevenLabs', cls: 'blue' }] },
+  { logo: '/images/ft_logo_pos_0119.png', logoText: undefined, logoAlt: 'Franklin Templeton', badge: 'Project', badgeClass: 'badge-project', org: 'Franklin Templeton', role: 'Capitawise', date: 'Mar – Jun 2024', chips: [{ label: '🏆 $7,000', cls: 'amber' }] },
+  { logo: '/images/ft_logo_pos_0119.png', logoText: undefined, logoAlt: 'Franklin Templeton', badge: 'Project', badgeClass: 'badge-project', org: 'Franklin Templeton', role: 'PawPrints', date: 'Mar – Jun 2023', chips: [{ label: '🥇 $15,000', cls: 'amber' }] },
+  { logo: '/images/bosch_logo.png', logoText: undefined, logoAlt: 'Bosch', badge: 'Project', badgeClass: 'badge-project', org: 'CMU × BOSCH', role: 'Parking Spot Locator', date: 'Aug – Dec 2025', chips: [{ label: '3× faster', cls: 'green' }] },
 ]
 
 function ExpCard({ card, hidden }: { card: typeof cards[0]; hidden?: boolean }) {
@@ -21,9 +23,11 @@ function ExpCard({ card, hidden }: { card: typeof cards[0]; hidden?: boolean }) 
       <div className="exp-card-head">
         {card.logo
           ? <img src={card.logo} alt={hidden ? '' : card.logoAlt} className={`exp-logo${logoNeedsTile(card.logo) ? ' exp-logo-ft logo-tile' : ''}`} />
-          : card.live
-            ? <span className="live-badge">● LIVE</span>
-            : null}
+          : card.logoText
+            ? <span className="exp-logo exp-logo-text" aria-label={hidden ? undefined : card.logoText}>{card.logoText}</span>
+            : card.live
+              ? <span className="live-badge">● LIVE</span>
+              : null}
         <span className={`bento-badge ${card.badgeClass}`}>{card.badge}</span>
       </div>
       <p className="exp-org">{card.org}</p>

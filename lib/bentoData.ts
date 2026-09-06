@@ -5,6 +5,11 @@ export interface BentoEntry {
   logo: string | null; live: boolean
   title: string; date: string
   award: string | null; demo: string | null
+  /** source to read, for projects with nothing hosted to visit */
+  repo?: string
+  /** screenshots; the card shows the first, the detail panel shows them all.
+   *  A caption is what makes a shot informative rather than decorative. */
+  shots?: { src: string; alt: string; caption: string }[]
   metrics: Metric[]; points: string[]; tags: string[]
 }
 
@@ -14,6 +19,45 @@ export interface BentoEntry {
 export const logoNeedsTile = (src: string | null | undefined) => !!src?.includes('ft_logo')
 
 export const bentoDetails: Record<string, BentoEntry> = {
+  robin: {
+    type: 'Project', badge: 'badge-project', org: 'Open source · fork of agegr/pi-web',
+    logo: null, live: true,
+    title: 'Robin — Personal Agent Workspace',
+    date: 'Aug 2026 – Present', award: null, demo: null,
+    repo: 'https://github.com/bruceche-cmu-F25/pi-web-robin',
+    shots: [
+      {
+        src: '/shots/robin-dashboard.webp',
+        alt: 'The Robin dashboard: assistant box, agenda, todos and the job hunt on one page',
+        caption: 'One assistant box at the top, then agenda, todos, the job hunt and saved links. The line under each reply is built from the tool calls that actually ran, not from the model\'s prose.',
+      },
+      {
+        src: '/shots/robin-week.webp',
+        alt: 'The week grid, with an all-day band and a deadlines row above the time grid',
+        caption: 'The week grid keeps an all-day band and a deadlines row above the time grid, gives overlapping events a share of the day\'s width, and is sized to its own content so it never traps the page\'s scroll.',
+      },
+      {
+        src: '/shots/robin-coding.webp',
+        alt: 'The coding workspace: the NeetCode rail, the problem itself, and a coach panel',
+        caption: 'NeetCode\'s own problem page sits in the middle, judge included. A cross-origin frame reports nothing back, so clicking the rail is what tells the server which problem is open — the only reason the coach can answer about "this one".',
+      },
+    ],
+    metrics: [
+      { label: '80 commits over upstream', color: 'blue' },
+      { label: 'Allow-list, no shell', color: 'blue' },
+      { label: 'Telegram bridge', color: 'blue' },
+    ],
+    points: [
+      'Forked agegr/pi-web — the browser UI for the pi coding agent — and built Robin beside it: a personal workspace driven by the same agent, 80 commits and ~300 files ahead of upstream and still syncing with it.',
+      'The agent\'s reach is bounded at tool registration rather than by prompt: Robin sessions activate only their own allow-list, so pi\'s bash, read, write and edit stay inactive.',
+      'Read-only Gmail triage that sorts the morning\'s mail into buckets, then opens a calendar event for an appointment and a todo for a deadline.',
+      'Job hunt that scans configured boards and an ATS directory, scores each posting against a CV and rubric, and pushes twice-daily digests to Telegram with triage buttons.',
+      'Coding workspace embedding the NeetCode roadmap next to a coach that climbs a hint ladder — what did you try, the pattern, the invariant, the algorithm — and records how far up it had to go.',
+      'Mail is treated as untrusted input: the tool prompts extract facts from a message and never follow instructions found inside one.',
+      'Google stays read-only and is fetched per request rather than copied into the local store, so disconnecting an account removes the data immediately.',
+    ],
+    tags: ['TypeScript', 'Next.js', 'React', 'pi-agent', 'Google APIs', 'Telegram', 'Bun'],
+  },
   agai: {
     type: 'Research', badge: 'badge-work', org: 'CMU Applied Generative AI (AGAI)',
     logo: '/images/CMULogo.jpg', live: true,
@@ -57,6 +101,13 @@ export const bentoDetails: Record<string, BentoEntry> = {
     title: 'NightyNight',
     date: 'Apr 2025 – Present', award: null,
     demo: 'https://nightynight-1.onrender.com/',
+    shots: [
+      {
+        src: '/shots/nightynight.webp',
+        alt: 'The NightyNight landing page: a planet limb under a starfield',
+        caption: 'The landing page. The generator itself sits behind sign-in.',
+      },
+    ],
     metrics: [
       { label: 'LangGraph multi-agent', color: 'blue' },
       { label: 'ElevenLabs TTS', color: 'blue' },
@@ -71,6 +122,19 @@ export const bentoDetails: Record<string, BentoEntry> = {
       'Supports 4 audience profiles (toddler, child, teen, adult) with dynamically adjusted vocabulary, sentence length, and tone.',
     ],
     tags: ['LangGraph', 'FastAPI', 'React', 'TypeScript', 'ElevenLabs', 'SSE', 'Python'],
+  },
+  ucsdia: {
+    type: 'Work', badge: 'badge-work', org: 'UC San Diego · Mathematics',
+    logo: null, live: false,
+    title: 'Instructional Assistant',
+    date: 'Sep 2023 – Apr 2024', award: null, demo: null,
+    metrics: [{ label: '100+ students', color: 'green' }],
+    points: [
+      'Instructional assistant for MATH 20D, differential equations, in the UC San Diego mathematics department — 100+ students across the term.',
+      'Held office hours and ran review sessions, working through problems with students rather than handing over the solution.',
+      'Graded coursework and exams for the course.',
+    ],
+    tags: ['MATH 20D', 'Differential Equations', 'Office Hours', 'Review Sessions', 'Grading'],
   },
   convoloo: {
     type: 'Work', badge: 'badge-work', org: 'Convoloo',
