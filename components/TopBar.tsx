@@ -37,11 +37,21 @@ export default function TopBar() {
       const navH = nav!.offsetHeight
       const scrollY = window.scrollY
       let activeHref: string | null = null
+      let progress = 0
       document.querySelectorAll<HTMLElement>('.site-main section[id]').forEach(section => {
         const top = pageTop(section) - navH - 60
-        if (scrollY >= top && scrollY < top + section.offsetHeight) activeHref = `#${section.id}`
+        if (scrollY >= top && scrollY < top + section.offsetHeight) {
+          activeHref = `#${section.id}`
+          progress = (scrollY - top) / section.offsetHeight
+        }
       })
-      navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === activeHref))
+      // progress is local: the active link's underline fills as you read that
+      // section, and starts over at the next one
+      navLinks.forEach(l => {
+        const on = l.getAttribute('href') === activeHref
+        l.classList.toggle('active', on)
+        l.style.setProperty('--p', on ? progress.toFixed(3) : '0')
+      })
     }
     updateNav()
     // re-measure once the hero has mounted and pushed the sections down
@@ -58,8 +68,10 @@ export default function TopBar() {
     const target = document.querySelector<HTMLElement>(href)
     const nav = navRef.current
     if (target) {
-      const offset = nav ? nav.offsetHeight : 0
-      const top = target.getBoundingClientRect().top + window.scrollY - offset
+      // a section that opens with a scroll scene marks the frame to land on
+      const land = target.querySelector<HTMLElement>('[data-nav-land]')
+      const offset = nav && !land ? nav.offsetHeight : 0
+      const top = (land ?? target).getBoundingClientRect().top + window.scrollY - offset
       window.scrollTo({ top, behavior: 'smooth' })
     }
     setMenuOpen(false)

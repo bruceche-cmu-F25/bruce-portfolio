@@ -2,7 +2,7 @@
 import { useEffect } from 'react'
 import gsap from 'gsap'
 
-const HOVER_SEL = 'a, button, [role="button"], .work-card, .hobby-card, .contact-card, .edu-card, label, input, textarea'
+const HOVER_SEL = 'a, button, [role="button"], .work-card, .contact-card, .edu-card, label, input, textarea'
 
 /** Celestial cursor: a single bright gold star-dot that snaps to the pointer.
  *  It swells over interactive elements and contracts on press. */

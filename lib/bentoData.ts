@@ -10,6 +10,8 @@ export interface BentoEntry {
   /** screenshots; the card shows the first, the detail panel shows them all.
    *  A caption is what makes a shot informative rather than decorative. */
   shots?: { src: string; alt: string; caption: string }[]
+  /** a line in Bruce's own voice: why he built it, not what it does */
+  note?: string
   metrics: Metric[]; points: string[]; tags: string[]
 }
 
@@ -21,9 +23,10 @@ export const logoNeedsTile = (src: string | null | undefined) => !!src?.includes
 export const bentoDetails: Record<string, BentoEntry> = {
   robin: {
     type: 'Project', badge: 'badge-project', org: 'Open source · fork of agegr/pi-web',
-    logo: null, live: true,
+    logo: null, live: false,
     title: 'Robin — Personal Agent Workspace',
     date: 'Aug 2026 – Present', award: null, demo: null,
+    note: 'I wanted an agent that cuts the time I spend finding and filing things, so more of my day goes to what I want to do, or should be doing.',
     repo: 'https://github.com/bruceche-cmu-F25/pi-web-robin',
     shots: [
       {
@@ -59,8 +62,8 @@ export const bentoDetails: Record<string, BentoEntry> = {
     tags: ['TypeScript', 'Next.js', 'React', 'pi-agent', 'Google APIs', 'Telegram', 'Bun'],
   },
   agai: {
-    type: 'Research', badge: 'badge-work', org: 'CMU Applied Generative AI (AGAI)',
-    logo: '/images/CMULogo.jpg', live: true,
+    type: 'Research', badge: 'badge-work', org: 'CMU AGAI Group · Applied Generative AI',
+    logo: '/images/agai_logo.png', live: false,
     title: 'Graduate Researcher — Generative AI Reliability',
     date: 'Sep 2026 – Present', award: null, demo: null,
     metrics: [
@@ -68,7 +71,7 @@ export const bentoDetails: Record<string, BentoEntry> = {
       { label: 'Interpretability', color: 'blue' },
     ],
     points: [
-      'Conducting research under Dr. Mohamed Farag on LLM hallucination detection, mitigation, and interpretability.',
+      'Conducting research in the CMU AGAI (Applied Generative AI) group under Dr. Mohamed Farag on LLM hallucination detection, mitigation, and interpretability.',
       'Focused on improving the reliability of Generative AI systems — measuring when a model is wrong, and why.',
       'Carnegie Mellon University, Pittsburgh, Pennsylvania · Remote.',
     ],

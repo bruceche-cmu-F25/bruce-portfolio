@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SITE } from '@/lib/siteConfig'
+import Emergence from './Emergence'
 
 export default function Contact() {
   const [submitting, setSubmitting] = useState(false)
@@ -39,12 +40,17 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="section section-contact" aria-label="Contact Bruce Cheng">
+    <section id="contact" className="section-contact" aria-label="Contact Bruce Cheng">
+      <Emergence>
+        <div className="container">
+          <p className="section-kicker">Get In Touch</p>
+          <h2 className="contact-heading">Let&apos;s Work<br />Together</h2>
+          <p className="contact-sub">Open to full-time roles, collaborations, and interesting conversations.</p>
+        </div>
+      </Emergence>
+      <div className="contact-body">
       <div className="contact-glow" aria-hidden="true" />
       <div className="container">
-        <p className="section-kicker">Get In Touch</p>
-        <h2 className="contact-heading">Let&apos;s Work<br />Together</h2>
-        <p className="contact-sub">Open to internships, collaborations, and interesting conversations.</p>
         <div className="contact-cards">
           <a href={`mailto:${SITE.email}`} className="contact-card">
             <span className="contact-icon">📧</span>
@@ -86,6 +92,7 @@ export default function Contact() {
             {submitting ? 'Opening mail…' : 'Send Message →'}
           </button>
         </form>
+      </div>
       </div>
     </section>
   )

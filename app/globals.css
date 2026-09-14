@@ -91,7 +91,6 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   -webkit-backdrop-filter: blur(9px) saturate(0.8);
 }
 
-.portfolio-entry-image .stat-tile,
 .portfolio-entry-image .edu-card {
   background: rgba(8, 10, 15, 0.58);
 }
@@ -178,7 +177,16 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   color: var(--text-2); padding: 0.35rem 0;
   border-bottom: 1px solid transparent;
   transition: color 0.2s, border-color 0.2s;
+  position: relative;
 }
+/* reading progress through the current section, drawn over the hairline */
+.nav-link::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+  background: var(--accent);
+  transform: scaleX(var(--p, 0)); transform-origin: left;
+  opacity: 0; transition: opacity 0.2s;
+}
+.nav-link.active::after { opacity: 1; }
 .nav-link:hover { color: var(--text-1); }
 .nav-link.active { color: var(--accent-bright); border-bottom-color: var(--hairline); }
 .nav-resume {
@@ -192,14 +200,6 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .hamburger span {
   display: block; width: 22px; height: 1.5px; background: var(--text-2);
   border-radius: 1px; transition: transform 0.2s, opacity 0.2s;
-}
-
-/* ── Scroll progress ────────────────────────────────────────────── */
-.scroll-progress {
-  position: fixed; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-bright));
-  transform-origin: left; transform: scaleX(0);
-  z-index: 400; pointer-events: none;
 }
 
 /* ── Cursor — star-dot ──────────────────────────────────────────── */
@@ -254,27 +254,6 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 
 /* ── About ───────────────────────────────────────────────────────── */
 .about-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: start; }
-.stats-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
-  background: var(--border); border: 1px solid var(--border);
-  border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem;
-}
-.stat-tile {
-  background: rgba(12, 14, 21, 0.82); padding: 1.5rem;
-  display: flex; flex-direction: column; gap: 0.3rem;
-  transition: background 0.2s;
-}
-.stat-tile:hover { background: var(--bg-3); }
-.stat-value {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 5vw, 3rem); font-weight: 500;
-  color: var(--accent-bright); letter-spacing: -0.01em; line-height: 1;
-}
-.stat-text { font-size: clamp(1.6rem, 4vw, 2.4rem) !important; }
-.stat-label {
-  font-family: var(--font-mono); font-size: 0.64rem;
-  color: var(--text-3); letter-spacing: 0.1em; text-transform: uppercase;
-}
 .edu-cards { display: flex; flex-direction: column; gap: 0.75rem; }
 .edu-card {
   display: flex; align-items: center; gap: 1rem;
@@ -471,17 +450,16 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .work-card-org     { font-family: var(--font-mono); font-size: 0.67rem; color: var(--text-3); margin-bottom: 0.2rem; }
 .work-card-title   { font-family: var(--font-display); font-size: 1.06rem; font-weight: 700; color: var(--text-1); line-height: 1.3; margin-bottom: 0.3rem; }
 .work-card-date    { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-3); margin-bottom: 1rem; }
+/* the one line in Bruce's own voice sits apart from the résumé copy below it */
+.work-card-note, .overlay-note {
+  font-family: var(--font-display); font-style: italic;
+  color: var(--text-1); line-height: 1.55;
+  padding-left: 0.85rem; border-left: 1px solid var(--accent);
+}
+.work-card-note { font-size: 0.92rem; margin-bottom: 1rem; }
+.overlay-note   { font-size: 1.02rem; margin: 0.25rem 0 1.25rem; }
 .work-card-desc    { font-size: 0.82rem; color: var(--text-2); line-height: 1.6; margin-bottom: 1rem; }
 .work-card-metrics { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
-.work-card-tags {
-  display: flex; flex-wrap: wrap; gap: 0.35rem;
-  padding-top: 0.75rem; border-top: 1px solid var(--border);
-}
-.work-card-tags span {
-  font-family: var(--font-mono); font-size: 0.63rem; color: var(--text-3);
-  background: rgba(255,255,255,0.03); border: 1px solid var(--border);
-  padding: 0.14rem 0.45rem; border-radius: 4px;
-}
 .work-card-demo {
   display: inline-flex; align-items: center; gap: 0.35rem;
   font-size: 0.72rem; letter-spacing: 0.04em; color: var(--accent);
@@ -555,20 +533,6 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .stack-pills span:hover { border-color: var(--hairline); color: var(--accent-bright); background: var(--bg-3); }
 
 /* ── Life ───────────────────────────────────────────────────────── */
-.hobbies-grid {
-  display: grid; grid-template-columns: repeat(4,1fr); gap: 1px;
-  background: var(--border); border: 1px solid var(--border);
-  border-radius: 14px; overflow: hidden; margin-bottom: 4rem;
-}
-.hobby-card {
-  background: var(--bg-2); padding: 1.5rem 1.25rem;
-  display: flex; flex-direction: column; gap: 0.5rem;
-  position: relative; transition: background 0.2s;
-}
-.hobby-card:hover { background: var(--bg-3); }
-.hobby-icon { font-size: 1.5rem; }
-.hobby-card h3 { font-size: 0.86rem; font-weight: 600; color: var(--text-1); }
-.hobby-card p  { font-size: 0.76rem; color: var(--text-3); line-height: 1.5; }
 .life-showcase { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
 .life-subheading { font-family: var(--font-display); font-size: 1.15rem; font-weight: 500; color: var(--white); margin-bottom: 1.25rem; }
 .artwork-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
@@ -579,7 +543,10 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .mbti-card { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
 
 /* ── Contact ────────────────────────────────────────────────────── */
-.section-contact { position: relative; overflow: hidden; }
+.section-contact { position: relative; }
+/* clip, not hidden: `hidden` would make this the scroll container and break
+   the emergence stage's sticky positioning */
+.contact-body { position: relative; overflow: clip; padding: 0 0 7rem; margin-top: -18vh; }
 .contact-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 640px; height: 420px; background: radial-gradient(ellipse, rgba(212,162,78,0.07), transparent 70%); pointer-events: none; }
 .contact-heading { font-family: var(--font-display); font-size: clamp(2.2rem, 6vw, 4.5rem); font-weight: 500; color: var(--white); letter-spacing: 0.005em; line-height: 1.05; margin-bottom: 1rem; }
 .contact-sub { font-size: 1rem; color: var(--text-2); margin-bottom: 3rem; }
@@ -643,6 +610,20 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .sh-stage { position: sticky; top: 0; height: 100vh; width: 100%; overflow: hidden; }
 .sh-canvas, .sh-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 /* the event horizon swallowing the view: driven by the dive scrub */
+/* ── Emergence — the way out, before Contact ─────────────────────── */
+.emergence { position: relative; height: 260vh; }
+.emergence-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.emergence-stage canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.emergence-land { position: absolute; left: 0; top: calc((100% - 100vh) * 0.88); height: 1px; width: 1px; }
+.emergence-copy { position: relative; height: 100%; display: flex; align-items: center; }
+.emergence-copy .contact-sub { margin-bottom: 0; }
+/* no scene: the heading just sits at the top of Contact */
+@media (prefers-reduced-motion: reduce) {
+  .emergence { height: auto; }
+  .emergence-stage { position: relative; height: auto; padding: 7rem 0 3rem; }
+  .emergence-stage canvas { display: none; }
+  .contact-body { margin-top: 0; }
+}
 .sh-blackout { position: absolute; inset: 0; background: var(--bg-0); opacity: 0; pointer-events: none; }
 .sh-title {
   position: absolute; top: 50%; right: 8vw; transform: translateY(-50%);
@@ -689,6 +670,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   .nav-menu.active { opacity: 1; visibility: visible; transform: translateY(0); }
   .nav-menu li { width: 100%; }
   .nav-link { display: block; padding: 0.8rem 0; }
+  .nav-link::after { display: none; }
   .nav-resume { display: inline-block; margin-top: 0.75rem; }
   .hamburger { display: flex; }
 
@@ -701,11 +683,9 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   .contact-cards    { grid-template-columns: 1fr 1fr; }
   .form-row         { grid-template-columns: 1fr; }
   .life-showcase    { grid-template-columns: 1fr; }
-  .hobbies-grid     { grid-template-columns: repeat(2,1fr); }
   .contact-heading  { font-size: clamp(2rem, 12vw, 3.5rem); }
 }
 @media (max-width: 480px) {
   .contact-cards { grid-template-columns: 1fr; }
   .artwork-grid  { grid-template-columns: 1fr; }
-  .hobbies-grid  { grid-template-columns: 1fr; }
 }

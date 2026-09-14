@@ -6,7 +6,7 @@ export const SITE = {
   phoneHref: 'tel:+18583050278',
   github: 'https://github.com/bruceche-cmu-F25',
   githubHandle: 'bruceche-cmu-F25',
-  linkedin: 'https://linkedin.com/in/chi-cheng-779b4a259/',
-  linkedinHandle: 'chi-cheng-779b4a259',
+  linkedin: 'https://www.linkedin.com/in/chi-cheng921/',
+  linkedinHandle: 'chi-cheng921',
   resume: '/Chi Cheng-Resume-2026-August.pdf',
 } as const

@@ -32,7 +32,6 @@ export default function Page() {
       <div className="starfield" aria-hidden="true">
         <i className="sf1" /><i className="sf2" /><i className="sf3" />
       </div>
-      <div className="scroll-progress" aria-hidden="true" />
       <SpaceHero />
       <div className="portfolio-entry-image">
         <Image

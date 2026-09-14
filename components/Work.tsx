@@ -68,6 +68,7 @@ function WorkOverlay({ open, entry, onClose }: { open: boolean; entry: BentoEntr
         {entry.award && <div className="overlay-award">{entry.award}</div>}
         <h2 className="overlay-title">{entry.title}</h2>
         <p className="overlay-date">{entry.date}</p>
+        {entry.note && <p className="overlay-note">{entry.note}</p>}
         <div className="overlay-metrics">
           {entry.metrics.map((m, i) => <span key={i} className={`metric ${m.color}`}>{m.label}</span>)}
         </div>
@@ -102,7 +103,7 @@ const CARDS = [
   {
     key: 'robin', featured: true,
     badgeClass: 'badge-project', badgeLabel: 'Project',
-    logo: null, live: true,
+    logo: null, live: false,
     org: 'Open source · fork of agegr/pi-web', title: 'Robin — Personal Agent Workspace', date: 'Aug 2026 – Present',
     desc: 'A personal assistant built on the pi coding agent\'s web UI — same agent, but registered with a fixed tool allow-list instead of a shell. Todos and calendar, read-only Gmail triage, a scored job hunt with Telegram digests, and a coding coach that hints instead of answering.',
     metrics: [
@@ -117,9 +118,9 @@ const CARDS = [
   {
     key: 'agai', featured: false,
     badgeClass: 'badge-work', badgeLabel: 'Research',
-    logo: '/images/CMULogo.jpg', live: true,
-    org: 'CMU Applied Generative AI', title: 'Graduate Researcher', date: 'Sep 2026 – Present',
-    desc: 'Research under Dr. Mohamed Farag on LLM hallucination detection, mitigation and interpretability — improving the reliability of Generative AI systems.',
+    logo: '/images/agai_logo.png', live: false,
+    org: 'CMU AGAI Group', title: 'Graduate Researcher', date: 'Sep 2026 – Present',
+    desc: 'Research in the CMU AGAI (Applied Generative AI) group under Dr. Mohamed Farag on LLM hallucination detection, mitigation and interpretability — improving the reliability of Generative AI systems.',
     metrics: [
       { label: 'Hallucination detection', color: 'blue' }, { label: 'Interpretability', color: 'blue' },
     ],
@@ -279,14 +280,12 @@ export default function Work() {
               <p className="work-card-org">{card.org}</p>
               <h3 className="work-card-title">{card.title}</h3>
               <p className="work-card-date">{card.date}</p>
+              {bentoDetails[card.key]?.note && <p className="work-card-note">{bentoDetails[card.key].note}</p>}
               {card.desc && <p className="work-card-desc">{card.desc}</p>}
               <div className="work-card-metrics">
                 {card.metrics.map((m, i) => (
                   <span key={i} className={`metric ${m.color}`}>{m.label}</span>
                 ))}
-              </div>
-              <div className="work-card-tags">
-                {card.tags.map(t => <span key={t}>{t}</span>)}
               </div>
               {(card.demo || card.repo) && (
                 <a href={card.demo ?? card.repo} target="_blank" rel="noopener" className="work-card-demo"

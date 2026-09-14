@@ -5,8 +5,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { logoNeedsTile } from '@/lib/bentoData'
 
 const cards = [
-  { logo: null, logoText: undefined, live: true, badge: 'Project', badgeClass: 'badge-project', org: 'Open source', role: 'Robin — Personal Agent', date: 'Aug 2026 – Present', chips: [{ label: 'Tool allow-list', cls: 'blue' }] },
-  { logo: '/images/CMULogo.jpg', logoText: undefined, logoAlt: 'CMU AGAI', live: true, badge: 'Research', badgeClass: 'badge-work', org: 'CMU Applied Generative AI', role: 'Graduate Researcher', date: 'Sep 2026 – Present', chips: [{ label: 'LLM reliability', cls: 'blue' }] },
+  { logo: null, logoText: undefined, live: false, badge: 'Project', badgeClass: 'badge-project', org: 'Open source', role: 'Robin — Personal Agent', date: 'Aug 2026 – Present', chips: [{ label: 'Tool allow-list', cls: 'blue' }] },
+  { logo: '/images/agai_logo.png', logoText: undefined, logoAlt: 'CMU AGAI Group', live: false, badge: 'Research', badgeClass: 'badge-work', org: 'CMU AGAI Group', role: 'Graduate Researcher', date: 'Sep 2026 – Present', chips: [{ label: 'LLM reliability', cls: 'blue' }] },
   { logo: '/images/HelportLogo.jpg', logoText: undefined, logoAlt: 'Helport AI', badge: 'Work', badgeClass: 'badge-work', org: 'Helport AI', role: 'AI Product Developer / PM', date: 'Sep 2024 – Jun 2025', chips: [{ label: '35% AHT ↓', cls: 'green' }, { label: '6× cost ↓', cls: 'green' }] },
   { logo: '/images/convoloo_logo.jpeg', logoText: undefined, logoAlt: 'Convoloo', badge: 'Work', badgeClass: 'badge-work', org: 'Convoloo', role: 'SDE Intern', date: 'Jul 2024 – Sep 2024', chips: [{ label: '2.5s → 1.5s', cls: 'green' }] },
   { logo: null, logoText: 'UCSD', badge: 'Work', badgeClass: 'badge-work', org: 'UC San Diego · MATH 20D', role: 'Instructional Assistant', date: 'Sep 2023 – Apr 2024', chips: [{ label: '100+ students', cls: 'green' }] },

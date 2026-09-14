@@ -5,18 +5,13 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 /**
  * Page-level motion that belongs to no single section:
- * the scroll progress hairline, the shared kicker/heading reveals,
+ * the shared kicker/heading reveals,
  * the starfield parallax, and the reduced-motion escape hatch.
  */
 export default function PageEffects() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
     const ctx = gsap.context(() => {
-      gsap.to('.scroll-progress', {
-        scaleX: 1, ease: 'none',
-        scrollTrigger: { start: 'top top', end: 'max', scrub: 0.3 },
-      })
-
       // gentle depth: each star layer drifts at its own rate as the page scrolls
       const drift = [-6, -12, -20]
       gsap.utils.toArray<HTMLElement>('.starfield i').forEach((layer, i) => {

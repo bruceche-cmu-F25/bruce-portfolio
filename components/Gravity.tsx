@@ -11,7 +11,7 @@ import gsap from 'gsap'
  *  `:hover { transform: translateY(-8px) }` never actually fired. Letting GSAP
  *  own the transform lets the lean, the lift and the reveal compose. The light
  *  itself is a background, so it stays in CSS as --px / --py. */
-const CARDS = '.work-card, .exp-card, .contact-card, .edu-card, .stat-tile, .hobby-card'
+const CARDS = '.work-card, .exp-card, .contact-card, .edu-card'
 
 /** degrees of lean at the corners, and how far the card lifts under the pointer */
 const TILT = 5
