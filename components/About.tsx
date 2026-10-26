@@ -1,59 +1,35 @@
-'use client'
-import { useEffect } from 'react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SITE } from '@/lib/siteConfig'
 
+const proofs = [
+  { name: 'Helport AI', text: 'Production call assistant. 20ms responses, 6× lower inference cost, 35% shorter handling time.' },
+  { name: 'Robin', text: 'A personal agent registered with a fixed tool allow-list, not a shell.' },
+  { name: 'CMU AGAI', text: 'Research on detecting and explaining LLM hallucinations.' },
+]
+
+const schools = [
+  'MS Software Engineering · Carnegie Mellon · Silicon Valley · GPA 3.6 · Dec 2026',
+  'BS Mathematics–Computer Science · UC San Diego · GPA 3.6 · Apr 2025',
+]
+
 export default function About() {
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger)
-
-
-    gsap.fromTo('.edu-card',
-      { y: 24, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, duration: 0.6, stagger: 0.12, ease: 'power3.out',
-        scrollTrigger: { trigger: '.edu-cards', start: 'top 89%' } })
-
-    gsap.fromTo('.about-body, .about-links',
-      { y: 20, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, duration: 0.65, stagger: 0.1, ease: 'power3.out',
-        scrollTrigger: { trigger: '.about-right', start: 'top 87%' } })
-  }, [])
-
   return (
-    <section id="about" className="section section-alt" aria-label="About Bruce Cheng">
+    <section id="about" className="section" aria-label="About Bruce Cheng">
       <div className="container">
-        <div className="about-layout">
-          <div className="about-left">
-            <div className="edu-cards">
-              <div className="edu-card">
-                <img src="/images/CMULogo.jpg" alt="Carnegie Mellon University" className="edu-logo" />
-                <div className="edu-info">
-                  <strong>Carnegie Mellon University</strong>
-                  <span>MS Software Engineering</span>
-                  <span className="edu-meta">GPA 3.6 · Silicon Valley · Dec 2026</span>
-                </div>
-              </div>
-              <div className="edu-card">
-                <div className="edu-logo edu-logo-ucsd" aria-label="UC San Diego">UCSD</div>
-                <div className="edu-info">
-                  <strong>UC San Diego</strong>
-                  <span>BS Mathematics–Computer Science</span>
-                  <span className="edu-meta">GPA 3.6 · San Diego · Apr 2025</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="about-right">
-            <p className="section-kicker">About</p>
-            <h2 className="about-heading">Building at the<br />frontier of AI</h2>
-            <p className="about-body">Software engineer building AI systems, agentic pipelines, and full-stack applications. Currently a graduate researcher in Carnegie Mellon&apos;s AGAI (Applied Generative AI) group, working on LLM hallucination detection, mitigation, and interpretability. Previously shipped production backend at Helport AI — 20ms response latency, 6× lower inference cost, 35% shorter handling time. MS in Software Engineering at CMU, Dec 2026; looking for full-time software engineering roles.</p>
-            <div className="about-links">
-              <a href={SITE.github} target="_blank" rel="noopener" className="about-link">GitHub ↗</a>
-              <a href={SITE.linkedin} target="_blank" rel="noopener" className="about-link">LinkedIn ↗</a>
-              <a href={SITE.resume} download className="about-link">Resume ↓</a>
-            </div>
-          </div>
+        <p className="section-kicker">About</p>
+        <h2 className="about-heading">Full-time software<br />roles, Dec 2026</h2>
+        <p className="about-body">MS in Software Engineering at CMU Silicon Valley. I build agentic systems, and the backends that keep them fast.</p>
+        <ul className="about-proofs">
+          {proofs.map(item => (
+            <li key={item.name}><strong>{item.name}</strong> — {item.text}</li>
+          ))}
+        </ul>
+        <ul className="about-edu">
+          {schools.map(line => <li key={line}>{line}</li>)}
+        </ul>
+        <div className="about-links">
+          <a href={SITE.github} target="_blank" rel="noopener" className="about-link">GitHub ↗</a>
+          <a href={SITE.linkedin} target="_blank" rel="noopener" className="about-link">LinkedIn ↗</a>
+          <a href={SITE.resume} download className="about-link">Resume ↓</a>
         </div>
       </div>
     </section>

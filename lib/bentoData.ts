@@ -176,7 +176,7 @@ export const bentoDetails: Record<string, BentoEntry> = {
   },
   parking: {
     type: 'Project', badge: 'badge-project', org: 'CMU × BOSCH',
-    logo: null, live: false,
+    logo: '/images/bosch_logo.png', live: false,
     title: 'Parking Spot Locator',
     date: 'Aug 2025 – Dec 2025', award: null,
     demo: 'https://psl.fogx.link',

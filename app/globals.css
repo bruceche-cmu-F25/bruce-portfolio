@@ -47,79 +47,6 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 2.5rem; }
 .site-main { position: relative; z-index: 1; }
 
-.portfolio-entry-image {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  align-items: center;
-  min-height: max(620px, 100svh);
-  overflow: hidden;
-  isolation: isolate;
-  background: var(--bg-0);
-}
-
-.portfolio-entry-image-media {
-  object-fit: cover;
-  object-position: center;
-  filter: saturate(0.78) contrast(1.04) brightness(0.78);
-}
-
-.portfolio-entry-image-shade {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background:
-    linear-gradient(180deg, var(--bg-0) 0%, transparent 14%, transparent 78%, var(--bg-0) 100%),
-    linear-gradient(90deg, rgba(3, 4, 8, 0.2) 0%, rgba(3, 4, 8, 0.35) 48%, rgba(3, 4, 8, 0.68) 100%),
-    radial-gradient(ellipse at center, transparent 32%, rgba(3, 4, 8, 0.42) 100%);
-}
-
-.portfolio-entry-image #about {
-  z-index: 2;
-  width: 100%;
-}
-
-.portfolio-entry-image .about-left,
-.portfolio-entry-image .about-right {
-  padding: 1.75rem 2rem;
-  border: 1px solid rgba(244, 241, 232, 0.09);
-  border-radius: 16px;
-  background: rgba(3, 4, 8, 0.5);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(9px) saturate(0.8);
-  -webkit-backdrop-filter: blur(9px) saturate(0.8);
-}
-
-.portfolio-entry-image .edu-card {
-  background: rgba(8, 10, 15, 0.58);
-}
-
-.portfolio-entry-image .about-heading,
-.portfolio-entry-image .about-body,
-.portfolio-entry-image .section-kicker {
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.9);
-}
-
-.portfolio-entry-image .about-body {
-  color: rgba(244, 241, 232, 0.84);
-}
-
-@media (max-width: 768px) {
-  .portfolio-entry-image {
-    min-height: 100svh;
-  }
-
-  .portfolio-entry-image-media {
-    object-position: 48% center;
-  }
-
-  .portfolio-entry-image .about-left,
-  .portfolio-entry-image .about-right {
-    padding: 1.5rem;
-  }
-}
-
 /* ── Starfield — static CSS backdrop below the hero ─────────────── */
 .starfield { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .starfield i { position: absolute; inset: -12vh 0; background-repeat: repeat; will-change: transform; }
@@ -253,33 +180,24 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 }
 
 /* ── About ───────────────────────────────────────────────────────── */
-.about-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: start; }
-.edu-cards { display: flex; flex-direction: column; gap: 0.75rem; }
-.edu-card {
-  display: flex; align-items: center; gap: 1rem;
-  background: rgba(12, 14, 21, 0.82); border: 1px solid var(--border);
-  border-radius: 10px; padding: 1rem 1.25rem;
-  transition: border-color 0.2s, background 0.2s;
-}
-.edu-card:hover { border-color: var(--hairline); background: var(--bg-3); }
-.edu-logo { width: 40px; height: 40px; border-radius: 8px; object-fit: contain; flex-shrink: 0; }
-.edu-logo-ucsd {
-  width: 40px; height: 40px; border-radius: 8px;
-  background: #00629B; color: #FFD700;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-mono); font-size: 0.58rem; font-weight: 700; flex-shrink: 0;
-}
-.edu-info { display: flex; flex-direction: column; gap: 0.15rem; }
-.edu-info strong { font-family: var(--font-display); font-size: 0.92rem; color: var(--text-1); }
-.edu-info span   { font-size: 0.76rem; color: var(--text-2); }
-.edu-meta { font-family: var(--font-mono); font-size: 0.64rem !important; color: var(--text-3) !important; }
-
 .about-heading {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 3.2vw, 2.2rem); font-weight: 500;
-  color: var(--white); letter-spacing: 0.005em; line-height: 1.25; margin-bottom: 1.25rem;
+  font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 500;
+  color: var(--white); letter-spacing: 0.005em; line-height: 1.08; margin-bottom: 1.25rem;
 }
-.about-body   { font-size: 0.97rem; line-height: 1.85; color: var(--text-2); margin-bottom: 1.75rem; }
+.about-body { max-width: 38rem; font-size: 1.02rem; line-height: 1.7; color: var(--text-2); margin-bottom: 1.75rem; }
+.about-proofs { display: flex; flex-direction: column; gap: 0.85rem; max-width: 40rem; margin-bottom: 2rem; }
+.about-proofs li {
+  position: relative; padding-left: 1rem;
+  font-size: 0.95rem; line-height: 1.55; color: var(--text-2);
+}
+.about-proofs li::before {
+  content: ''; position: absolute; left: 0; top: 0.55em;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+}
+.about-proofs strong { color: var(--text-1); font-weight: 600; }
+.about-edu { display: flex; flex-direction: column; gap: 0.45rem; margin-bottom: 1.75rem; }
+.about-edu li { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-3); line-height: 1.5; }
 .about-links  { display: flex; gap: 1rem; flex-wrap: wrap; }
 .about-link {
   font-size: 0.76rem; letter-spacing: 0.06em; color: var(--accent);
@@ -287,40 +205,47 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 }
 .about-link:hover { border-color: var(--accent); color: var(--accent-bright); }
 
-/* ── Experience Marquee ─────────────────────────────────────────── */
-.section-experience { padding: 5rem 0 0; overflow: hidden; position: relative; }
-.exp-cmu-bg { display: none; }
-.exp-marquee-wrap {
-  width: 100%; overflow: hidden; position: relative; padding: 2.5rem 0 3.5rem;
-  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+/* ── Experience timeline ────────────────────────────────────────── */
+.section-experience { padding-bottom: 4rem; }
+.section-experience .section-heading { margin-bottom: 1.5rem; }
+.exp-list { position: relative; display: flex; flex-direction: column; }
+.exp-list::before {
+  content: '';
+  position: absolute; left: 3px; top: 2rem; bottom: 2.75rem;
+  width: 1px; background: var(--hairline);
 }
-.exp-marquee-inner { display: flex; gap: 1.25rem; width: max-content; animation: exp-scroll 38s linear infinite; }
-.exp-marquee-wrap:hover .exp-marquee-inner { animation-play-state: paused; }
-@keyframes exp-scroll { to { transform: translateX(-50%); } }
-
-.exp-card {
-  flex-shrink: 0; width: 260px;
-  background: rgba(12, 14, 21, 0.82); border: 1px solid var(--border);
-  border-radius: 12px; padding: 1.25rem;
-  transition: border-color 0.2s, background 0.2s;
+.exp-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 16px 36px minmax(0, 1fr) auto;
+  gap: 0.35rem 1.15rem;
+  align-items: start;
+  padding: 1.35rem 0;
+  border-top: 1px solid var(--border);
 }
-.exp-card:hover { border-color: var(--hairline); background: var(--bg-3); }
-.exp-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
-.exp-logo { height: 28px; max-width: 80px; object-fit: contain; border-radius: 4px; }
-.exp-logo-ft { max-width: 64px; object-fit: contain; }
-/* a role with no logo file gets a wordmark, in UCSD's own blue and gold */
+.exp-mark {
+  position: relative; z-index: 1;
+  width: 7px; height: 7px; margin-top: 0.45rem;
+  border-radius: 50%; background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(3, 4, 8, 1), 0 0 0 5px rgba(212, 162, 78, 0.35);
+}
+.exp-logo { width: 36px; height: 36px; object-fit: contain; border-radius: 8px; }
 .exp-logo-text {
   display: inline-flex; align-items: center; justify-content: center;
-  height: 28px; max-width: none; padding: 0 0.55rem;
-  background: #00629B; color: #FFD700;
-  font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700;
-  letter-spacing: 0.04em;
+  width: 36px; height: 36px;
+  background: #00629B; color: #FFD700; border-radius: 8px;
+  font-family: var(--font-mono); font-size: 0.52rem; font-weight: 700;
+  letter-spacing: 0.02em;
 }
-.exp-org  { font-size: 0.68rem; color: var(--text-3); font-family: var(--font-mono); margin-bottom: 0.2rem; }
-.exp-role { font-family: var(--font-display); font-size: 0.94rem; font-weight: 600; color: var(--text-1); margin-bottom: 0.3rem; line-height: 1.3; }
-.exp-date { font-size: 0.68rem; color: var(--text-3); font-family: var(--font-mono); margin-bottom: 0.75rem; }
-.exp-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.exp-role { font-family: var(--font-display); font-size: 1.15rem; font-weight: 500; color: var(--white); line-height: 1.25; }
+.exp-org  { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-3); margin: 0.3rem 0 0.45rem; }
+.exp-detail { font-size: 0.9rem; line-height: 1.55; color: var(--text-2); max-width: 62ch; }
+.exp-case { color: var(--accent); border-bottom: 1px solid var(--hairline); white-space: nowrap; }
+.exp-case:hover { color: var(--accent-bright); border-bottom-color: var(--accent); }
+.exp-date {
+  font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-3);
+  padding-top: 0.35rem; white-space: nowrap;
+}
 
 /* ── Badges & metrics ───────────────────────────────────────────── */
 .bento-badge {
@@ -343,11 +268,41 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .metric.blue  { background: rgba(244,241,232,0.05); color: var(--text-2);        border: 1px solid var(--border); }
 .metric.amber { background: rgba(243,206,139,0.08); color: var(--accent-bright); border: 1px solid rgba(243,206,139,0.2); }
 
-/* ── Work grid ──────────────────────────────────────────────────── */
-.work-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 1.75rem;
+/* ── Work cases ─────────────────────────────────────────────────── */
+.work-cases { display: flex; flex-direction: column; gap: 1.25rem; }
+.work-card.work-case-split {
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+  padding: 0; align-items: center;
 }
+.work-card.work-case-split::before { opacity: 0; }
+.work-card.work-case-split:hover::before { opacity: 1; }
+.work-case-split .work-card-shot,
+.work-case-copy { position: relative; z-index: 1; }
+.work-case-copy { padding: 1.75rem 1.85rem 1.6rem; }
+.work-case-metrics .work-card-title { font-size: clamp(1.35rem, 2vw, 1.7rem); }
+.work-case-metrics .metric { font-size: 0.78rem; padding: 0.4rem 0.75rem; }
+.work-card.work-case-slim { padding: 1.25rem 1.5rem; }
+.work-case-slim .work-card-desc { margin-bottom: 0.75rem; }
+#work-helport, #work-robin, #work-parking { scroll-margin-top: calc(var(--nav-h) + 16px); }
+
+.work-also {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: 0.35rem 1.35rem;
+  margin-top: 2.25rem; padding-top: 1.35rem;
+  border-top: 1px solid var(--border);
+}
+.work-also-label {
+  font-family: var(--font-mono); font-size: 0.64rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3);
+  margin-right: 0.35rem;
+}
+.work-also-item { font-size: 0.92rem; color: var(--text-1); }
+.work-also-item:hover { color: var(--accent-bright); }
+.work-also-hint {
+  font-family: var(--font-mono); font-size: 0.66rem; color: var(--text-3);
+  margin-left: 0.45rem;
+}
+.work-also-item:hover .work-also-hint { color: var(--accent); }
 .work-card {
   background: rgba(12, 14, 21, 0.82); border: 1px solid var(--border);
   border-radius: 16px; padding: 1.75rem; cursor: pointer;
@@ -385,8 +340,6 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   pointer-events: none;
 }
 .work-card:hover::after { opacity: 1; }
-.work-card-featured { grid-column: span 2; }
-
 .work-card-head    { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
 .work-card-logo    { width: 36px; height: 36px; border-radius: 8px; object-fit: contain; }
 /* Logos that arrive as dark ink on transparency need a light tile to read on the
@@ -398,36 +351,31 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 /* a hero shot sits flush to the card's top edge; the card already clips */
 .work-card-shot {
   position: relative;
-  margin: -1.75rem -1.75rem 1.4rem;
-  aspect-ratio: 16 / 9;
+  margin: 0;
+  min-height: 280px;
   overflow: hidden;
   background: var(--bg-1);
 }
-/* the wide card gets a band rather than a block */
-.work-card-featured .work-card-shot { aspect-ratio: 21 / 9; }
 .work-card-shot img {
   width: 100%; height: 100%;
+  min-height: 280px;
   object-fit: cover; object-position: top center;
-  /* sit the shot back into the page's palette until the card is hovered */
-  filter: saturate(0.72) brightness(0.72);
-  transition: filter 0.4s var(--ease), transform 0.6s var(--ease);
+  transition: transform 0.6s var(--ease);
 }
-/* a scrim carries the shot into the card, so a light screenshot doesn't sit on
-   the near-black page as a bright rectangle */
-.work-card-shot::after {
+/* a short edge fade only — the interface itself stays readable */
+.work-case-split .work-card-shot::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(12, 14, 21, 0.42) 0%,
-    rgba(12, 14, 21, 0.14) 42%,
-    rgba(12, 14, 21, 0.97) 100%
-  );
+  background: linear-gradient(90deg, transparent 78%, rgba(12, 14, 21, 0.28) 100%);
   pointer-events: none;
-  transition: opacity 0.4s var(--ease);
 }
-.work-card:hover .work-card-shot img { filter: saturate(1) brightness(0.95); transform: scale(1.03); }
-.work-card:hover .work-card-shot::after { opacity: 0.62; }
+.work-card:hover .work-card-shot img { transform: scale(1.02); }
+.work-case-split .work-card-shot,
+.work-case-split .work-card-shot img {
+  height: 440px;
+  min-height: 0;
+  max-height: 440px;
+}
 
 .overlay-shot { margin: 1.4rem 0; }
 .overlay-shot img {
@@ -533,14 +481,12 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
 .stack-pills span:hover { border-color: var(--hairline); color: var(--accent-bright); background: var(--bg-3); }
 
 /* ── Life ───────────────────────────────────────────────────────── */
-.life-showcase { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
-.life-subheading { font-family: var(--font-display); font-size: 1.15rem; font-weight: 500; color: var(--white); margin-bottom: 1.25rem; }
-.artwork-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+#life .section-heading { margin-bottom: 1rem; }
+.life-lead { max-width: 36rem; font-size: 1rem; line-height: 1.65; color: var(--text-2); margin-bottom: 1.75rem; }
+.artwork-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 320px)); gap: 1rem; }
 .artwork-card { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); aspect-ratio: 1; }
 .artwork-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s var(--ease); }
 .artwork-card:hover img { transform: scale(1.04); }
-.mbti-desc { font-size: 0.84rem; color: var(--text-2); line-height: 1.6; margin-bottom: 1rem; }
-.mbti-card { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
 
 /* ── Contact ────────────────────────────────────────────────────── */
 .section-contact { position: relative; }
@@ -675,14 +621,18 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   .hamburger { display: flex; }
 
   .sh-title { right: 6vw; left: 6vw; align-items: flex-end; }
-  .about-layout     { grid-template-columns: 1fr; }
-  .work-grid        { grid-template-columns: 1fr; }
-  .work-card-featured { grid-column: span 1; }
-  /* once the wide card is one column, its band would be a sliver */
-  .work-card-featured .work-card-shot { aspect-ratio: 16 / 9; }
+  .exp-row { grid-template-columns: 16px 36px minmax(0, 1fr); }
+  .exp-date { grid-column: 3; padding-top: 0; white-space: normal; }
+  .work-card.work-case-split { grid-template-columns: 1fr; }
+  .work-case-split .work-card-shot,
+  .work-case-split .work-card-shot img {
+    width: 100%; height: auto; max-height: none; min-height: 0; aspect-ratio: 16 / 10;
+  }
+  .work-case-split .work-card-shot::after {
+    background: linear-gradient(180deg, transparent 70%, rgba(12, 14, 21, 0.55) 100%);
+  }
   .contact-cards    { grid-template-columns: 1fr 1fr; }
   .form-row         { grid-template-columns: 1fr; }
-  .life-showcase    { grid-template-columns: 1fr; }
   .contact-heading  { font-size: clamp(2rem, 12vw, 3.5rem); }
 }
 @media (max-width: 480px) {

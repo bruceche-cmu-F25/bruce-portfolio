@@ -2,65 +2,69 @@
 import { useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { logoNeedsTile } from '@/lib/bentoData'
 
-const cards = [
-  { logo: null, logoText: undefined, live: false, badge: 'Project', badgeClass: 'badge-project', org: 'Open source', role: 'Robin — Personal Agent', date: 'Aug 2026 – Present', chips: [{ label: 'Tool allow-list', cls: 'blue' }] },
-  { logo: '/images/agai_logo.png', logoText: undefined, logoAlt: 'CMU AGAI Group', live: false, badge: 'Research', badgeClass: 'badge-work', org: 'CMU AGAI Group', role: 'Graduate Researcher', date: 'Sep 2026 – Present', chips: [{ label: 'LLM reliability', cls: 'blue' }] },
-  { logo: '/images/HelportLogo.jpg', logoText: undefined, logoAlt: 'Helport AI', badge: 'Work', badgeClass: 'badge-work', org: 'Helport AI', role: 'AI Product Developer / PM', date: 'Sep 2024 – Jun 2025', chips: [{ label: '35% AHT ↓', cls: 'green' }, { label: '6× cost ↓', cls: 'green' }] },
-  { logo: '/images/convoloo_logo.jpeg', logoText: undefined, logoAlt: 'Convoloo', badge: 'Work', badgeClass: 'badge-work', org: 'Convoloo', role: 'SDE Intern', date: 'Jul 2024 – Sep 2024', chips: [{ label: '2.5s → 1.5s', cls: 'green' }] },
-  { logo: null, logoText: 'UCSD', badge: 'Work', badgeClass: 'badge-work', org: 'UC San Diego · MATH 20D', role: 'Instructional Assistant', date: 'Sep 2023 – Apr 2024', chips: [{ label: '100+ students', cls: 'green' }] },
-  { logo: '/images/CMULogo.jpg', logoText: undefined, logoAlt: 'CMU', badge: 'Project', badgeClass: 'badge-project', org: 'CMU 14-825', role: 'Research Assistant Agent', date: 'Jan 2026 – Mar 2026', chips: [{ label: '30+ papers indexed', cls: 'blue' }] },
-  { logo: null, logoText: undefined, live: true, badge: 'Project', badgeClass: 'badge-project', org: 'Independent', role: 'NightyNight', date: 'Apr 2025 – Present', chips: [{ label: 'LangGraph', cls: 'blue' }, { label: 'ElevenLabs', cls: 'blue' }] },
-  { logo: '/images/ft_logo_pos_0119.png', logoText: undefined, logoAlt: 'Franklin Templeton', badge: 'Project', badgeClass: 'badge-project', org: 'Franklin Templeton', role: 'Capitawise', date: 'Mar – Jun 2024', chips: [{ label: '🏆 $7,000', cls: 'amber' }] },
-  { logo: '/images/ft_logo_pos_0119.png', logoText: undefined, logoAlt: 'Franklin Templeton', badge: 'Project', badgeClass: 'badge-project', org: 'Franklin Templeton', role: 'PawPrints', date: 'Mar – Jun 2023', chips: [{ label: '🥇 $15,000', cls: 'amber' }] },
-  { logo: '/images/bosch_logo.png', logoText: undefined, logoAlt: 'Bosch', badge: 'Project', badgeClass: 'badge-project', org: 'CMU × BOSCH', role: 'Parking Spot Locator', date: 'Aug – Dec 2025', chips: [{ label: '3× faster', cls: 'green' }] },
+const roles = [
+  {
+    logo: '/images/agai_logo.png', logoText: undefined, logoAlt: 'CMU AGAI Group',
+    org: 'CMU AGAI Group', role: 'Graduate Researcher', date: 'Sep 2026 – Present',
+    detail: 'LLM hallucination detection, mitigation, and interpretability.',
+  },
+  {
+    logo: '/images/HelportLogo.jpg', logoText: undefined, logoAlt: 'Helport AI',
+    org: 'Helport AI', role: 'AI Product Developer / PM', date: 'Sep 2024 – Jun 2025',
+    detail: '20ms responses, 6× lower inference cost, 35% shorter handling time.',
+    caseHref: '#work-helport',
+  },
+  {
+    logo: '/images/convoloo_logo.jpeg', logoText: undefined, logoAlt: 'Convoloo',
+    org: 'Convoloo', role: 'SDE Intern', date: 'Jul 2024 – Sep 2024',
+    detail: 'RAG medical chatbot. Response time 2.5s → 1.5s.',
+  },
+  {
+    logo: null, logoText: 'UCSD', logoAlt: 'UC San Diego',
+    org: 'UC San Diego · MATH 20D', role: 'Instructional Assistant', date: 'Sep 2023 – Apr 2024',
+    detail: 'Office hours, review sessions, and grading for 100+ students.',
+  },
 ]
-
-function ExpCard({ card, hidden }: { card: typeof cards[0]; hidden?: boolean }) {
-  return (
-    <article className="exp-card" aria-hidden={hidden ? 'true' : undefined}>
-      <div className="exp-card-head">
-        {card.logo
-          ? <img src={card.logo} alt={hidden ? '' : card.logoAlt} className={`exp-logo${logoNeedsTile(card.logo) ? ' exp-logo-ft logo-tile' : ''}`} />
-          : card.logoText
-            ? <span className="exp-logo exp-logo-text" aria-label={hidden ? undefined : card.logoText}>{card.logoText}</span>
-            : card.live
-              ? <span className="live-badge">● LIVE</span>
-              : null}
-        <span className={`bento-badge ${card.badgeClass}`}>{card.badge}</span>
-      </div>
-      <p className="exp-org">{card.org}</p>
-      <h3 className="exp-role">{card.role}</h3>
-      <p className="exp-date">{card.date}</p>
-      <div className="exp-chips">
-        {card.chips.map((c, i) => <span key={i} className={`metric ${c.cls}`}>{c.label}</span>)}
-      </div>
-    </article>
-  )
-}
 
 export default function Experience() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
-    gsap.fromTo('.section-experience .section-heading',
-      { y: 30, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, duration: 0.7, ease: 'power3.out',
-        scrollTrigger: { trigger: '.section-experience', start: 'top 85%' } })
+    gsap.fromTo('.exp-row',
+      { y: 18, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, duration: 0.55, stagger: 0.08, ease: 'power3.out',
+        scrollTrigger: { trigger: '.exp-list', start: 'top 88%' } })
   }, [])
 
   return (
-    <section id="experience" className="section section-experience" aria-label="Work experience timeline">
-      <div className="exp-cmu-bg" aria-hidden="true" />
+    <section id="experience" className="section section-experience" aria-label="Work experience">
       <div className="container">
         <p className="section-kicker">Timeline</p>
         <h2 className="section-heading">Where I&apos;ve Worked</h2>
-      </div>
-      <div className="exp-marquee-wrap">
-        <div className="exp-marquee-inner" id="expMarquee">
-          {cards.map((c, i) => <ExpCard key={i} card={c} />)}
-          {cards.map((c, i) => <ExpCard key={`dup-${i}`} card={c} hidden />)}
-        </div>
+        <ol className="exp-list">
+          {roles.map(role => (
+            <li key={role.org} className="exp-row">
+              <span className="exp-mark" aria-hidden="true" />
+              {role.logo
+                ? <img src={role.logo} alt={role.logoAlt} className="exp-logo" />
+                : <span className="exp-logo exp-logo-text" aria-label={role.logoAlt}>{role.logoText}</span>}
+              <div className="exp-main">
+                <h3 className="exp-role">{role.role}</h3>
+                <p className="exp-org">{role.org}</p>
+                <p className="exp-detail">
+                  {role.detail}
+                  {role.caseHref && (
+                    <>
+                      {' '}
+                      <a href={role.caseHref} className="exp-case">Case study →</a>
+                    </>
+                  )}
+                </p>
+              </div>
+              <p className="exp-date">{role.date}</p>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   )

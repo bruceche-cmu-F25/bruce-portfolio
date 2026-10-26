@@ -99,142 +99,31 @@ function WorkOverlay({ open, entry, onClose }: { open: boolean; entry: BentoEntr
   )
 }
 
-const CARDS = [
+/** Two case studies, then one supporting project. Everything else is a single line. */
+const CASES = [
   {
-    key: 'robin', featured: true,
-    badgeClass: 'badge-project', badgeLabel: 'Project',
-    logo: null, live: false,
-    org: 'Open source · fork of agegr/pi-web', title: 'Robin — Personal Agent Workspace', date: 'Aug 2026 – Present',
+    key: 'robin',
+    layout: 'split',
     desc: 'A personal assistant built on the pi coding agent\'s web UI — same agent, but registered with a fixed tool allow-list instead of a shell. Todos and calendar, read-only Gmail triage, a scored job hunt with Telegram digests, and a coding coach that hints instead of answering.',
-    metrics: [
-      { label: '80 commits over upstream', color: 'blue' }, { label: 'Allow-list, no shell', color: 'blue' },
-      { label: 'Telegram bridge', color: 'blue' },
-    ],
-    tags: ['TypeScript', 'Next.js', 'pi-agent', 'Google APIs', 'Telegram', 'Bun'],
-    demo: undefined,
-    repo: 'https://github.com/bruceche-cmu-F25/pi-web-robin',
-    shot: { src: '/shots/robin-dashboard.webp', alt: 'The Robin dashboard: assistant box, agenda, todos and the job hunt on one page' },
   },
   {
-    key: 'agai', featured: false,
-    badgeClass: 'badge-work', badgeLabel: 'Research',
-    logo: '/images/agai_logo.png', live: false,
-    org: 'CMU AGAI Group', title: 'Graduate Researcher', date: 'Sep 2026 – Present',
-    desc: 'Research in the CMU AGAI (Applied Generative AI) group under Dr. Mohamed Farag on LLM hallucination detection, mitigation and interpretability — improving the reliability of Generative AI systems.',
-    metrics: [
-      { label: 'Hallucination detection', color: 'blue' }, { label: 'Interpretability', color: 'blue' },
-    ],
-    tags: ['LLM Evaluation', 'Hallucination Detection', 'Interpretability', 'Generative AI'],
-    demo: undefined,
-    repo: undefined,
-    shot: undefined,
-  },
-  {
-    key: 'helport', featured: true,
-    badgeClass: 'badge-work', badgeLabel: 'Work',
-    logo: '/images/HelportLogo.jpg', live: false,
-    org: 'Helport AI', title: 'AI Product Developer / PM', date: 'Sep 2024 – Jun 2025',
+    key: 'helport',
+    layout: 'metrics',
     desc: 'Backend systems for an AI call assistant across mortgage, healthcare, insurance and government — 20ms response latency. Rebuilt intent matching on Gemini 2.0 + Vertex AI, cutting inference cost 6× ($0.002 → $0.00031 per match).',
-    metrics: [
-      { label: '35% AHT ↓', color: 'green' }, { label: '6× cost reduction', color: 'green' },
-      { label: '14d → 5d cycle', color: 'green' }, { label: '15% conversion ↑', color: 'green' },
-    ],
-    tags: ['Python', 'FastAPI', 'Gemini 2.0', 'Vertex AI', 'Docker', 'CI/CD'],
-    demo: undefined,
-    repo: undefined,
-    shot: undefined,
   },
   {
-    key: 'nighty', featured: false,
-    badgeClass: 'badge-project', badgeLabel: 'Project',
-    logo: null, live: true,
-    org: 'Independent', title: 'NightyNight', date: 'Apr 2025 – Present',
-    desc: 'Full-stack AI bedtime science story generator with LangGraph multi-agent pipeline and ElevenLabs TTS.',
-    metrics: [
-      { label: 'LangGraph multi-agent', color: 'blue' }, { label: '7 narrator voices', color: 'blue' },
-    ],
-    tags: ['LangGraph', 'FastAPI', 'React/TS', 'ElevenLabs', 'SSE'],
-    demo: 'https://nightynight-1.onrender.com/',
-    repo: undefined,
-    shot: { src: '/shots/nightynight.webp', alt: 'The NightyNight landing page: a planet limb under a starfield' },
-  },
-  {
-    key: 'convoloo', featured: false,
-    badgeClass: 'badge-work', badgeLabel: 'Work',
-    logo: '/images/convoloo_logo.jpeg', live: false,
-    org: 'Convoloo', title: 'SDE Intern', date: 'Jul – Sep 2024',
-    desc: 'AI medical chatbot on FastAPI + LangChain identifying 50+ common diseases, with RAG retrieval cutting response time from 2.5s to 1.5s.',
-    metrics: [
-      { label: '2.5s → 1.5s', color: 'green' }, { label: '50+ diseases', color: 'green' },
-    ],
-    tags: ['LangChain', 'LangGraph', 'FastAPI', 'NestJS', 'Terraform', 'GCP'],
-    demo: undefined,
-    repo: undefined,
-    shot: undefined,
-  },
-  {
-    key: 'ucsdia', featured: false,
-    badgeClass: 'badge-work', badgeLabel: 'Work',
-    logo: null, live: false,
-    org: 'UC San Diego · Mathematics', title: 'Instructional Assistant', date: 'Sep 2023 – Apr 2024',
-    desc: 'Instructional assistant for MATH 20D (differential equations) — office hours, review sessions and grading for 100+ students.',
-    metrics: [{ label: '100+ students', color: 'green' }],
-    tags: ['MATH 20D', 'Differential Equations', 'Office Hours', 'Review Sessions', 'Grading'],
-    demo: undefined,
-    repo: undefined,
-    shot: undefined,
-  },
-  {
-    key: 'research', featured: false,
-    badgeClass: 'badge-project', badgeLabel: 'Project',
-    logo: '/images/CMULogo.jpg', live: false,
-    org: 'CMU 14-825', title: 'Research Assistant Agent', date: 'Jan – Mar 2026',
-    desc: 'LangGraph agentic pipeline with RAG over 30+ papers, deployed on GKE with auto-scaling.',
-    metrics: [
-      { label: '30+ papers indexed', color: 'blue' }, { label: 'GKE auto-scale', color: 'blue' },
-    ],
-    tags: ['LangGraph', 'RAG', 'Streamlit', 'GKE', 'Milvus'],
-    demo: undefined,
-    repo: undefined,
-    shot: undefined,
-  },
-  {
-    key: 'parking', featured: false,
-    badgeClass: 'badge-project', badgeLabel: 'Project',
-    logo: '/images/CMULogo.jpg', live: false,
-    org: 'CMU × BOSCH', title: 'Parking Spot Locator', date: 'Aug – Dec 2025',
-    desc: 'Bosch-sponsored locator using vision-language models and CLIP embeddings for spatial reasoning over sensor data; 3× faster queries.',
-    metrics: [{ label: '3× faster (45s → 15s)', color: 'green' }],
-    tags: ['Vision-Language', 'CLIP', 'AWS', 'FastAPI', 'Python'],
-    demo: 'https://psl.fogx.link',
-    repo: undefined,
-    shot: undefined,
-  },
-  {
-    key: 'capitawise', featured: false,
-    badgeClass: 'badge-project', badgeLabel: 'Project',
-    logo: '/images/ft_logo_pos_0119.png', live: false,
-    org: 'Franklin Templeton Hackathon', title: 'Capitawise', date: 'Mar – Jun 2024',
-    desc: 'AI banking chatbot on GPT-4o with Node.js and Flask — 40% faster replies, resolution up from 68% to 85%.',
-    metrics: [{ label: '🏆 2nd Place · $7,000', color: 'amber' }],
-    tags: ['GPT-4o', 'React', 'Node.js', 'Flask', 'OpenAI API'],
-    demo: undefined,
-    repo: undefined,
-    shot: undefined,
-  },
-  {
-    key: 'pawprints', featured: false,
-    badgeClass: 'badge-project', badgeLabel: 'Project',
-    logo: '/images/ft_logo_pos_0119.png', live: false,
-    org: 'Franklin Templeton Hackathon', title: 'PawPrints', date: 'Mar – Jun 2023',
-    desc: 'Web3 pet adoption platform. Led team of 4 as product owner and primary full-stack dev.',
-    metrics: [{ label: '🥇 1st Place · $15,000', color: 'amber' }],
-    tags: ['Web3', 'Express.js', 'React.js', 'MySQL', 'Blockchain'],
-    demo: undefined,
-    repo: undefined,
-    shot: undefined,
+    key: 'parking',
+    layout: 'slim',
+    desc: 'Bosch-sponsored locator using vision-language models and CLIP embeddings for spatial reasoning over sensor data.',
   },
 ] as const
+
+const ALSO: { key: keyof typeof bentoDetails; hint: string }[] = [
+  { key: 'nighty', hint: 'Live' },
+  { key: 'research', hint: '30+ papers' },
+  { key: 'capitawise', hint: '2nd · $7,000' },
+  { key: 'pawprints', hint: '1st · $15,000' },
+]
 
 export default function Work() {
   const [activeKey, setActiveKey] = useState<string | null>(null)
@@ -243,57 +132,76 @@ export default function Work() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
     gsap.fromTo('.work-card',
-      { y: 50, scale: 0.94, autoAlpha: 0 },
-      { y: 0, scale: 1, autoAlpha: 1, duration: 0.7, stagger: 0.08, ease: 'back.out(1.3)',
-        scrollTrigger: { trigger: '.work-grid', start: 'top 88%' } })
+      { y: 28, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, duration: 0.6, stagger: 0.1, ease: 'power3.out',
+        scrollTrigger: { trigger: '.work-cases', start: 'top 88%' } })
   }, [])
 
+  function open(key: string) { setActiveKey(key) }
+
   return (
-    <section id="work" className="section" aria-label="Work experience and projects">
+    <section id="work" className="section" aria-label="Selected work">
       <div className="container">
-        <p className="section-kicker">Work &amp; Projects</p>
+        <p className="section-kicker">Selected work</p>
         <h2 className="section-heading">What I&apos;ve Built</h2>
-        <div className="work-grid">
-          {CARDS.map(card => (
-            <article
-              key={card.key}
-              className={`work-card${card.featured ? ' work-card-featured' : ''}`}
-              role="button" tabIndex={0}
-              aria-label={`${card.title} — click to expand`}
-              onClick={() => setActiveKey(card.key)}
-              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveKey(card.key) } }}
-            >
-              {card.shot && (
-                <figure className="work-card-shot">
-                  <img src={card.shot.src} alt={card.shot.alt} loading="lazy" />
-                </figure>
-              )}
-              <div className="work-card-head">
-                {card.logo
-                  ? <img src={card.logo} alt={card.org} className={`work-card-logo${logoNeedsTile(card.logo) ? ' logo-tile' : ''}`} />
-                  : <span />}
-                <div className="work-card-badges">
-                  <span className={`bento-badge ${card.badgeClass}`}>{card.badgeLabel}</span>
-                  {card.live && <span className="live-badge">● LIVE</span>}
+        <div className="work-cases">
+          {CASES.map(card => {
+            const entry = bentoDetails[card.key]
+            const shot = entry.shots?.[0]
+            const link = entry.demo || entry.repo
+            return (
+              <article
+                key={card.key}
+                id={`work-${card.key}`}
+                className={`work-card work-case work-case-${card.layout}`}
+                role="button" tabIndex={0}
+                aria-label={`${entry.title} — click to expand`}
+                onClick={() => open(card.key)}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(card.key) } }}
+              >
+                {card.layout === 'split' && shot && (
+                  <figure className="work-card-shot">
+                    <img src={shot.src} alt={shot.alt} />
+                  </figure>
+                )}
+                <div className="work-case-copy">
+                  <div className="work-card-head">
+                    {entry.logo
+                      ? <img src={entry.logo} alt={entry.org} className={`work-card-logo${logoNeedsTile(entry.logo) ? ' logo-tile' : ''}`} />
+                      : <span />}
+                    <div className="work-card-badges">
+                      <span className={`bento-badge ${entry.badge}`}>{entry.type}</span>
+                      {entry.live && <span className="live-badge">● LIVE</span>}
+                    </div>
+                  </div>
+                  <p className="work-card-org">{entry.org}</p>
+                  <h3 className="work-card-title">{entry.title}</h3>
+                  <p className="work-card-date">{entry.date}</p>
+                  {entry.note && <p className="work-card-note">{entry.note}</p>}
+                  <p className="work-card-desc">{card.desc}</p>
+                  <div className="work-card-metrics">
+                    {entry.metrics.map(m => (
+                      <span key={m.label} className={`metric ${m.color}`}>{m.label}</span>
+                    ))}
+                  </div>
+                  {link && (
+                    <a href={link} target="_blank" rel="noopener" className="work-card-demo"
+                       onClick={e => e.stopPropagation()}>
+                      {entry.demo ? 'Demo ↗' : 'Source ↗'}
+                    </a>
+                  )}
                 </div>
-              </div>
-              <p className="work-card-org">{card.org}</p>
-              <h3 className="work-card-title">{card.title}</h3>
-              <p className="work-card-date">{card.date}</p>
-              {bentoDetails[card.key]?.note && <p className="work-card-note">{bentoDetails[card.key].note}</p>}
-              {card.desc && <p className="work-card-desc">{card.desc}</p>}
-              <div className="work-card-metrics">
-                {card.metrics.map((m, i) => (
-                  <span key={i} className={`metric ${m.color}`}>{m.label}</span>
-                ))}
-              </div>
-              {(card.demo || card.repo) && (
-                <a href={card.demo ?? card.repo} target="_blank" rel="noopener" className="work-card-demo"
-                   onClick={e => e.stopPropagation()}>
-                  {card.demo ? 'Demo ↗' : 'Source ↗'}
-                </a>
-              )}
-            </article>
+              </article>
+            )
+          })}
+        </div>
+        <div className="work-also">
+          <span className="work-also-label">Also</span>
+          {ALSO.map(item => (
+            <button key={item.key} type="button" className="work-also-item" onClick={() => open(item.key)}>
+              {bentoDetails[item.key].title}
+              <span className="work-also-hint">{item.hint}</span>
+            </button>
           ))}
         </div>
       </div>

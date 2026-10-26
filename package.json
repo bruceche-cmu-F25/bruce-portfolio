@@ -9,12 +9,14 @@
     "wedding:compress": "node scripts/compress-wedding-photos.mjs"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.1",
+    "gsap": "^3.12.7",
+    "lenis": "^1.1.14",
     "next": "14.2.15",
+    "page-flip": "^2.0.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "gsap": "^3.12.7",
-    "@gsap/react": "^2.1.1",
-    "lenis": "^1.1.14",
+    "roughjs": "^4.6.6",
     "three": "^0.167.1",
     "vanta": "^0.5.24"
   },

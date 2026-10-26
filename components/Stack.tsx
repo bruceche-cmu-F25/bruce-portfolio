@@ -3,11 +3,13 @@ import { useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
+/** Only tools that show up in the work above. */
 const rows = [
-  { label: 'Languages & Backend', pills: ['Python','Java','C/C++','JavaScript','TypeScript','Go','FastAPI','Flask','Node.js','Express.js','MySQL','MongoDB'] },
-  { label: 'Cloud & DevOps',      pills: ['AWS','GCP','Docker','Kubernetes','Terraform','CI/CD','GKE'] },
-  { label: 'AI / ML',             pills: ['LangGraph','LangChain','RAG','LLM APIs','OpenAI API','Vertex AI','PyTorch','TensorFlow','Hugging Face','vLLM','Milvus'] },
-  { label: 'Frontend & Tools',    pills: ['React','Next.js','Streamlit','Figma','Git','Agile/Scrum'] },
+  { label: 'Languages', pills: ['Python', 'TypeScript', 'JavaScript'] },
+  { label: 'Backend',   pills: ['FastAPI', 'Flask', 'Node.js', 'Express.js', 'NestJS', 'MySQL'] },
+  { label: 'Cloud',     pills: ['AWS', 'GCP', 'Docker', 'GKE', 'Terraform'] },
+  { label: 'AI',        pills: ['LangGraph', 'LangChain', 'RAG', 'Vertex AI', 'OpenAI API', 'Milvus'] },
+  { label: 'Frontend',  pills: ['React', 'Next.js', 'Streamlit'] },
 ]
 
 export default function Stack() {
