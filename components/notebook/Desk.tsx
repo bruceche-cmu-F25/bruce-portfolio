@@ -59,6 +59,27 @@ function Box({ seed }: { seed: number }) {
   )
 }
 
+/** The desk lamp, drawn small for its switch beside the page-turn buttons. At
+ *  night its light comes on (.nb-lamp-glow). */
+export function Lamp() {
+  const line = (seed: number) => ({ seed, stroke: 'currentColor', strokeWidth: 1.7, roughness: 0.5 })
+  return (
+    <svg viewBox="0 0 28 28" aria-hidden="true">
+      <defs>
+        <linearGradient id="nb-lamp-light" x1="20" y1="12" x2="24" y2="27" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#f7c83a" stopOpacity="0.9" />
+          <stop offset="1" stopColor="#f7c83a" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <path className="nb-lamp-glow" d="M17.6 14.2L23.6 9.8L30 26L17 28Z" fill="url(#nb-lamp-light)" />
+      <Drawn shape={gen.line(4, 25.5, 16, 25.5, line(141))} />
+      <Drawn shape={gen.line(10, 25, 6.5, 15, line(142))} />
+      <Drawn shape={gen.line(6.5, 15, 13.6, 7.4, line(143))} />
+      <Drawn shape={gen.polygon([[13, 6.6], [16.4, 3.6], [23.6, 9.8], [17.6, 14.2]], line(144))} />
+    </svg>
+  )
+}
+
 const TODO = ['job search', 'research', 'build AI product']
 
 export function DeskProps() {

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import Notebook from '@/components/notebook/Notebook'
 import { SITE } from '@/lib/siteConfig'
+import { LIGHTS_BOOT } from '@/lib/lights'
 import './notebook.css'
 
 /** Excalidraw's hand. OFL-1.1 — the licence ships beside the font file. */
@@ -61,6 +62,8 @@ const PERSON = {
 export default function Page() {
   return (
     <div className={`${virgil.variable} ${typewriter.variable}`}>
+      {/* lights off before the first paint, if it's night for this visitor */}
+      <script dangerouslySetInnerHTML={{ __html: LIGHTS_BOOT }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(PERSON) }} />
       {/* WeChat ignores og:image when a link is pasted into a chat and takes the
           first large image in the page instead — so the preview comes first. */}

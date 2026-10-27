@@ -52,11 +52,12 @@ function Out({ href, children, download }: { href: string; children: ReactNode; 
 
 /* ── Covers ───────────────────────────────────────────────────────── */
 
-/** Where each sticker sits on the front cover, laptop-lid style: % of the cover, size in units, tilt. */
-const ON_THE_COVER: { x: string; y: string; w: number; r: number; art: ReactNode }[] = [
+/** Where each sticker sits on the front cover, laptop-lid style: % of the cover, size in units, tilt.
+ *  The bat-signal is also a light switch: a tap puts the lights out (Notebook). */
+const ON_THE_COVER: { x: string; y: string; w: number; r: number; art: ReactNode; lights?: true }[] = [
   // the cover's first arrangement, with today's stickers in its places
   { x: '6%',  y: '6%',  w: 128, r: -12, art: <Decal kind="blackhole" label="A black hole" /> },
-  { x: '69%', y: '8%',  w: 140, r: 11,  art: <Decal kind="bat" label="The bat-signal" /> },
+  { x: '69%', y: '8%',  w: 140, r: 11,  art: <Decal kind="bat" label="The bat-signal" />, lights: true },
   { x: '8%',  y: '46%', w: 132, r: -9,  art: <Decal kind="docker" label="The Docker logo" /> },
   { x: '26%', y: '61%', w: 108, r: 7,   art: <Decal kind="neural" label="A small neural network" /> },
   { x: '57%', y: '49%', w: 116, r: 6,   art: <Decal kind="pi" label="The Pi logo" /> },
@@ -75,7 +76,7 @@ function FrontCover() {
           <p className="nb-label-small">MS Software Engineering · Carnegie Mellon</p>
         </div>
         {ON_THE_COVER.map((s, i) => (
-          <span key={i} className="nb-on-cover"
+          <span key={i} className="nb-on-cover" data-lights={s.lights ? '' : undefined}
                 style={{ ['--x' as string]: s.x, ['--y' as string]: s.y, ['--w' as string]: s.w, ['--r' as string]: `${s.r}deg` }}>
             {s.art}
           </span>

@@ -21,10 +21,12 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import type { PageFlip as PageFlipT, Point } from 'page-flip'
 import { SPREADS } from '@/lib/notebook'
+import { NIGHT_KEY } from '@/lib/lights'
 import { Pages } from './Pages'
 import { Hand, HAND_TIP } from './Hand'
 import { Lightbox, type Lifted } from './Lightbox'
-import { DeskProps } from './Desk'
+import { DeskProps, Lamp } from './Desk'
+import { LampDust } from './Dust'
 import { CardDefs, cardTitle } from './Cards'
 
 /** Where a visitor's collected cards are kept, in their own browser. */
@@ -593,6 +595,13 @@ export default function Notebook() {
     const cancelIntro = () => clearTimeout(introTimer)
     const onClick = (e: MouseEvent) => {
       const target = e.target as Element
+      // the lamp's switch, or the bat-signal on the cover
+      if (target.closest('[data-lights]')) {
+        e.preventDefault()
+        cancelIntro()
+        switchLights()
+        return
+      }
       const lift = target.closest<HTMLElement>('[data-zoom]')
       if (lift) {
         cancelIntro()
@@ -675,6 +684,27 @@ export default function Notebook() {
     const still = new URLSearchParams(location.search).has('still')
     root.toggleAttribute('data-still', still)
 
+    /* ── the lamp: lights off for the night ── */
+
+    const darkOS = matchMedia('(prefers-color-scheme: dark)')
+    const chosen = () => { try { return localStorage.getItem(NIGHT_KEY) } catch { return null } }
+    const lampSwitch = root.querySelector<HTMLElement>('.nb-lamp-switch')!
+    const lights = (off: boolean) => {
+      document.documentElement.toggleAttribute('data-night', off)
+      lampSwitch.setAttribute('aria-pressed', String(off))
+      lampSwitch.title = off ? 'lights on' : 'lights off'
+    }
+    function switchLights() {
+      const off = !document.documentElement.hasAttribute('data-night')
+      lights(off)
+      try { localStorage.setItem(NIGHT_KEY, off ? 'on' : 'off') } catch { /* not remembered, then */ }
+    }
+    // as the page's boot script left it — worked out again, in case the page came without it
+    lights(!still && (chosen() === 'on' || (chosen() === null && darkOS.matches)))
+    // until the visitor has chosen, night falls when their system's does
+    const onDarkOS = (e: MediaQueryListEvent) => { if (!still && chosen() === null) lights(e.matches) }
+    darkOS.addEventListener('change', onDarkOS)
+
     build(startPage).then(() => {
       if (disposed || startPage !== 0 || still) return
       introTimer = window.setTimeout(handTurn, INTRO_DELAY)
@@ -723,6 +753,7 @@ export default function Notebook() {
       window.removeEventListener('touchend', onDrop, true)
       root.removeEventListener('click', onClickAfterDrag, true)
       root.removeEventListener('pointermove', onHover)
+      darkOS.removeEventListener('change', onDarkOS)
       gsap.killTweensOf(mount)
       teardown()
     }
@@ -743,9 +774,16 @@ export default function Notebook() {
         <span className="nb-nav-count" aria-live="polite" />
         <button type="button" data-dir="next">next</button>
       </nav>
+      <button type="button" className="nb-lamp-switch" data-lights aria-label="Night mode" aria-pressed="false" title="lights off">
+        <Lamp />
+      </button>
       <p className="nb-toast" role="status" aria-live="polite" />
       <div className="nb-source" ref={sourceRef} hidden>{pages}</div>
       <Hand ref={handRef} />
+      {/* at night: the lamp's light over everything, its beam in the air, and the dust in that */}
+      <div className="nb-lamp" aria-hidden="true" />
+      <div className="nb-beam" aria-hidden="true" />
+      <LampDust />
       {lifted && (
         <Lightbox lifted={lifted} onClose={() => setLifted(null)} />
       )}
