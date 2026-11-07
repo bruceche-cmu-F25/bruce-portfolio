@@ -231,19 +231,14 @@
 }
 
 /* Bruce's photograph as he dithered it, used as it came — the only thing that
-   changes with the hour is a colour filter over it. content-box keeps the
-   frame's padding off the 96. */
+   changes with the hour is a colour filter over it. */
 .who-pic {
   position: relative;
   isolation: isolate;
   display: block;
-  box-sizing: content-box;
   width: 96px;
   height: 96px;
   flex: none;
-  padding: 4px;
-  background: rgb(var(--accent-rgb) / 0.18);
-  border: 1px solid var(--rule);
 }
 .who-pic img {
   display: block;
@@ -254,7 +249,7 @@
 }
 .who-tint {
   position: absolute;
-  inset: 4px;
+  inset: 0;
   background: var(--accent);
   mix-blend-mode: color;
   opacity: 0.32;
@@ -265,19 +260,6 @@
    no tint over it */
 :root[data-hour='day'] .who-pic img { filter: none; }
 :root[data-hour='day'] .who-tint { opacity: 0; }
-
-/* corner brackets, in the hour's colour */
-.who-pic::before, .who-pic::after {
-  content: '';
-  position: absolute;
-  width: 11px; height: 11px;
-  border: 1px solid var(--accent);
-  transition: inset 0.25s ease;
-}
-.who-pic::before { inset: -1px auto auto -1px; border-width: 1px 0 0 1px; }
-.who-pic::after  { inset: auto -1px -1px auto; border-width: 0 1px 1px 0; }
-.who-pic:hover::before { inset: -4px auto auto -4px; }
-.who-pic:hover::after  { inset: auto -4px -4px auto; }
 
 .who-name { min-width: 0; }
 .who-name h1 { font: 600 19px/1.2 var(--sans); letter-spacing: -0.01em; }
