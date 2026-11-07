@@ -356,7 +356,7 @@ function About() {
           <span className="nb-seal" style={{ ['--seal-tilt' as string]: '-6deg' }}>
             <img src="/images/ucsd-seal.webp" alt="Seal of the University of California, San Diego" />
           </span>
-          <p className="nb-school">UC San Diego<span>BS Mathematics–Computer Science · GPA 3.6 · Mar 2025</span></p>
+          <p className="nb-school">UC San Diego<span>BS Mathematics–Computer Science · GPA 3.6 · Apr 2025</span></p>
         </li>
       </ul>
       <div className="nb-about-foot">
@@ -373,11 +373,11 @@ function About() {
 
 /** Each role, with its organisation's logo; Helport's is a wordmark, so it's laid out wide. */
 const ROLES: { org: string; role: string; date: string; logo: string; wide?: true; detail: string; page?: string }[] = [
-  { org: 'CMU AGAI Group', role: 'Graduate Researcher', date: 'Sep 2026 – Present', logo: '/logos/agai.webp',
+  { org: 'CMU AGAI Group', role: 'Graduate Researcher', date: 'Aug 2026 – Present', logo: '/logos/agai.webp',
     detail: 'Identified and resolved flaws in LLM hallucination-detection experiments, improving detection precision by 6 percentage points through systematic evaluation and debugging.' },
   { org: 'Helport AI', role: 'AI Product Developer / PM', date: 'Sep 2024 – Jun 2025', logo: '/logos/helport.webp', wide: true,
     detail: '6× lower inference cost, 35% shorter handling time.', page: 'helport' },
-  { org: 'Convoloo', role: 'Software Engineer Intern', date: 'Jul 2024 – Sep 2024', logo: '/logos/convoloo.webp',
+  { org: 'Convoloo', role: 'Software Development Engineer Intern', date: 'Jul 2024 – Sep 2024', logo: '/logos/convoloo.webp',
     detail: 'RAG medical chatbot. Response time 2.5s → 1.5s.' },
   { org: 'UC San Diego · MATH 20D', role: 'Instructional Assistant', date: 'Sep 2023 – Apr 2024', logo: '/images/ucsd-seal.webp',
     detail: 'Office hours, review sessions, and grading.' },

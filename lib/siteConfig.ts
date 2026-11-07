@@ -10,5 +10,5 @@ export const SITE = {
   githubHandle: 'bruceche-cmu-F25',
   linkedin: 'https://www.linkedin.com/in/chi-cheng921/',
   linkedinHandle: 'chi-cheng921',
-  resume: '/Chi_Cheng_Oct_2026_CV.pdf',
+  resume: '/Resume_Chi_Bruce_Cheng_Software_Engineer_2026-11.pdf',
 } as const

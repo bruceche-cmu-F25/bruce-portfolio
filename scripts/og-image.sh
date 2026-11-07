@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Re-shoots the share preview (public/og.jpg): the closed notebook on the desk,
-# exactly as the built site draws it. Run after changing the cover or the desk.
+# Re-shoots the share preview (public/og.jpg): the homepage as the site draws it —
+# the painted scene over the name. Run after changing the scene or the opening.
 #
 #   npm run build && bash scripts/og-image.sh
 #
@@ -21,7 +21,7 @@ SERVER=$!
 disown "$SERVER"   # no "Terminated" notice when the trap stops it
 for _ in $(seq 20); do curl -sf "http://127.0.0.1:$PORT/" >/dev/null && break; sleep 0.25; done
 
-# ?still keeps the book shut (no hand) and skips every transition
+# ?still freezes the scene on one frame and skips every transition
 "$CHROME" --headless=new --disable-gpu --hide-scrollbars --no-first-run \
   --user-data-dir="$WORK/profile" --force-device-scale-factor=2 \
   --window-size=1200,717 --virtual-time-budget=8000 \

@@ -1,0 +1,11 @@
+.art { overflow: visible; shape-rendering: crispEdges; }
+.shadow { fill: color-mix(in srgb, var(--bg) 84%, var(--accent)); }
+.outline { fill: color-mix(in srgb, var(--bg) 62%, var(--ink)); }
+.side { fill: color-mix(in srgb, var(--bg) 70%, var(--accent)); }
+.surface { fill: color-mix(in srgb, var(--bg) 66%, var(--ink)); }
+.paper { fill: color-mix(in srgb, var(--bg) 30%, var(--ink)); }
+.muted { fill: color-mix(in srgb, var(--bg) 30%, var(--mute)); }
+.accent { fill: var(--accent); }
+.accentDark { fill: color-mix(in srgb, var(--bg) 48%, var(--accent)); }
+.accentLight { fill: color-mix(in srgb, var(--ink) 42%, var(--accent)); }
+.warm { fill: var(--amber); }

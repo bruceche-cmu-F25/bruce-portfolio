@@ -1,0 +1,279 @@
+{
+  "watcher": {
+    "comment": "The figure on the crest, in profile facing the city. `d` is the cape, `o` the rim the city puts on his edges.",
+    "rows": [
+      "........KK........",
+      "........KK........",
+      ".......KKKK.......",
+      "....KKKKKKK.......",
+      "...KKKKKKKK.......",
+      "...KKKKKKKK.......",
+      "....KKKKKKK.......",
+      ".....KKKKKK.......",
+      "....KKKKKKKKd.....",
+      "....KKKKKKKKdd....",
+      "....KKKKKKKKddd...",
+      "....KKKKKKKddddd..",
+      "....KKKKKKKddddd..",
+      "....KKKKKKKdddddd.",
+      "....KKKKKKKdddddd.",
+      "....KKKKKKKddddddd",
+      "....KKKKKKKddddddd",
+      "....KKKKKKdddddddd",
+      "....KKKKKKdddddddd",
+      "....KKKKKKddddddd.",
+      "....KKK.KKddddddd.",
+      "....KKK.KKdddddd..",
+      "....KKK.KKdddddd..",
+      "....KKK.KK.dddd...",
+      "....KKK.KK.ddd....",
+      "....KKK.KK..d.....",
+      "....KKK.KK........",
+      "....KKK.KK........",
+      "...KKKK.KKK.......",
+      "...KKKK.KKK......."
+    ]
+  },
+  "batmobile": {
+    "comment": "Parked on the crest, facing the city. `c` is canopy glass, `w` a headlight or a glint, `r` the tail light.",
+    "rows": [
+      "................................................................",
+      ".................................................KKK............",
+      "................................................KKKKK...........",
+      "................................................KKKKK...........",
+      "...............................................KKKKKKK..........",
+      "............................ccccccccccc........KKKKKKK..........",
+      "..........................ccwwwcccccccccc.....KKKKKKKKK.........",
+      ".........................ccccccccccccccccc...KKKKKKKKKKK........",
+      "........................ccccccccccccccccccc.KKKKKKKKKKKKK.......",
+      "..........KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK...",
+      "...KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK.",
+      "wwKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKr",
+      "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK.",
+      "..KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK..",
+      "..........KKKKKKKKKKKK.................KKKKKKKKKKKKKKK..........",
+      "..........KKKKKKKKKKKK.................KKKKKKKKKKKKKKK..........",
+      "...........KKKKKKKKKK...................KKKKKKKKKKKKK...........",
+      "............KKKKKKKK.....................KKKKKKKKKKK............"
+    ]
+  },
+  "bat": {
+    "rows": [
+      "K..............K",
+      "KK....KKKK....KK",
+      "KKK..KKKKKK..KKK",
+      ".KKKKKKKKKKKKKK.",
+      "..KKKwKKKKwKKK..",
+      "...KKKKKKKKKK...",
+      "....KK.KK.KK...."
+    ],
+    "palette": {
+      "K": "#2a2f47",
+      "w": "#6f779b"
+    }
+  },
+  "ui": {
+    "mail": [
+      "KKKKKKK",
+      "K.....K",
+      "KK...KK",
+      "K.K.K.K",
+      "K..K..K",
+      "K.....K",
+      "KKKKKKK"
+    ],
+    "down": [
+      "...K...",
+      "...K...",
+      "...K...",
+      ".KKKKK.",
+      "..KKK..",
+      "...K...",
+      "KKKKKKK"
+    ],
+    "out": [
+      "..KKKKK",
+      "....KKK",
+      "...K.KK",
+      "..K....",
+      ".K.....",
+      "K......",
+      "......."
+    ],
+    "phone": [
+      ".KKKKK.",
+      ".K...K.",
+      ".K...K.",
+      ".K...K.",
+      ".K...K.",
+      ".K.K.K.",
+      ".KKKKK."
+    ],
+    "doc": [
+      "KKKKK..",
+      "K....K.",
+      "K....KK",
+      "K.....K",
+      "K.....K",
+      "K.....K",
+      "KKKKKKK"
+    ],
+    "heart": [
+      ".KK.KK.",
+      "KKKKKKK",
+      "KKKKKKK",
+      ".KKKKK.",
+      "..KKK..",
+      "...K...",
+      "......."
+    ],
+    "heartLine": [
+      ".KK.KK.",
+      "K..K..K",
+      "K.....K",
+      ".K...K.",
+      "..K.K..",
+      "...K...",
+      "......."
+    ]
+  },
+  "cursor": {
+    "comment": "Shapes the cursor blob snaps into, stamped onto the heat grid.",
+    "heart": [
+      ".KK...KK.",
+      "KhKK.KKKK",
+      "KhKKKKKKK",
+      "KKKKKKKKK",
+      ".KKKKKKK.",
+      "..KKKKK..",
+      "...KKK...",
+      "....K...."
+    ],
+    "thumb": [
+      ".....KK.....",
+      "....KKKK....",
+      "....KKKK....",
+      "....KKKK....",
+      "...KKKKKKKK.",
+      "cc.KKKKKKKKK",
+      "cc.KKKKKKKKK",
+      "cc.KKKKKKKKK",
+      "cc.KKKKKKKKK",
+      "cc.KKKKKKKK.",
+      "cc..KKKKKK.."
+    ],
+    "arrow": [
+      "....KKKKKKK",
+      ".......KKKK",
+      "........KKK",
+      ".......KKKK",
+      "......KKK..",
+      ".....KKK...",
+      "....KKK....",
+      "...KKK.....",
+      "..KKK......",
+      ".KKK.......",
+      "KKK........"
+    ],
+    "bat": [
+      ".K....K.K....K.",
+      "KKK..KKKKK..KKK",
+      "KKKKKKKKKKKKKKK",
+      ".KKKKKKKKKKKKK.",
+      "..KKKK.K.KKKK..",
+      "...KK.....KK..."
+    ],
+    "plus": [
+      "..K..",
+      "..K..",
+      "KKKKK",
+      "..K..",
+      "..K.."
+    ],
+    "star": [
+      ".....K.....",
+      ".....K.....",
+      "....KKK....",
+      "....KhK....",
+      "..KKKhKKK..",
+      "KKKhhhhhKKK",
+      "..KKKhKKK..",
+      "....KhK....",
+      "....KKK....",
+      ".....K.....",
+      ".....K....."
+    ],
+    "branch": [
+      "hKKK...hKKK",
+      "K..K...K..K",
+      "K..K...K..K",
+      "KKKK...KKKK",
+      "..K.....K..",
+      "..K.....K..",
+      "..K....K...",
+      "hKKKKKK....",
+      "K..K.......",
+      "K..K.......",
+      "KKKK......."
+    ],
+    "hi": [
+      "K...K.KKK.K",
+      "K...K..K..K",
+      "K...K..K..K",
+      "KKKKK..K..K",
+      "K...K..K..K",
+      "K...K..K...",
+      "K...K.KKK.K"
+    ]
+  },
+  "guests": {
+    "comment": "Pixel guests standing in the page gutters. K body, d shading, e an eye or a lit panel.",
+    "gundam": [
+      ".........KK.........",
+      ".......KKKKKK.......",
+      ".......KeKKeK.......",
+      "........KKKK........",
+      "....KKKKKKKKKKKK....",
+      "...ddKKKKKKKKKKdd...",
+      "...KKKKKKKKKKKKKK...",
+      "....KKKKKeeKKKKK....",
+      ".....KKKKKKKKKK.....",
+      ".....KKKKKKKKKK.....",
+      "...KKK.KKKKKK.KKK...",
+      "...KKK.KKKKKK.KKK...",
+      "...KKK.KKKKKK.KKK...",
+      "...KKK..KKKK..KKK...",
+      "...KKK.KKKKKK.KKK...",
+      ".......KKKKKK.......",
+      "......KKKKKKKK......",
+      "......KKKKKKKK......",
+      "......KKKKKKKK......",
+      ".....KKKKKKKKKK.....",
+      ".....KKKKKKKKKK.....",
+      "....KKKKKKKKKKKK...."
+    ],
+    "ultraman": [
+      "........KK........",
+      ".......KKKK.......",
+      "......KeKKeK......",
+      ".......KKKK.......",
+      "......KKKKKK......",
+      "....KKKKKKKKKK....",
+      "...KKKKKeeKKKKK...",
+      "....KKKKKKKKKK....",
+      "..KKK.KKKKKK.KKK..",
+      ".KKK..KKKKKK..KKK.",
+      "KKK...KKKKKK...KKK",
+      "KKK...KKKKKK...KKK",
+      "......KKKKKK......",
+      "......KKKKKK......",
+      ".....KKKKKKKK.....",
+      ".....KKKKKKKK.....",
+      ".....KKKKKKKK.....",
+      ".....KKKKKKKK.....",
+      "....KKKKKKKKKK....",
+      "....KKKKKKKKKK....",
+      "...KKKKKKKKKKKK..."
+    ]
+  }
+}

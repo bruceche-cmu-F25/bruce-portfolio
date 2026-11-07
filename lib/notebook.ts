@@ -59,7 +59,7 @@ export const ALBUMS: Record<string, Picture[]> = {
     { src: '/photos/bruce.webp', alt: 'Bruce Cheng smiling, in a suit and a UC San Diego graduation stole', caption: 'Hi there! I\'m Bruce (also go by Chi).' },
   ],
   resume: [
-    { src: '/resume/resume-2026-october.webp', alt: 'Chi (Bruce) Cheng — résumé, October 2026', caption: 'October 2026' },
+    { src: '/resume/resume-2026-november.webp', alt: 'Chi (Bruce) Cheng — résumé, November 2026', caption: 'November 2026' },
   ],
 }
 
@@ -193,7 +193,7 @@ export const SPREADS: Spread[] = [
     slug: 'experience', label: 'Where I\'ve Worked',
     note: {
       quote: QUOTES.hamming,
-      card: { album: 'resume', caption: 'The full résumé, October 2026 — click to read it.', tilt: -0.8, tape: 'clip' },
+      card: { album: 'resume', caption: 'The full résumé, November 2026 — click to read it.', tilt: -0.8, tape: 'clip' },
       link: { href: SITE.resume, label: 'download the PDF', download: true },
     },
     main: { kind: 'experience' },
