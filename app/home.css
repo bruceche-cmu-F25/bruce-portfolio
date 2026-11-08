@@ -1118,12 +1118,13 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
   border-radius: 1px;
 }
 
-/* the dither ramp that opens every heading — the page's texture, in type */
-.sec-ramp {
-  font: 400 11px/1 var(--mono);
-  letter-spacing: -0.04em;
+.sec-mark {
+  display: block;
+  flex-shrink: 0;
+  align-self: center;
+  width: 18px;
+  height: 14px;
   color: var(--accent);
-  opacity: 0.75;
 }
 
 /* ── reveal ────────────────────────────────────────────────────── */

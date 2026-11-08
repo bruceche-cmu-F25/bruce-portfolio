@@ -95,7 +95,10 @@ function Section({ id, title, children, aside }: { id: string; title: string; as
   return (
     <section className="sec" id={id} data-reveal>
       <h2 className="sec-head">
-        <span className="sec-ramp" aria-hidden>░▒▓</span>
+        <svg className="sec-mark" viewBox="0 0 9 7" width="18" height="14" fill="currentColor" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
+          <path d="M4 0h1v2h1v1h2v1H6v1H5v2H4V5H3V4H1V3h2V2h1Z" opacity="0.5" />
+          <path d="M4 2h1v1h1v1H5v1H4V4H3V3h1Z" opacity="0.9" />
+        </svg>
         <a href={`#${id}`}>{title}</a>
         {aside && <span className="sec-aside">{aside}</span>}
       </h2>
