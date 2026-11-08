@@ -17,8 +17,10 @@
  *
  *  A click throws out embers — cells that fly, fall and cool from white-hot
  *  through the bands — behind a flash and a shockwave; holding still on a
- *  click charges a bigger burst. The black-hole passage hides the cursor and
- *  pauses every effect here. Skipped on touch and under reduced motion.
+ *  click charges a bigger burst, which also throws the page into neon — the
+ *  accent and the ramp stepping round the colour wheel (home.css, `neon`) —
+ *  and the next one brings it back. The black-hole passage hides the cursor
+ *  and pauses every effect here. Skipped on touch and under reduced motion.
  */
 
 import { useEffect, useState } from 'react'
@@ -152,6 +154,20 @@ export default function Trail() {
     let heatColors = readHeat()
     const buildRamp = () => [...heatColors.map(colorString), colorString(mixColor(heatColors[3], [255, 255, 255], 0.55))]
     let ramp = buildRamp()
+    /** Re-read the ramp, but only rebuild it when the page's colours have
+     *  actually moved — under neon they step ten times a second, not sixty.
+     *  Returns whether anything changed. */
+    let heatKey = ''
+    const refreshRamp = () => {
+      const styles = getComputedStyle(page)
+      const values = [1, 2, 3, 4].map(i => styles.getPropertyValue(`--heat-${i}`))
+      const key = values.join()
+      if (key === heatKey) return false
+      heatKey = key
+      heatColors = values.map(readColor) as RGB[]
+      ramp = buildRamp()
+      return true
+    }
     const HOT = 4
 
     let themeEndsAt = 0
@@ -764,6 +780,8 @@ export default function Trail() {
         waves.push({ x: press.x, y: press.y, startedAt: now, kind: 'burst', reach })
         waves = waves.slice(-4)
         explode(press.x, press.y, 1.5)
+        // the held burst throws the page into neon; the next one brings it back
+        document.documentElement.toggleAttribute('data-neon')
       }
 
       const ease = 1 - Math.exp(-Math.min(elapsed, 64) / SHAPE_EASE_MS)
@@ -777,9 +795,10 @@ export default function Trail() {
       pointer.readingMix += ((pointer.reading ? 1 : 0) - pointer.readingMix) * ease
       pointer.chargeMix += ((press && !press.fired ? 1 : 0) - pointer.chargeMix) * ease
 
-      if (themeEndsAt) {
-        heatColors = readHeat()
-        ramp = buildRamp()
+      // The ramp is fixed within an hour, so it's only read while the hour is
+      // changing, or while the neon is stepping it round the wheel.
+      if (themeEndsAt || neonTicker) {
+        refreshRamp()
         if (now >= themeEndsAt) themeEndsAt = 0
       }
       const colorMoving = themeEndsAt > 0
@@ -855,9 +874,20 @@ export default function Trail() {
       }
     }
 
+    // Under neon the colours step by themselves. When nothing else is moving,
+    // look ten times a second and repaint the cursor only on a step, rather
+    // than holding the loop open at sixty frames for a colour that hasn't moved.
+    let neonTicker = 0
+    const syncNeon = () => {
+      const on = document.documentElement.hasAttribute('data-neon')
+      if (on && !neonTicker) neonTicker = window.setInterval(() => { if (pointer.on && refreshRamp()) wake() }, 100)
+      else if (!on && neonTicker) { window.clearInterval(neonTicker); neonTicker = 0 }
+    }
+
     const resize = () => size()
     const themeObserver = new MutationObserver(() => {
       themeEndsAt = performance.now() + THEME_TRANSITION_MS + 50
+      syncNeon()
       wake()
     })
     const boundsObserver = new ResizeObserver(() => {
@@ -885,7 +915,8 @@ export default function Trail() {
       }
     })
     size()
-    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-hour'] })
+    syncNeon()
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-hour', 'data-neon'] })
     warpObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-warp'] })
     if (scene) boundsObserver.observe(scene)
     if (frameElement) boundsObserver.observe(frameElement)
@@ -901,6 +932,7 @@ export default function Trail() {
 
     return () => {
       stopped = true
+      window.clearInterval(neonTicker)
       clearCursorTransition()
       cancelAnimationFrame(animationFrame)
       themeObserver.disconnect()

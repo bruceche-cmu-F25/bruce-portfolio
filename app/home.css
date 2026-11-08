@@ -1350,3 +1350,33 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
 :root:is([data-warp], [data-cursor-transition]),
 :root:is([data-warp], [data-cursor-transition]) * { cursor: none !important; }
 :root[data-warp] .trail { opacity: 0; }
+
+/* Neon — a held click's burst (components/home/Trail.tsx) toggles `data-neon`
+   on <html>. Only the accent and the heat ramp turn, round the wheel; the dark
+   ground and the ink stay as they are, so everything still reads. Every tint
+   on the page, the cursor trail and the black hole's pixels follow, because
+   they're all made from these.
+
+   It steps, like a palette cycling in an old game, rather than gliding: each
+   sixth of the wheel is fifteen steps, so the page restyles ten times a second
+   instead of sixty. That's the pixel look, and it's most of the cost gone —
+   every change to these restyles the whole page and repaints all its tints.
+   With reduced motion there's no burst, so no neon; the block below is only
+   for a visitor who turns reduced motion on mid-neon. */
+@keyframes neon {
+  0% { --home-accent-r: 255; --home-accent-g: 64; --home-accent-b: 184; --home-heat-1: #1d8c6e; --home-heat-2: #b8ff48; --home-heat-3: #ffa040; --home-heat-4: #ff40b8; }
+  16.667% { --home-accent-r: 255; --home-accent-g: 160; --home-accent-b: 64; --home-heat-1: #29588c; --home-heat-2: #34ffc8; --home-heat-3: #b8ff48; --home-heat-4: #ffa040; }
+  33.333% { --home-accent-r: 184; --home-accent-g: 255; --home-accent-b: 72; --home-heat-1: #63338c; --home-heat-2: #4aa0ff; --home-heat-3: #34ffc8; --home-heat-4: #b8ff48; }
+  50% { --home-accent-r: 52; --home-accent-g: 255; --home-accent-b: 200; --home-heat-1: #8c2365; --home-heat-2: #b45cff; --home-heat-3: #4aa0ff; --home-heat-4: #34ffc8; }
+  66.667% { --home-accent-r: 74; --home-accent-g: 160; --home-accent-b: 255; --home-heat-1: #8c5823; --home-heat-2: #ff40b8; --home-heat-3: #b45cff; --home-heat-4: #4aa0ff; }
+  83.333% { --home-accent-r: 180; --home-accent-g: 92; --home-accent-b: 255; --home-heat-1: #658c28; --home-heat-2: #ffa040; --home-heat-3: #ff40b8; --home-heat-4: #b45cff; }
+  100% { --home-accent-r: 255; --home-accent-g: 64; --home-accent-b: 184; --home-heat-1: #1d8c6e; --home-heat-2: #b8ff48; --home-heat-3: #ffa040; --home-heat-4: #ff40b8; }
+}
+:root[data-neon] .page { animation: neon 9s steps(15) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  :root[data-neon] .page {
+    animation: none;
+    --home-accent-r: 52; --home-accent-g: 255; --home-accent-b: 200;
+    --home-heat-1: #8c2365; --home-heat-2: #b45cff; --home-heat-3: #4aa0ff; --home-heat-4: #34ffc8;
+  }
+}

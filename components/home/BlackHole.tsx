@@ -162,9 +162,15 @@ export default function BlackHole() {
       return [d[0], d[1], d[2]]
     }
     let ramp: string[] = []
+    let rampKey = ''
     const readRamp = () => {
       const styles = getComputedStyle(el.closest('.page') ?? document.documentElement)
-      const heat = [1, 2, 3, 4].map(i => rgb(styles.getPropertyValue(`--heat-${i}`)))
+      const values = [1, 2, 3, 4].map(i => styles.getPropertyValue(`--heat-${i}`))
+      // under neon this runs every frame; the colours only step ten times a second
+      const key = values.join()
+      if (key === rampKey) return
+      rampKey = key
+      const heat = values.map(rgb)
       const hot = heat[3].map(c => Math.round(c + (255 - c) * 0.6))
       ramp = [...heat, hot].map(c => `rgb(${c[0]} ${c[1]} ${c[2]})`)
     }
@@ -264,6 +270,8 @@ export default function BlackHole() {
         return false
       }
       blank = false
+      // the neon steps the ramp round the wheel under us; keep up with it
+      if (root.hasAttribute('data-neon')) readRamp()
       const t = calm ? 0 : time / 1000
       // Like the Three.js scene, rotate material in the disk's own plane,
       // leaving the projected silhouette and camera roll tied only to scroll.
@@ -394,7 +402,7 @@ export default function BlackHole() {
     }
 
     const hours = new MutationObserver(() => { readRamp(); draw() })
-    hours.observe(document.documentElement, { attributes: true, attributeFilter: ['data-hour'] })
+    hours.observe(document.documentElement, { attributes: true, attributeFilter: ['data-hour', 'data-neon'] })
     const ro = new ResizeObserver(() => { resize(); draw() })
     ro.observe(canvas)
     resize()
