@@ -10,8 +10,8 @@ import LogoLoop, { type LogoLoopItem } from '@/components/home/LogoLoop'
 import { Glyph } from '@/components/home/Pixels'
 import BrandMark from '@/components/home/BrandMark'
 import { figures } from '@/components/home/Figures'
-import { INTRO, PROJECTS, ROLES, SCHOOLS, SEEKING, SHELVES, STACK, CORE } from '@/lib/home'
-import { ALBUMS } from '@/lib/notebook'
+import { INTRO, PROJECTS, ROLES, SCHOOLS, SEEKING, STACK, CORE } from '@/lib/home'
+import { SHELVES } from '@/lib/interests'
 import { HOUR_BOOT } from '@/lib/hours'
 import { SITE } from '@/lib/siteConfig'
 import './home.css'
@@ -238,17 +238,17 @@ export default function Page() {
           </dl>
         </Section>
 
-        <Section id="life" title="Life &amp; Interests" aside="what I read, play and watch between builds">
+        <Section id="life" title="Life &amp; Interests" aside="favorites & things on my radar">
           <div className="shelves">
             {SHELVES.map(s => (
               <div key={s.label} className="shelf">
                 <p className="shelf-label">{s.label}</p>
                 <ul>
-                  {ALBUMS[s.album].slice(0, 7).map(p => (
-                    <li key={p.src} className="cel">
-                      <img src={p.src} alt={p.alt} loading="lazy" />
+                  {s.pictures.map(p => (
+                    <li key={p.src} className="cel" title={`${p.caption ?? p.alt}${p.suggested ? ' · on my radar' : ''}`}>
+                      <img src={p.src} alt={p.alt} width="280" height="420" loading="lazy" decoding="async" />
                       <i className="cel-scan" aria-hidden />
-                      <i className="cel-name">{(p.caption ?? '').split(' · ')[0]}</i>
+                      <i className="cel-name">{(p.caption ?? '').split(' · ')[0]}{p.suggested ? ' · on my radar' : ''}</i>
                     </li>
                   ))}
                 </ul>

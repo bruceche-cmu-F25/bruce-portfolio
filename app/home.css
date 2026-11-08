@@ -967,15 +967,16 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
 
 /* ── life ──────────────────────────────────────────────────────── */
 
-.shelves { display: grid; gap: 15px; overflow-x: clip; }
+.shelves { display: grid; gap: 15px; }
 .shelf-label { font: 400 10px/1 var(--mono); color: var(--faint); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
-.shelf ul { display: flex; flex-wrap: wrap; gap: 7px; }
+.shelf ul { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 7px; }
 /* each cover sits in a bracketed cel: scanlines over it, corner marks around
    it, and its title only when you're pointing at it */
 .cel {
   position: relative;
   z-index: 0;
   display: block;
+  min-width: 0;
   padding: 3px;
   background: var(--panel);
   border: 1px solid var(--rule-soft);
@@ -983,8 +984,10 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
 }
 .cel img {
   display: block;
-  height: 62px;
-  width: auto;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: contain;
   filter: saturate(0.55) brightness(0.68) contrast(1.1);
   transition: filter 0.2s;
 }
@@ -1041,6 +1044,16 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
   pointer-events: none;
 }
 .cel:hover .cel-name { opacity: 1; transform: none; }
+.cel:nth-child(12n) .cel-name,
+.cel:nth-child(12n - 1) .cel-name,
+.cel:nth-child(12n - 2) .cel-name { left: auto; right: 3px; }
+
+@media (max-width: 760px) {
+  .shelf ul { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .cel:nth-child(6n) .cel-name,
+  .cel:nth-child(6n - 1) .cel-name,
+  .cel:nth-child(6n - 2) .cel-name { left: auto; right: 3px; }
+}
 
 /* ── contact ───────────────────────────────────────────────────── */
 
@@ -1244,7 +1257,6 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
   .stack > div { grid-template-columns: minmax(0, 1fr); gap: 6px; }
   .graph-grid { gap: 1.5px; }
   .graph-foot { flex-direction: column; align-items: flex-start; gap: 7px; }
-  .shelf img { height: 52px; }
 }
 
 @media (max-width: 600px) {

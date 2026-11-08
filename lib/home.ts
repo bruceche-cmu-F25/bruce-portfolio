@@ -182,10 +182,3 @@ export const SEEKING = {
   where: ['San Francisco', 'Bay Area onsite or remote', 'No visa sponsorship required'],
   from: 'Dec 2026',
 } as const
-
-/** The shelves on the Life row — albums already defined for the notebook. */
-export const SHELVES = [
-  { label: 'films', album: 'posters' },
-  { label: 'games', album: 'games' },
-  { label: 'books', album: 'books' },
-] as const
