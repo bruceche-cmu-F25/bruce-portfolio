@@ -7,6 +7,7 @@ import Answer from '@/components/home/Answer'
 import PixelFit from '@/components/home/PixelFit'
 import BlackHole from '@/components/home/BlackHole'
 import Ascii from '@/components/home/Ascii'
+import SoundToggle from '@/components/home/SoundToggle'
 import Trail from '@/components/home/Trail'
 import Like from '@/components/home/Like'
 import Reveal from '@/components/home/Reveal'
@@ -154,6 +155,7 @@ export default function Page() {
       <img src={PREVIEW.url} alt="" hidden loading="lazy" width={PREVIEW.width} height={PREVIEW.height} />
 
       <Trail />
+      <SoundToggle />
       <Reveal />
 
       <div className="frame">

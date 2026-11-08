@@ -30,6 +30,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
+import { hum } from '@/lib/sound'
 
 const CELL = 9
 /** How much slower than the page the stars drift over Tech Stack. */
@@ -264,6 +265,14 @@ export default function BlackHole() {
       // light at the start of the way out, when there's somewhere to go.
       const warp = !calm && p > 0 && p < 0.74
       if (warp !== root.hasAttribute('data-warp')) root.toggleAttribute('data-warp', warp)
+      // the drone (lib/sound.ts): it sinks an octave and darkens the closer
+      // you fall, then climbs two and a bit and brightens as the light pours
+      // out, and fades once you're through — silent outside the passage
+      if (!calm) hum(
+        smooth(0.03, 0.45, p) * (1 - smooth(0.88, 0.99, p)),
+        (1 - 0.5 * smooth(0.04, 0.72, p)) * (1 + 4 * s.exit),
+        0.3 - 0.2 * s.dive + 0.9 * s.exit,
+      )
       if (!live && !settling) {
         lastTime = undefined
         if (!blank) { context.clearRect(0, 0, width, height); blank = true }

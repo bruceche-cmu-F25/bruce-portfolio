@@ -26,6 +26,7 @@
 import { useEffect, useState } from 'react'
 import sprites from '@/lib/sprites.json'
 import { THEME_TRANSITION_MS } from '@/lib/hours'
+import { boom } from '@/lib/sound'
 
 export const CELL = 9
 
@@ -65,7 +66,7 @@ const ZONES: { glyph: Glyph; sel: string }[] = [
   { glyph: 'hi', sel: '#contact, .foot' },
 ]
 const GLYPHS: Glyph[] = ['heart', 'thumb', 'star', 'hi', 'branch']
-const QUIET_TARGETS = '.like, .shots-nav, .shots-open, .shots-view, .shots-dialog, .deck-again'
+const QUIET_TARGETS = '.sound, .like, .shots-nav, .shots-open, .shots-view, .shots-dialog, .deck-again'
 const READING_TARGETS = '.intro, .who, .role-body, .card-head, .card-meta, .card-blurb, .card-facts, .card-tags, .stack, .contact, .seek, .sec-head, .graph-foot'
 
 interface Wave { x: number; y: number; startedAt: number; kind: WaveKind; reach: number }
@@ -781,7 +782,7 @@ export default function Trail() {
         waves = waves.slice(-4)
         explode(press.x, press.y, 1.5)
         // the held burst throws the page into neon; the next one brings it back
-        document.documentElement.toggleAttribute('data-neon')
+        boom(document.documentElement.toggleAttribute('data-neon'))
       }
 
       const ease = 1 - Math.exp(-Math.min(elapsed, 64) / SHAPE_EASE_MS)
