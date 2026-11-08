@@ -6,6 +6,7 @@ import Shots from '@/components/home/Shots'
 import Answer from '@/components/home/Answer'
 import PixelFit from '@/components/home/PixelFit'
 import BlackHole from '@/components/home/BlackHole'
+import Ascii from '@/components/home/Ascii'
 import Trail from '@/components/home/Trail'
 import Like from '@/components/home/Like'
 import Reveal from '@/components/home/Reveal'
@@ -71,7 +72,7 @@ const PERSON = {
     { '@type': 'CollegeOrUniversity', name: 'University of California, San Diego' },
   ],
   knowsAbout: ['AI agents', 'LLM applications', 'Backend engineering', 'Full-stack development', 'Python', 'TypeScript', 'FastAPI', 'LangGraph'],
-  sameAs: [SITE.linkedin, SITE.github],
+  sameAs: [SITE.linkedin, SITE.github, SITE.instagram],
 }
 
 /** Turns the `[text](href)` in an intro paragraph into real anchors, and the
@@ -94,13 +95,46 @@ function Mark({ name, className }: { name: string; className?: string }) {
 
 const STATUS_LABEL = { live: 'Live', dev: 'In progress', archive: 'Archived' } as const
 
+/** Each section's bullet: a 9×7 pixel picture of what's in it, in the same two
+ *  tones as before — `d` dim, `b` bright — so the five still read as one family
+ *  of bullet points. Every one fills the whole 9×7 box and carries about the
+ *  same amount of ink (some 25–30 lit cells), so none looks bigger or bolder. */
+const SECTION_MARKS: Record<string, string[]> = {
+  // a briefcase: bright outline, dim clasp and floor, open inside like the bubble
+  experience: ['...bbb...', '...b.b...', 'bbbbbbbbb', 'b.......b', 'b...d...b', 'b.......b', 'bdddddddb'],
+  // </> — doubled strokes on the brackets so it isn't the thinnest of the five
+  built:      ['.....b...', '..b..bb..', '.bb.b.bb.', 'bd..b..db', '.bb.b.bb.', '..bb..b..', '...b.....'],
+  // the stack: three layers widening downward, on a dim base
+  stack:      ['..bbbbb..', '.........', '.bbbbbbb.', '.........', 'bbbbbbbbb', '.........', 'ddddddddd'],
+  // the things I love: a heart, as the cursor shows over them; lit edge, dim fill
+  life:       ['.bb...bb.', 'bddb.bddb', 'bdddddddb', '.bdddddb.', '..bdddb..', '...bdb...', '....b....'],
+  // say hi: a speech bubble with its tail
+  contact:    ['.bbbbbbb.', 'b.......b', 'b.d.d.d.b', 'b.......b', '.bbbbbbb.', '..bd.....', '..b......'],
+}
+
+/** Rows of a pixel grid to one path per tone: a run of the same tone is one rect. */
+function pixelPath(rows: string[], tone: string) {
+  let d = ''
+  rows.forEach((row, y) => {
+    for (let x = 0; x < row.length; x++) {
+      if (row[x] !== tone) continue
+      let end = x
+      while (row[end + 1] === tone) end++
+      d += `M${x} ${y}h${end - x + 1}v1h${-(end - x + 1)}Z`
+      x = end
+    }
+  })
+  return d
+}
+
 function Section({ id, title, children, aside }: { id: string; title: string; aside?: React.ReactNode; children: React.ReactNode }) {
+  const mark = SECTION_MARKS[id]
   return (
     <section className="sec" id={id} data-reveal>
       <h2 className="sec-head">
         <svg className="sec-mark" viewBox="0 0 9 7" width="18" height="14" fill="currentColor" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
-          <path d="M4 0h1v2h1v1h2v1H6v1H5v2H4V5H3V4H1V3h2V2h1Z" opacity="0.5" />
-          <path d="M4 2h1v1h1v1H5v1H4V4H3V3h1Z" opacity="0.9" />
+          <path d={pixelPath(mark, 'd')} opacity="0.5" />
+          <path d={pixelPath(mark, 'b')} opacity="0.9" />
         </svg>
         <a href={`#${id}`}>{title}</a>
         {aside && <span className="sec-aside">{aside}</span>}
@@ -247,8 +281,12 @@ export default function Page() {
         <BlackHole />
 
         <div className="arrival">
+        {/* what's waiting on the far side of the hole */}
+        <div className="hello">
+          <Ascii text={['Hello you!', "I'm Bruce"]} asciiFontSize={6} textScale={1.65} />
+        </div>
+
         <Section id="life" title="Life &amp; Interests" aside="favorites & things on my radar">
-          <p className="sec-intro">A few worlds I keep coming back to.</p>
           <Answer hand={HAND}>
           <div className="shelves">
             {SHELVES.map(s => (
@@ -275,18 +313,18 @@ export default function Page() {
         </Section>
 
         <Section id="contact" title="Let's Work Together">
-          <p className="sec-intro">If any of these are your favorites too, <a href={`mailto:${SITE.email}`} aria-label="Say hi to Bruce by email">say hi</a>.</p>
           <div className="seek">
             <p className="seek-label">looking for · from {SEEKING.from}</p>
-            <p className="seek-roles">{SEEKING.roles.map(r => <span key={r}>{r}</span>)}</p>
+            <p className="seek-roles">{SEEKING.roles.map((r, i) => <span key={r} style={{ '--i': i } as React.CSSProperties}>{r}</span>)}</p>
             <p className="seek-where">{SEEKING.where.join(' · ')}</p>
           </div>
           <dl className="contact">
             <div><dt><Glyph name="mail" /> email</dt><dd><a href={`mailto:${SITE.email}`}>{SITE.email}</a></dd></div>
             <div><dt><BrandMark name="linkedin" /> LinkedIn</dt><dd><a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">{SITE.linkedinHandle}</a></dd></div>
             <div><dt><BrandMark name="github" /> GitHub</dt><dd><a href={SITE.github} target="_blank" rel="noopener noreferrer">{SITE.githubHandle}</a></dd></div>
+            <div><dt><BrandMark name="instagram" /> Instagram</dt><dd><a href={SITE.instagram} target="_blank" rel="noopener noreferrer">{SITE.instagramHandle}</a></dd></div>
             <div><dt><Glyph name="phone" /> phone</dt><dd><a href={SITE.phoneHref}>{SITE.phone}</a></dd></div>
-            <div><dt><Glyph name="down" /> résumé</dt><dd><a href={SITE.resume} download>PDF</a></dd></div>
+            <div><dt><Glyph name="down" /> résumé</dt><dd><a className="resume-link" href={SITE.resume} download>PDF</a></dd></div>
           </dl>
         </Section>
 
@@ -294,7 +332,6 @@ export default function Page() {
           <p>© 2026 Bruce Cheng</p>
           <p className="foot-links">
             <a href="/notebook/">the notebook</a>
-            <a href="/robin/">the space site</a>
           </p>
         </footer>
         </div>

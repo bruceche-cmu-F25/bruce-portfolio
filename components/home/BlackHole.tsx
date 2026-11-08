@@ -2,7 +2,7 @@
 
 /** The black hole, back — redrawn in the page's pixel grid.
  *
- *  The space site's hero ended by falling into a black hole. This is that fall
+ *  The old space site's hero ended by falling into a black hole. This is that fall
  *  for the homepage, drawn in the same 9px cells and the same heat ramp as the
  *  cursor's trail, so it takes the hour's colours. It is one sky, fixed behind
  *  the page, driven by scroll from Projects to the far side of the passage:
@@ -260,9 +260,9 @@ export default function BlackHole() {
           arrival.style.maskImage = arrival.style.webkitMaskImage = feather
         }
       }
-      // Keep the pointer out of the passage; normal page interaction resumes
-      // as soon as the journey ends.
-      const warp = !calm && p > 0 && p < 1
+      // Keep the pointer out of the passage; it comes back with the point of
+      // light at the start of the way out, when there's somewhere to go.
+      const warp = !calm && p > 0 && p < 0.74
       if (warp !== root.hasAttribute('data-warp')) root.toggleAttribute('data-warp', warp)
       if (!live && !settling) {
         lastTime = undefined
