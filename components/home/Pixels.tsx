@@ -49,7 +49,7 @@ function Sprite({ rows, palette, alpha, className, title }: {
 export type GlyphName = keyof typeof sprites.ui
 
 export function Glyph({ name, className }: { name: GlyphName; className?: string }) {
-  return <Sprite rows={sprites.ui[name]} palette={{ K: 'currentColor' }} className={`glyph ${className ?? ''}`} />
+  return <Sprite rows={sprites.ui[name]} palette={{ K: 'currentColor', M: 'currentColor' }} alpha={{ M: 0.55 }} className={`glyph ${className ?? ''}`} />
 }
 
 /** The footer's sleeping bat. */

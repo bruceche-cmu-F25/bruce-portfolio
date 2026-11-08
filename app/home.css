@@ -1096,10 +1096,9 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
 
 /* ── pixel glyphs, figures, section ramps ──────────────────────── */
 
-/* the little drawn icons: 7×7 sprites at 14px, so every cell is exactly 2px */
 .glyph {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   flex: none;
   display: inline-block;
   vertical-align: -2px;
