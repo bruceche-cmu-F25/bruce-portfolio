@@ -225,7 +225,7 @@ function skyline(x: number, w: number, h: number, horizon: number): number {
 function landmarksMask(w: number, h: number, horizon: number) {
   const c = document.createElement('canvas')
   c.width = w; c.height = h
-  const g = c.getContext('2d')!
+  const g = c.getContext('2d', { willReadFrequently: true })!
   g.fillStyle = g.strokeStyle = '#fff'
 
   const deck = horizon - h * 0.008
@@ -962,7 +962,7 @@ function renderPerson(height: number, hour: Hour): HTMLCanvasElement {
   const h = Math.ceil(height) + pad * 2
   const c = document.createElement('canvas')
   c.width = w; c.height = h
-  const x = c.getContext('2d')!
+  const x = c.getContext('2d', { willReadFrequently: true })!
   x.translate(w / 2, h - pad)
   x.scale(height, height)
   rimmed(x, personBody(), ink.body, ink.rim, height)
@@ -1032,7 +1032,7 @@ export default function Scene() {
     // and a cache that outlived its canvas would skip the paint and leave it black
     let painted: { w: number; h: number; hour: Hour } | null = null
     const scene = document.createElement('canvas')
-    const sctx = scene.getContext('2d')!
+    const sctx = scene.getContext('2d', { willReadFrequently: true })!
     let lit: Lit = { x: 0, y: 0 }
     let crest: (x: number) => number = () => 0
     let beacons: { x: number; y: number }[] = []

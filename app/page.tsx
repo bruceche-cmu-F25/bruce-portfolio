@@ -3,6 +3,9 @@ import Scene from '@/components/home/Scene'
 import Graph from '@/components/home/Graph'
 import IsoArt from '@/components/home/Iso'
 import Shots from '@/components/home/Shots'
+import Answer from '@/components/home/Answer'
+import PixelFit from '@/components/home/PixelFit'
+import BlackHole from '@/components/home/BlackHole'
 import Trail from '@/components/home/Trail'
 import Like from '@/components/home/Like'
 import Reveal from '@/components/home/Reveal'
@@ -11,7 +14,7 @@ import { Glyph } from '@/components/home/Pixels'
 import BrandMark from '@/components/home/BrandMark'
 import { figures } from '@/components/home/Figures'
 import { INTRO, PROJECTS, ROLES, SCHOOLS, SEEKING, STACK, CORE } from '@/lib/home'
-import { SHELVES } from '@/lib/interests'
+import { HAND, SHELVES } from '@/lib/interests'
 import { HOUR_BOOT } from '@/lib/hours'
 import { SITE } from '@/lib/siteConfig'
 import './home.css'
@@ -114,7 +117,7 @@ export default function Page() {
       <script dangerouslySetInnerHTML={{ __html: HOUR_BOOT }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(PERSON) }} />
       {/* WeChat takes the first large image in the page when a link is pasted into a chat */}
-      <img src={PREVIEW.url} alt="" hidden width={PREVIEW.width} height={PREVIEW.height} />
+      <img src={PREVIEW.url} alt="" hidden loading="lazy" width={PREVIEW.width} height={PREVIEW.height} />
 
       <Trail />
       <Reveal />
@@ -197,7 +200,7 @@ export default function Page() {
                          style={{ ['--d' as string]: `${(index % 2) * 80 + Math.floor(index / 2) * 110}ms` }}>
                   <span className="card-art">
                     <Shots index={String(index + 1).padStart(2, '0')} label={ART_LABELS[p.art]} title={p.title} shots={p.shots}>
-                      <IsoArt art={p.art} />
+                      <PixelFit><IsoArt art={p.art} /></PixelFit>
                     </Shots>
                   </span>
                   <span className="card-head">
@@ -238,16 +241,29 @@ export default function Page() {
           </dl>
         </Section>
 
+        {/* the way through: the old site's black hole, in the page's pixel grid —
+            its stars start showing over Tech Stack, and Life and Contact lie on
+            the far side of it */}
+        <BlackHole />
+
+        <div className="arrival">
         <Section id="life" title="Life &amp; Interests" aside="favorites & things on my radar">
+          <p className="sec-intro">A few worlds I keep coming back to.</p>
+          <Answer hand={HAND}>
           <div className="shelves">
             {SHELVES.map(s => (
               <div key={s.label} className="shelf">
                 <p className="shelf-label">{s.label}</p>
                 <ul>
-                  {s.pictures.map(p => (
-                    <li key={p.src} className="cel" title={`${p.caption ?? p.alt}${p.suggested ? ' · on my radar' : ''}`}>
-                      <img src={p.src} alt={p.alt} width="280" height="420" loading="lazy" decoding="async" />
-                      <i className="cel-scan" aria-hidden />
+                  {s.pictures.map((p, i) => (
+                    <li key={p.src} className="cel" data-out={i >= HAND || undefined}
+                        title={`${p.caption ?? p.alt}${p.suggested ? ' · on my radar' : ''}`}>
+                      <span className="cel-card">
+                        <span className="cel-front">
+                          <img src={p.src} alt={p.alt} width="280" height="420" loading="lazy" decoding="async" />
+                          <i className="cel-scan" aria-hidden />
+                        </span>
+                      </span>
                       <i className="cel-name">{(p.caption ?? '').split(' · ')[0]}{p.suggested ? ' · on my radar' : ''}</i>
                     </li>
                   ))}
@@ -255,9 +271,11 @@ export default function Page() {
               </div>
             ))}
           </div>
+          </Answer>
         </Section>
 
         <Section id="contact" title="Let's Work Together">
+          <p className="sec-intro">If any of these are your favorites too, <a href={`mailto:${SITE.email}`} aria-label="Say hi to Bruce by email">say hi</a>.</p>
           <div className="seek">
             <p className="seek-label">looking for · from {SEEKING.from}</p>
             <p className="seek-roles">{SEEKING.roles.map(r => <span key={r}>{r}</span>)}</p>
@@ -279,6 +297,7 @@ export default function Page() {
             <a href="/robin/">the space site</a>
           </p>
         </footer>
+        </div>
       </div>
     </main>
   )

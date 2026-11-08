@@ -1,11 +1,27 @@
 .art { overflow: visible; shape-rendering: crispEdges; }
-.shadow { fill: color-mix(in srgb, var(--bg) 84%, var(--accent)); }
-.outline { fill: color-mix(in srgb, var(--bg) 62%, var(--ink)); }
-.side { fill: color-mix(in srgb, var(--bg) 70%, var(--accent)); }
-.surface { fill: color-mix(in srgb, var(--bg) 66%, var(--ink)); }
-.paper { fill: color-mix(in srgb, var(--bg) 30%, var(--ink)); }
+.shadow { fill: color-mix(in srgb, color-mix(in srgb, var(--bg) 70%, #000) 88%, var(--accent)); }
+.outline { fill: color-mix(in srgb, var(--bg) 79%, var(--ink)); }
+.side { fill: color-mix(in srgb, var(--bg) 64%, var(--accent)); }
+.surface { fill: color-mix(in srgb, var(--bg) 61%, var(--ink)); }
+.paper { fill: color-mix(in srgb, var(--bg) 22%, var(--ink)); }
 .muted { fill: color-mix(in srgb, var(--bg) 30%, var(--mute)); }
 .accent { fill: var(--accent); }
 .accentDark { fill: color-mix(in srgb, var(--bg) 48%, var(--accent)); }
 .accentLight { fill: color-mix(in srgb, var(--ink) 42%, var(--accent)); }
 .warm { fill: var(--amber); }
+
+/* colours the hour can't supply: a salad's green, a corkboard's brown and a
+   detective's red thread — each settled a little into the page */
+.leaf { fill: color-mix(in srgb, var(--live) 80%, var(--bg)); }
+.cork { fill: color-mix(in srgb, #b9824c 62%, var(--bg)); }
+.corkDark { fill: color-mix(in srgb, #8c5a2e 50%, var(--bg)); }
+.thread { fill: #e0474c; }
+/* a cat's cheeks, a sleeping child's: pink at every hour */
+.blush { fill: color-mix(in srgb, #f291aa 88%, var(--bg)); }
+.blushDark { fill: color-mix(in srgb, #a83a55 90%, var(--bg)); }
+
+/* the hour's heat ramp, coolest first — Nyan Cat's rainbow is made of it */
+.heat1 { fill: var(--home-heat-1); }
+.heat2 { fill: var(--home-heat-2); }
+.heat3 { fill: var(--home-heat-3); }
+.heat4 { fill: var(--home-heat-4); }

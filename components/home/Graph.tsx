@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useRef, useState, type KeyboardEvent } from 'react'
+import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react'
 import data from '@/lib/contributions.json'
 import styles from './Graph.module.css'
 
@@ -29,9 +29,19 @@ export default function Graph() {
   const days = data.days
   const instructionsId = useId()
   const cells = useRef<(HTMLButtonElement | null)[]>([])
-  const [activeIndex, setActiveIndex] = useState(days.length - 1)
-  const [selectedIndex, setSelectedIndex] = useState(days.length - 1)
+  // the readout opens on the most recent day with something on it — "no
+  // contributions today" is a flat thing to greet anyone with
+  const latest = (() => { for (let i = days.length - 1; i >= 0; i--) if (days[i].count > 0) return i; return days.length - 1 })()
+  const [activeIndex, setActiveIndex] = useState(latest)
+  const [selectedIndex, setSelectedIndex] = useState(latest)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const scroller = useRef<HTMLDivElement>(null)
+
+  // on a narrow screen the year overflows; start at its recent end
+  useEffect(() => {
+    const el = scroller.current
+    if (el && el.scrollWidth > el.clientWidth) el.scrollLeft = el.scrollWidth
+  }, [])
 
   if (!days.length) return null
 
@@ -70,7 +80,7 @@ export default function Graph() {
     <section className="graph" aria-label="GitHub activity">
       <p className={styles.total}><strong>{data.total.toLocaleString('en-US')}</strong> public contributions in the past year</p>
       <p id={instructionsId} className={styles.srOnly}>Use up and down arrows to move by day, left and right arrows by week. Home and End move to the start and end of a week; Control or Command plus Home and End move to the start and end of the year. Tap a day to see its contribution count.</p>
-      <div className="graph-scroll">
+      <div className="graph-scroll" ref={scroller}>
         <div className="graph-chart">
           <div className="graph-months" style={cols} aria-hidden>
             {shown.map(month => <span key={month.key} style={{ gridColumn: `${month.col} / span ${month.span}` }}>{month.label}</span>)}
@@ -84,13 +94,13 @@ export default function Graph() {
                       data-selected={detailIndex === index || undefined} aria-label={description(day)}
                       tabIndex={activeIndex === index ? 0 : -1}
                       onPointerEnter={event => { if (event.pointerType !== 'touch') setHoveredIndex(index) }}
-                      onFocus={() => selectDay(index)} onClick={() => selectDay(index)}
+                      onFocus={() => { setHoveredIndex(null); selectDay(index) }} onClick={() => selectDay(index)}
                       onKeyDown={event => moveDay(event, index)} />
             ))}
           </div>
         </div>
       </div>
-      <p className="graph-hint">Scroll horizontally to see the full year →</p>
+      <p className="graph-hint">← scroll back for earlier months</p>
       <p className={styles.detail} role="status" aria-live="polite" aria-atomic="true">{description(days[detailIndex])}</p>
       <div className="graph-foot">
         <span className="graph-range">{pretty(days[0].date)} — {pretty(days[days.length - 1].date)}</span>

@@ -469,6 +469,15 @@
 }
 .sec-head a:hover::before { opacity: 1; }
 .sec-aside { font: 400 10.5px/1 var(--mono); letter-spacing: 0.02em; text-transform: none; color: var(--faint); }
+.sec-intro { margin: -2px 0 18px; font: 400 13px/1.6 var(--sans); color: var(--body); }
+.sec-intro a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--accent-soft); text-underline-offset: 3px; }
+.sec-intro a:hover { color: var(--accent); }
+@media (max-width: 600px) {
+  .sec-head { flex-wrap: wrap; row-gap: 7px; }
+  .sec-aside { flex-basis: 100%; padding-left: 30px; line-height: 1.3; }
+}
+/* no one-word last lines in the running copy */
+.page p { text-wrap: pretty; }
 
 /* ── roles ─────────────────────────────────────────────────────── */
 
@@ -611,6 +620,8 @@
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .pixel-art svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* PixelFit sizes the scene inside this to a whole number of device pixels */
+.pixel-fit { position: absolute; inset: 0; display: block; }
 /* the drawing rises a little further than the card does — a hint of depth */
 .card[data-link]:hover .pixel-art { transform: translateY(-3px); }
 
@@ -977,10 +988,16 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
   z-index: 0;
   display: block;
   min-width: 0;
+  transition: transform 0.2s;
+}
+.cel-card { position: relative; display: block; }
+.cel-front {
+  position: relative;
+  display: block;
   padding: 3px;
   background: var(--panel);
   border: 1px solid var(--rule-soft);
-  transition: border-color 0.2s, transform 0.2s, background 0.2s;
+  transition: border-color 0.2s, background 0.2s;
 }
 .cel img {
   display: block;
@@ -988,8 +1005,6 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
   height: auto;
   aspect-ratio: 2 / 3;
   object-fit: contain;
-  filter: saturate(0.55) brightness(0.68) contrast(1.1);
-  transition: filter 0.2s;
 }
 .cel-scan {
   position: absolute;
@@ -1001,7 +1016,7 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
     transparent 1px 3px
   );
   mix-blend-mode: screen;
-  opacity: 0.55;
+  opacity: 0.14;
   transition: opacity 0.2s;
 }
 /* the brackets: two L-shapes, pulled out when you point at the cel */
@@ -1013,13 +1028,13 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
   opacity: 0;
   transition: opacity 0.2s, inset 0.2s ease;
 }
-.cel::before { inset: -1px auto auto -1px; border-width: 1px 0 0 1px; }
-.cel::after  { inset: auto -1px -1px auto; border-width: 0 1px 1px 0; }
-.cel:hover { z-index: 2; border-color: rgb(var(--accent-rgb) / 0.45); transform: translateY(-2px); }
-.cel:hover img { filter: none; }
-.cel:hover .cel-scan { opacity: 0.22; }
-.cel:hover::before { opacity: 1; inset: -4px auto auto -4px; }
-.cel:hover::after  { opacity: 1; inset: auto -4px -4px auto; }
+.cel::before { inset: 0 auto auto 0; border-width: 1px 0 0 1px; z-index: 3; }
+.cel::after  { inset: auto 0 0 auto; border-width: 0 1px 1px 0; z-index: 3; }
+.cel:hover { z-index: 2; transform: translateY(-2px); }
+.cel:hover .cel-front { border-color: rgb(var(--accent-rgb) / 0.45); }
+.cel:hover .cel-scan { opacity: 0.06; }
+.cel:hover::before { opacity: 1; inset: -3px auto auto -3px; }
+.cel:hover::after  { opacity: 1; inset: auto -3px -3px auto; }
 /* titles run longer than a cover is wide, so the label sizes to its text and
    is allowed to sit over its neighbours while it's up */
 .cel-name {
@@ -1044,15 +1059,45 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
   pointer-events: none;
 }
 .cel:hover .cel-name { opacity: 1; transform: none; }
-.cel:nth-child(12n) .cel-name,
-.cel:nth-child(12n - 1) .cel-name,
-.cel:nth-child(12n - 2) .cel-name { left: auto; right: 3px; }
+.answer:not([data-live]) .cel:nth-child(12n) .cel-name,
+.answer:not([data-live]) .cel:nth-child(12n - 1) .cel-name,
+.answer:not([data-live]) .cel:nth-child(12n - 2) .cel-name,
+.answer[data-live] .cel[data-edge] .cel-name { left: auto; right: 3px; }
+
+/* Interest shelves, visible as soon as the passage opens. */
+.answer { position: relative; }
+
+/* Shuffle, at the right end of the first shelf's label row. */
+.answer-again {
+  position: absolute; right: 0; top: -2px;
+  display: inline-flex; align-items: center; gap: 6px;
+  font: 400 9.5px/1 var(--mono);
+  letter-spacing: 0.06em;
+  color: var(--faint);
+  background: none;
+  border: 0;
+  padding: 2px 0;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s, color 0.2s;
+}
+.answer-again[hidden] { display: none; }
+.answer-again svg { transition: rotate 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.answer:hover .answer-again { opacity: 1; }
+.answer-again:hover { color: var(--accent); }
+.answer-again:hover svg { rotate: -180deg; }
+.answer-again:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; opacity: 1; }
+.answer-again:disabled { cursor: default; opacity: 0.35; }
+
+/* a shelf can hold more covers than one hand: those not dealt this time
+   wait out of sight, and the deal decides the order of the rest */
+.cel[data-out] { display: none; }
 
 @media (max-width: 760px) {
   .shelf ul { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-  .cel:nth-child(6n) .cel-name,
-  .cel:nth-child(6n - 1) .cel-name,
-  .cel:nth-child(6n - 2) .cel-name { left: auto; right: 3px; }
+  .answer:not([data-live]) .cel:nth-child(6n) .cel-name,
+  .answer:not([data-live]) .cel:nth-child(6n - 1) .cel-name,
+  .answer:not([data-live]) .cel:nth-child(6n - 2) .cel-name { left: auto; right: 3px; }
 }
 
 /* ── contact ───────────────────────────────────────────────────── */
@@ -1069,6 +1114,16 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
 .seek-roles { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 9px 0 7px; }
 .seek-roles span { font: 400 12.5px/1.4 var(--sans); color: var(--ink); }
 .seek-roles span + span::before { content: '/'; color: var(--faint); margin-right: 14px; }
+@media (max-width: 600px) {
+  .seek-roles { flex-direction: column; gap: 5px; }
+  .seek-roles span::before,
+  .seek-roles span + span::before {
+    content: ''; display: inline-block;
+    width: 4px; height: 4px; margin: 0 9px 2px 0;
+    vertical-align: middle;
+    background: var(--accent);
+  }
+}
 .seek-where { font: 400 11px/1 var(--mono); color: var(--mute); }
 
 .contact { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; }
@@ -1149,19 +1204,22 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
   transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .reveals [data-reveal].is-in { opacity: 1; transform: none; }
+.reveals :is(#life, #contact)[data-reveal] { opacity: 1; transform: none; transition: none; }
 
 /* ── the cursor trail ─────────────────────────────────────────── */
 
 /* The grid the pointer heats, mounted by components/home/Trail.tsx. Cells are
    painted opaque in the heat colours; screen blending over a near-black page
    shows those colours almost exactly, and over light text only brightens it,
-   so the type stays readable under the trail. The system cursor is left alone. */
+   so the type stays readable under the trail. The passage fades it away. */
 .trail {
   position: fixed;
   inset: 0;
   z-index: 60;
   pointer-events: none;
   mix-blend-mode: screen;
+  opacity: 1;
+  transition: opacity 420ms ease;
 }
 
 /* ── the hour ──────────────────────────────────────────────────── */
@@ -1267,3 +1325,28 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
   .page { transition: none; }
   .page *, .page *::before, .page *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
+
+/* ── the black hole (components/home/BlackHole.tsx) ─────────────────
+   one sky, fixed behind the page's content: the passage itself is just a
+   tall run of scroll with nothing in it, so the sky has the screen to itself;
+   over Tech Stack, the stars show through behind the content. Its canvas is
+   clear wherever nothing is lit, so the page's own grid shows through. */
+.hole { position: relative; height: 0; margin: 0; pointer-events: none; }
+.hole[data-calm='false'] { height: 190vh; }
+.hole-sky, .hole-rim {
+  position: fixed; inset: 0;
+  display: block;
+  width: 100vw; height: 100vh; height: 100svh;
+  pointer-events: none;
+}
+.hole-sky { z-index: -1; }
+/* Flecks straddle the iris above the covers. */
+.hole-rim { z-index: 2; }
+/* reduced motion: one still frame in a short block, no run of scroll */
+.hole[data-calm='true'] { height: 72vh; }
+.hole[data-calm='true'] .hole-sky { position: absolute; width: 100vw; left: calc(50% - 50vw); height: 100%; }
+
+/* The passage keeps the pointer and its effects out of the scene. */
+:root:is([data-warp], [data-cursor-transition]),
+:root:is([data-warp], [data-cursor-transition]) * { cursor: none !important; }
+:root[data-warp] .trail { opacity: 0; }

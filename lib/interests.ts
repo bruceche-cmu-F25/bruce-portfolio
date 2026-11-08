@@ -7,6 +7,11 @@ function onRadar(title: string, src: string, alt: string): ShelfPicture {
   return { src, alt, caption: title, suggested: true }
 }
 
+/** How many covers a shelf shows at once — one row of twelve. A shelf may hold
+ *  more: the rest wait out of sight, and "deal again" draws a fresh hand,
+ *  favouring the covers that weren’t in the last one (components/home/Answer.tsx). */
+export const HAND = 12
+
 export const SHELVES: readonly Shelf[] = [
   {
     label: 'films',

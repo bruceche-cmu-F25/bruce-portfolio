@@ -17,11 +17,11 @@
  *
  *  A click throws out embers — cells that fly, fall and cool from white-hot
  *  through the bands — behind a flash and a shockwave; holding still on a
- *  click charges a bigger burst. Nothing here replaces the system cursor.
- *  Skipped on touch and under reduced motion.
+ *  click charges a bigger burst. The black-hole passage hides the cursor and
+ *  pauses every effect here. Skipped on touch and under reduced motion.
  */
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import sprites from '@/lib/sprites.json'
 import { THEME_TRANSITION_MS } from '@/lib/hours'
 
@@ -63,7 +63,7 @@ const ZONES: { glyph: Glyph; sel: string }[] = [
   { glyph: 'hi', sel: '#contact, .foot' },
 ]
 const GLYPHS: Glyph[] = ['heart', 'thumb', 'star', 'hi', 'branch']
-const QUIET_TARGETS = '.like, .shots-nav, .shots-open, .shots-view, .shots-dialog'
+const QUIET_TARGETS = '.like, .shots-nav, .shots-open, .shots-view, .shots-dialog, .deck-again'
 const READING_TARGETS = '.intro, .who, .role-body, .card-head, .card-meta, .card-blurb, .card-facts, .card-tags, .stack, .contact, .seek, .sec-head, .graph-foot'
 
 interface Wave { x: number; y: number; startedAt: number; kind: WaveKind; reach: number }
@@ -109,8 +109,18 @@ const rand = () => {
 }
 
 export default function Trail() {
+  const [calm, setCalm] = useState<boolean | null>(null)
+
   useEffect(() => {
-    if (!matchMedia('(pointer: fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const motion = matchMedia('(prefers-reduced-motion: reduce)')
+    const syncMotion = () => setCalm(motion.matches)
+    syncMotion()
+    motion.addEventListener('change', syncMotion)
+    return () => motion.removeEventListener('change', syncMotion)
+  }, [])
+
+  useEffect(() => {
+    if (calm !== false || !matchMedia('(pointer: fine)').matches) return
 
     const canvas = document.createElement('canvas')
     canvas.className = 'trail'
@@ -154,6 +164,7 @@ export default function Trail() {
     const activeCells = new Set<number>()
     let animationFrame = 0
     let previousFrameAt = 0
+    let cursorTransitionTimer = 0
     let stopped = false
     let lastBurstAt = -Infinity
     let chargeX = -1
@@ -179,6 +190,12 @@ export default function Trail() {
 
     const wake = () => {
       if (!stopped && !animationFrame) animationFrame = requestAnimationFrame(frame)
+    }
+
+    const clearCursorTransition = () => {
+      window.clearTimeout(cursorTransitionTimer)
+      cursorTransitionTimer = 0
+      document.documentElement.removeAttribute('data-cursor-transition')
     }
 
     /** The arrow aims at the middle of whatever part of the text column is on
@@ -294,6 +311,9 @@ export default function Trail() {
         }
       }
       if (inScene) press = null
+      if (cursorTransitionTimer || document.documentElement.hasAttribute('data-cursor-transition')) {
+        document.documentElement.toggleAttribute('data-cursor-transition', pointer.on && !inScene)
+      }
     }
 
     const move = (event: PointerEvent) => {
@@ -312,6 +332,11 @@ export default function Trail() {
 
     const down = (event: PointerEvent) => {
       if ((event.pointerType && event.pointerType !== 'mouse') || !event.isPrimary || event.button !== 0) return
+      if (document.documentElement.hasAttribute('data-warp')) {
+        press = null
+        move(event)
+        return
+      }
       const target = event.target instanceof Element ? event.target : null
       if (target?.closest(`${QUIET_TARGETS}, .scene, .graph-cell, input, textarea, select, [contenteditable]`)) return
       if (!pointer.on) {
@@ -337,7 +362,13 @@ export default function Trail() {
     }
 
     const release = (event: PointerEvent) => {
-      if ((event.pointerType && event.pointerType !== 'mouse') || !event.isPrimary || event.button !== 0 || !press) return
+      if ((event.pointerType && event.pointerType !== 'mouse') || !event.isPrimary || event.button !== 0) return
+      if (document.documentElement.hasAttribute('data-warp')) {
+        press = null
+        move(event)
+        return
+      }
+      if (!press) return
       const held = press
       press = null
       if (!held.fired && Math.hypot(event.clientX - held.x, event.clientY - held.y) <= CELL * 1.6 &&
@@ -352,6 +383,7 @@ export default function Trail() {
     }
 
     const leave = () => {
+      clearCursorTransition()
       pointer.on = false
       pointer.previousX = -1
       pointer.previousY = -1
@@ -657,6 +689,21 @@ export default function Trail() {
     function frame(now: number) {
       animationFrame = 0
       if (stopped) return
+      // Freeze the last painting for the CSS fade, discard transient state
+      // and sleep. The warp observer repaints the current pointer on exit.
+      if (document.documentElement.hasAttribute('data-warp')) {
+        heat.fill(0)
+        activeCells.clear()
+        waves.length = embers.length = flashes.length = rays.length = 0
+        press = null
+        chargeProgress = 0
+        pointer.chargeMix = 0
+        lastBurstAt = -Infinity
+        pointer.previousX = pointer.x
+        pointer.previousY = pointer.y
+        previousFrameAt = 0
+        return
+      }
       const elapsed = previousFrameAt ? now - previousFrameAt : 16.7
       previousFrameAt = now
 
@@ -817,8 +864,29 @@ export default function Trail() {
       updateBounds()
       wake()
     })
+    const warpObserver = new MutationObserver(() => {
+      if (stopped) return
+      window.clearTimeout(cursorTransitionTimer)
+      cursorTransitionTimer = 0
+      const root = document.documentElement
+      const warp = root.hasAttribute('data-warp')
+      if (!warp && pointer.on) updatePointerTarget(document.elementFromPoint(pointer.x, pointer.y))
+      root.toggleAttribute('data-cursor-transition', pointer.on && !pointer.inScene)
+      cancelAnimationFrame(animationFrame)
+      animationFrame = 0
+      // Paint before the first visible fade-in frame, so no stale cursor or
+      // trail appears at its position from before the passage.
+      frame(performance.now())
+      if (!warp && pointer.on && !pointer.inScene) {
+        cursorTransitionTimer = window.setTimeout(() => {
+          cursorTransitionTimer = 0
+          if (!root.hasAttribute('data-warp')) root.removeAttribute('data-cursor-transition')
+        }, 420)
+      }
+    })
     size()
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-hour'] })
+    warpObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-warp'] })
     if (scene) boundsObserver.observe(scene)
     if (frameElement) boundsObserver.observe(frameElement)
     addEventListener('resize', resize)
@@ -833,8 +901,10 @@ export default function Trail() {
 
     return () => {
       stopped = true
+      clearCursorTransition()
       cancelAnimationFrame(animationFrame)
       themeObserver.disconnect()
+      warpObserver.disconnect()
       boundsObserver.disconnect()
       removeEventListener('resize', resize)
       removeEventListener('pointermove', move)
@@ -847,7 +917,7 @@ export default function Trail() {
       document.removeEventListener('pointerleave', leave)
       canvas.remove()
     }
-  }, [])
+  }, [calm])
 
   return null
 }

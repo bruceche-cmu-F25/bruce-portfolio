@@ -40,15 +40,16 @@ export function drawParking(painter: PixelPainter) {
 
   painter.polygon([[61, 45], [89, 30], [108, 39], [80, 55]], 'shadow')
   painter.polygon([[62, 37], [90, 23], [104, 30], [104, 38], [76, 52], [62, 45]], 'outline')
-  painter.polygon([[62, 37], [90, 23], [104, 30], [76, 44]], 'warm')
-  painter.polygon([[76, 44], [104, 30], [104, 36], [76, 50]], 'accentDark')
-  painter.polygon([[62, 37], [76, 44], [76, 50], [62, 43]], 'side')
+  painter.polygon([[62, 37], [90, 23], [104, 30], [76, 44]], 'paper')
+  painter.polygon([[76, 44], [104, 30], [104, 36], [76, 50]], 'surface')
+  painter.polygon([[62, 37], [76, 44], [76, 50], [62, 43]], 'muted')
   painter.polygon([[74, 25], [86, 19], [96, 24], [100, 32], [82, 41], [68, 34]], 'outline')
-  painter.polygon([[74, 24], [86, 18], [96, 23], [84, 29]], 'warm')
-  painter.polygon([[75, 27], [83, 31], [81, 37], [71, 32]], 'accentLight')
-  painter.polygon([[87, 31], [96, 26], [98, 31], [85, 38]], 'accentDark')
+  painter.polygon([[74, 24], [86, 18], [96, 23], [84, 29]], 'paper')
+  painter.polygon([[75, 27], [83, 31], [81, 37], [71, 32]], 'accentDark')
+  painter.line(76, 29, 80, 31, 'accentLight')
+  painter.polygon([[87, 31], [96, 26], [98, 31], [85, 38]], 'side')
   painter.line(91, 29, 93, 34, 'outline')
-  painter.line(64, 38, 74, 43, 'paper')
+  painter.line(64, 38, 74, 43, 'accentLight')
   painter.rect(63, 40, 3, 2, 'warm')
   painter.rect(71, 44, 3, 2, 'warm')
   painter.line(64, 44, 73, 48, 'outline')
@@ -96,51 +97,105 @@ export function drawParking(painter: PixelPainter) {
   painter.rect(113, 33, 1, 3, 'paper')
 }
 
+/** A little deterministic noise, so textures don't shimmer between renders. */
+const speckle = (x: number, y: number) => {
+  const n = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453
+  return n - Math.floor(n)
+}
+
+/** The research agent as a detective working a case: a fedora and an upturned
+ *  collar under a hanging lamp, a magnifying glass held up to an evidence
+ *  board of photos, notes and a map, all strung together with red thread. */
 export function drawResearch(painter: PixelPainter) {
-  painter.polygon([[29, 52], [82, 79], [143, 48], [89, 22]], 'shadow')
-  painter.polygon([[32, 48], [84, 74], [142, 45], [90, 19]], 'outline')
-  painter.polygon([[32, 46], [84, 72], [142, 43], [90, 17]], 'side')
-  painter.polygon([[29, 47], [81, 73], [139, 44], [87, 18]], 'outline')
-  painter.polygon([[29, 44], [81, 70], [139, 41], [87, 15]], 'surface')
-  painter.polygon([[26, 48], [78, 74], [128, 49], [128, 38], [84, 16]], 'outline')
-  painter.polygon([[26, 45], [78, 71], [126, 47], [126, 37], [84, 16]], 'paper')
-  painter.polygon([[126, 37], [116, 42], [126, 47]], 'accentLight')
-  painter.line(116, 42, 126, 47, 'muted')
+  // the lamp and the cone of light it throws over the board
+  painter.polygon([[64, 15], [84, 15], [176, 92], [44, 104]], 'warm', 'sparse')
+  painter.line(74, 0, 74, 9, 'outline')
+  painter.polygon([[67, 9], [81, 9], [86, 15], [62, 15]], 'surface')
+  painter.rect(62, 14, 24, 1, 'muted')
+  painter.disc(74, 16, 3, 'warm')
+  painter.rect(73, 15, 2, 1, 'paper')
 
-  const pagePoint = (horizontal: number, vertical: number): Point => [84 + horizontal * 2 - vertical * 2, 16 + horizontal + vertical]
-  const pageLine = (horizontal1: number, vertical1: number, horizontal2: number, vertical2: number, tone: PixelTone, thickness = 1) => {
-    const start = pagePoint(horizontal1, vertical1)
-    const end = pagePoint(horizontal2, vertical2)
-    painter.line(start[0], start[1], end[0], end[1], tone, thickness)
+  // the evidence board: a cork face in a darker frame
+  painter.polygon([[86, 19], [175, 19], [175, 89], [86, 89]], 'shadow')
+  painter.rect(84, 16, 90, 72, 'corkDark')
+  painter.rect(87, 19, 84, 66, 'cork')
+  for (let y = 19; y < 85; y++) {
+    for (let x = 87; x < 171; x++) if (speckle(x, y) > 0.9) painter.rect(x, y, 1, 1, 'corkDark')
   }
 
-  pageLine(3, 5, 18, 5, 'outline', 3)
-  pageLine(3, 8, 13, 8, 'muted', 2)
-  painter.polygon([pagePoint(3, 11), pagePoint(23, 11), pagePoint(23, 15), pagePoint(3, 15)], 'accentLight')
-  pageLine(4, 12, 20, 12, 'accentDark')
-  pageLine(4, 14, 15, 14, 'accentDark')
+  // what's pinned up: a suspect's photo, a note, a map, a question, a report
+  painter.rect(93, 25, 20, 23, 'paper')
+  painter.rect(95, 27, 16, 15, 'surface')
+  painter.disc(103, 33, 3.6, 'outline')
+  painter.polygon([[96, 42], [98, 37], [108, 37], [110, 42]], 'outline')
+  painter.rect(95, 44, 10, 1, 'muted')
 
-  for (const row of [18, 21, 24]) {
-    pageLine(3, row, row === 24 ? 10 : 12, row, 'muted')
-    pageLine(15, row, row === 21 ? 21 : 23, row, 'muted')
+  painter.rect(121, 23, 22, 15, 'paper')
+  for (const [row, length] of [[27, 16], [30, 12], [33, 15]]) painter.rect(124, row, length, 1, 'muted')
+
+  painter.rect(148, 27, 20, 20, 'paper')
+  painter.line(149, 41, 166, 30, 'muted')
+  painter.line(152, 28, 160, 46, 'muted')
+  painter.line(149, 35, 167, 37, 'muted')
+  painter.stamp(['#...#', '.#.#.', '..#..', '.#.#.', '#...#'], 157, 38, 'thread')
+
+  painter.rect(99, 56, 17, 17, 'warm')
+  painter.rect(99, 56, 17, 2, 'corkDark', 'checker')
+  painter.stamp(['.###.', '#...#', '...#.', '..#..', '.....', '..#..'], 105, 61, 'outline')
+
+  painter.rect(126, 53, 24, 27, 'paper')
+  for (const [row, length] of [[57, 18], [60, 14], [63, 18], [66, 10], [72, 16], [75, 12]]) painter.rect(129, row, length, 1, 'muted')
+  painter.ring(136, 66.5, 5.5, 'thread', { squash: 0.6 })
+
+  painter.rect(155, 57, 14, 16, 'paper')
+  painter.rect(157, 59, 10, 9, 'surface')
+  painter.disc(162, 63, 2.4, 'outline')
+
+  // the red thread, pin to pin
+  const pins: [number, number][] = [[103, 25], [132, 23], [158, 27], [107, 56], [138, 53], [162, 57]]
+  for (const [a, b] of [[0, 1], [1, 2], [0, 3], [3, 4], [4, 2], [4, 5], [1, 4]]) {
+    painter.line(pins[a][0], pins[a][1], pins[b][0], pins[b][1], 'thread')
   }
-  pageLine(3, 27, 16, 27, 'accentDark')
+  pins.forEach(([x, y], index) => painter.rect(x - 1, y - 1, 3, 3, index % 2 ? 'accent' : 'thread'))
 
-  painter.rect(67, 66, 5, 5, 'accentDark')
-  painter.rect(68, 67, 3, 3, 'accentLight')
-  painter.line(69, 71, 69, 86, 'accentDark', 2)
-  painter.line(69, 86, 103, 86, 'accentDark', 2)
-  painter.line(103, 86, 103, 71, 'accentDark', 2)
-  painter.line(103, 71, 113, 71, 'accentDark', 2)
-  painter.polygon([[113, 71], [107, 67], [107, 75]], 'accentDark')
+  // the detective: coat, collar up, hat brim low — in silhouette, lit from the board's side
+  painter.polygon([[13, 100], [16, 64], [30, 56], [56, 55], [68, 64], [75, 100]], 'surface')
+  painter.polygon([[40, 58], [56, 55], [68, 64], [75, 100], [52, 100]], 'outline', 'checker')
+  // the coat fades out below the frame rather than stopping dead
+  painter.rect(13, 100, 62, 4, 'surface', 'checker')
+  painter.rect(13, 104, 62, 4, 'surface', 'sparse')
+  painter.line(30, 57, 40, 79, 'outline')
+  painter.line(56, 56, 46, 79, 'outline')
+  painter.rect(16, 86, 58, 3, 'outline')
+  painter.rect(42, 86, 6, 3, 'muted')
+  painter.rect(42, 94, 2, 2, 'muted')
+  // the upturned collar
+  painter.polygon([[26, 46], [38, 54], [34, 64], [22, 58]], 'side')
+  painter.polygon([[54, 46], [60, 52], [64, 62], [52, 60]], 'side')
+  painter.line(54, 46, 64, 62, 'muted')
+  // the face, mostly in the hat's shadow, its profile catching the light
+  painter.polygon([[32, 34], [54, 34], [58, 41], [56, 44], [57, 47], [53, 52], [36, 54]], 'outline')
+  painter.line(54, 35, 58, 41, 'warm')
+  painter.line(58, 41, 56, 44, 'warm')
+  painter.line(57, 47, 53, 52, 'warm')
+  painter.rect(48, 39, 3, 1, 'muted')
+  // the fedora
+  painter.polygon([[30, 30], [33, 19], [44, 16], [52, 19], [55, 30]], 'surface')
+  painter.line(37, 19, 44, 22, 'outline')
+  painter.rect(30, 27, 26, 4, 'outline')
+  painter.rect(30, 27, 26, 1, 'accentDark')
+  painter.polygon([[18, 32], [66, 30], [70, 34], [16, 37]], 'surface')
+  painter.line(18, 32, 66, 30, 'muted')
+  painter.line(16, 37, 70, 34, 'outline')
 
-  painter.polygon([[115, 56], [159, 56], [164, 61], [164, 89], [114, 89], [111, 86], [111, 59]], 'shadow')
-  painter.polygon([[115, 53], [157, 53], [162, 58], [162, 86], [112, 86], [109, 83], [109, 59]], 'outline')
-  painter.polygon([[115, 55], [156, 55], [160, 59], [160, 84], [113, 84], [111, 82], [111, 59]], 'surface')
-  painter.rect(114, 59, 3, 21, 'accent')
-  painter.stamp(['#####', '#####', '  ###', ' ### ', '##   '], 121, 60, 'accentDark')
-  painter.stamp(['#####', '#####', '  ###', ' ### ', '##   '], 130, 60, 'accentDark')
-  painter.rect(121, 70, 31, 2, 'outline')
-  painter.rect(121, 75, 26, 2, 'muted')
-  painter.rect(121, 80, 18, 2, 'muted')
+  // the arm up to the board, and the glass, showing the thread magnified
+  painter.polygon([[56, 60], [80, 52], [84, 58], [62, 70]], 'surface')
+  painter.line(58, 61, 80, 53, 'muted')
+  painter.disc(83, 56, 3, 'corkDark')
+  painter.line(84, 55, 87, 51, 'warm', 2)
+  painter.disc(93, 45, 7.5, 'cork')
+  painter.line(86, 40, 100, 50, 'thread', 2)
+  painter.rect(91, 43, 4, 4, 'thread')
+  painter.ring(93, 45, 7.6, 'paper', { thickness: 1.8 })
+  painter.ring(93, 45, 5.5, 'paper', { from: 200, to: 250 })
 }
