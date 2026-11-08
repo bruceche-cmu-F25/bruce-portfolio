@@ -1,7 +1,7 @@
 /* ================================================================
    BRUCE CHENG — Notebook
    a Letter-size notebook on a desk · Virgil in four inks
-   Every rule is scoped under .nb: globals.css still serves /robin.
+   Every rule is scoped under .nb, so nothing leaks onto the other pages.
    ================================================================ */
 
 .nb {

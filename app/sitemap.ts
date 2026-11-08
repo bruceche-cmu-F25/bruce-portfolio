@@ -3,7 +3,7 @@ import { SITE } from '@/lib/siteConfig'
 
 export const dynamic = 'force-static'
 
-/** The homepage, and the notebook it replaced; /robin and /wedding are left out on purpose. */
+/** The homepage, and the notebook it replaced; /wedding is left out on purpose. */
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
   return [
