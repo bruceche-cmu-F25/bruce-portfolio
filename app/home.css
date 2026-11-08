@@ -359,6 +359,14 @@
 .actions-thin .actions-github { color: var(--ink); border-color: rgb(var(--accent-rgb) / 0.32); }
 .actions-thin .actions-github .glyph { color: var(--accent); }
 
+.brand-mark {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  vertical-align: -0.2em;
+}
+
 @media (max-width: 600px) {
   .actions .btn, .actions-thin a { min-height: 44px; }
 }

@@ -8,6 +8,7 @@ import Like from '@/components/home/Like'
 import Reveal from '@/components/home/Reveal'
 import LogoLoop, { type LogoLoopItem } from '@/components/home/LogoLoop'
 import { Glyph } from '@/components/home/Pixels'
+import BrandMark from '@/components/home/BrandMark'
 import { figures } from '@/components/home/Figures'
 import { INTRO, PROJECTS, ROLES, SCHOOLS, SEEKING, SHELVES, STACK, CORE } from '@/lib/home'
 import { ALBUMS } from '@/lib/notebook'
@@ -144,8 +145,8 @@ export default function Page() {
             <Glyph name="down" /> Résumé (PDF)
           </a>
           <span className="actions-thin">
-            <a className="actions-github" href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub profile <Glyph name="out" /></a>
-            <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn <Glyph name="out" /></a>
+            <a className="actions-github" href={SITE.github} target="_blank" rel="noopener noreferrer"><BrandMark name="github" /> GitHub profile <Glyph name="out" /></a>
+            <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer"><BrandMark name="linkedin" /> LinkedIn <Glyph name="out" /></a>
           </span>
         </div>
 
@@ -208,7 +209,7 @@ export default function Page() {
                     {p.href
                       ? <a className="card-link" href={p.href} target="_blank" rel="noopener noreferrer"
                            aria-label={`${p.title} — ${p.linkKind === 'repo' ? 'read the source' : 'open the live site'}`}>
-                          <Glyph name="out" /> {p.linkKind === 'repo' ? 'Read the source' : 'Open the live site'}
+                          {p.linkKind === 'repo' ? <BrandMark name="github" /> : <Glyph name="out" />} {p.linkKind === 'repo' ? 'Read the source' : 'Open the live site'}
                         </a>
                       : <a className="card-link" href={`mailto:${SITE.email}?subject=${encodeURIComponent(`About ${p.title}`)}`}
                            aria-label={`Ask Bruce about ${p.title} by email`}>
@@ -261,8 +262,8 @@ export default function Page() {
           </div>
           <dl className="contact">
             <div><dt><Glyph name="mail" /> email</dt><dd><a href={`mailto:${SITE.email}`}>{SITE.email}</a></dd></div>
-            <div><dt><Glyph name="out" /> LinkedIn</dt><dd><a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">{SITE.linkedinHandle}</a></dd></div>
-            <div><dt><Glyph name="out" /> GitHub</dt><dd><a href={SITE.github} target="_blank" rel="noopener noreferrer">{SITE.githubHandle}</a></dd></div>
+            <div><dt><BrandMark name="linkedin" /> LinkedIn</dt><dd><a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">{SITE.linkedinHandle}</a></dd></div>
+            <div><dt><BrandMark name="github" /> GitHub</dt><dd><a href={SITE.github} target="_blank" rel="noopener noreferrer">{SITE.githubHandle}</a></dd></div>
             <div><dt><Glyph name="phone" /> phone</dt><dd><a href={SITE.phoneHref}>{SITE.phone}</a></dd></div>
             <div><dt><Glyph name="down" /> résumé</dt><dd><a href={SITE.resume} download>PDF</a></dd></div>
           </dl>
