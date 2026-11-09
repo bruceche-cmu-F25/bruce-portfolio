@@ -4,6 +4,7 @@
    everything inside one narrow column so the page reads top to bottom.
    ================================================================ */
 
+@property --mc { syntax: '<color>'; inherits: true; initial-value: #ffd56e; }
 @property --home-accent-r { syntax: '<number>'; inherits: true; initial-value: 255; }
 @property --home-accent-g { syntax: '<number>'; inherits: true; initial-value: 61; }
 @property --home-accent-b { syntax: '<number>'; inherits: true; initial-value: 127; }
@@ -976,11 +977,35 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
 }
 .stack dd span[data-core] { color: var(--ink); border-color: var(--rule); }
 
-/* ── life ──────────────────────────────────────────────────────── */
+/* ── about me ──────────────────────────────────────────────────── */
 
-.shelves { display: grid; gap: 15px; }
-.shelf-label { font: 400 10px/1 var(--mono); color: var(--faint); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
-.shelf ul { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 7px; }
+.about { --cover-h: 132px; --art: 196px; display: grid; gap: 14px; }
+
+/* every favourite in one row, going round like the stack's logo loop */
+.covers {
+  overflow: hidden;
+  margin: -4px 0;
+  padding: 4px 0;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+}
+.covers:focus-visible { outline: 1px solid var(--accent); outline-offset: -2px; }
+.covers-track {
+  display: flex;
+  width: max-content;
+  animation: logo-loop-scroll calc(var(--n) * 2.6s) linear infinite;
+  will-change: transform;
+}
+.covers:hover .covers-track,
+.covers:focus-within .covers-track { animation-play-state: paused; }
+.covers-list { display: flex; flex: 0 0 auto; gap: 7px; margin: 0; padding: 0 7px 0 0; list-style: none; }
+.covers .cel { flex: 0 0 auto; width: calc(var(--cover-h) * 2 / 3 + 8px); }
+@media (prefers-reduced-motion: reduce) {
+  .covers { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .covers-track { animation: none; will-change: auto; }
+  .covers-list[aria-hidden='true'] { display: none; }
+}
+
 /* each cover sits in a bracketed cel: scanlines over it, corner marks around
    it, and its title only when you're pointing at it */
 .cel {
@@ -990,7 +1015,6 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
   min-width: 0;
   transition: transform 0.2s;
 }
-.cel-card { position: relative; display: block; }
 .cel-front {
   position: relative;
   display: block;
@@ -1059,45 +1083,168 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
   pointer-events: none;
 }
 .cel:hover .cel-name { opacity: 1; transform: none; }
-.answer:not([data-live]) .cel:nth-child(12n) .cel-name,
-.answer:not([data-live]) .cel:nth-child(12n - 1) .cel-name,
-.answer:not([data-live]) .cel:nth-child(12n - 2) .cel-name,
-.answer[data-live] .cel[data-edge] .cel-name { left: auto; right: 3px; }
 
-/* Interest shelves, visible as soon as the passage opens. */
-.answer { position: relative; }
+.about-row { display: grid; grid-template-columns: minmax(0, 1fr) var(--art) var(--art); gap: 12px; }
 
-/* Shuffle, at the right end of the first shelf's label row. */
-.answer-again {
-  position: absolute; right: 0; top: -2px;
-  display: inline-flex; align-items: center; gap: 6px;
-  font: 400 9.5px/1 var(--mono);
-  letter-spacing: 0.06em;
-  color: var(--faint);
-  background: none;
-  border: 0;
-  padding: 2px 0;
-  cursor: pointer;
-  opacity: 0.7;
-  transition: opacity 0.2s, color 0.2s;
+/* the player card (components/home/Mbti.tsx): the type on split-flap tiles,
+   a sparring match beside it (Battle.tsx), and a perk a letter */
+.mbti {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: space-between;
+  gap: 9px;
+  min-width: 0;
+  padding: 11px 16px 12px;
+  background: var(--panel);
+  border: 1px solid var(--rule-soft);
+  border-left: 2px solid var(--accent);
+  border-radius: 3px;
 }
-.answer-again[hidden] { display: none; }
-.answer-again svg { transition: rotate 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
-.answer:hover .answer-again { opacity: 1; }
-.answer-again:hover { color: var(--accent); }
-.answer-again:hover svg { rotate: -180deg; }
-.answer-again:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; opacity: 1; }
-.answer-again:disabled { cursor: default; opacity: 0.35; }
+/* each trait's colour drifts round the ramp like the contact links do (the
+   tint further down), a beat apart; its tile and its perk share it */
+.mbti-slot:nth-child(1), .mbti-perks li:nth-child(1) { --mc: var(--heat-4); }
+.mbti-slot:nth-child(2), .mbti-perks li:nth-child(2) { --mc: var(--heat-3); }
+.mbti-slot:nth-child(3), .mbti-perks li:nth-child(3) { --mc: var(--accent); }
+.mbti-slot:nth-child(4), .mbti-perks li:nth-child(4) { --mc: var(--heat-2); }
+.mbti-slot, .mbti-perks li { animation: mbti-tint 9s ease-in-out calc(var(--i) * -2.25s) infinite; }
+@keyframes mbti-tint {
+  0%, 100% { --mc: var(--heat-4); }
+  33%      { --mc: var(--heat-3); }
+  66%      { --mc: var(--accent); }
+}
 
-/* a shelf can hold more covers than one hand: those not dealt this time
-   wait out of sight, and the deal decides the order of the rest */
-.cel[data-out] { display: none; }
+.mbti-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 7px;
+  border-bottom: 1px dashed var(--rule-soft);
+  font: 400 9.5px/1 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+  white-space: nowrap;
+}
+.mbti-top b { font-weight: 400; color: var(--ink); }
+.mbti-top i { font-style: normal; color: var(--accent); animation: mbti-blink 1.1s steps(1) infinite; }
+
+.mbti-stage { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px; }
+.mbti-tiles { display: flex; gap: 5px; }
+.mbti-slot { display: grid; justify-items: center; gap: 4px; cursor: default; }
+/* a tile: a dark card split across the middle, the letter on it */
+.mbti-tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 36px; height: 44px;
+  color: var(--mc);
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  box-shadow: inset 0 -3px 0 rgb(0 0 0 / 0.25);
+  transition: border-color 0.2s, translate 0.2s;
+}
+.mbti-tile::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 50%;
+  height: 1px;
+  background: var(--panel);
+}
+.mbti-tile[data-lost] { color: var(--faint); }
+.mbti-slot:hover .mbti-tile { border-color: var(--mc); translate: 0 -2px; }
+.mbti-flap { display: block; animation: mbti-flap 0.1s steps(3) both; }
+.mbti:not([data-armed]) .mbti-flap { animation: none; }
+.mbti-flap svg { display: block; width: 22px; height: auto; }
+.mbti-pct { font: 400 9px/1 var(--mono); color: var(--mc); font-variant-numeric: tabular-nums; }
+.mbti-pct[data-lost] { color: var(--faint); }
+.mbti-pct i { font-style: normal; margin-left: 1px; color: var(--ink); animation: mbti-blink 1.1s steps(1) infinite; }
+
+.battle {
+  display: block;
+  justify-self: center;
+  height: 54px;
+  width: auto;
+  max-width: 100%;
+  aspect-ratio: 52 / 22;
+  image-rendering: pixelated;
+}
+
+.mbti-perks { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.mbti-perks li {
+  display: grid;
+  grid-template-columns: 14px 94px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  margin: 0 -6px;
+  padding: 1px 6px;
+  border-radius: 2px;
+  transition: background-color 0.5s;
+}
+.mbti-perks svg { display: block; color: var(--mc); transition: scale 0.2s; }
+.mbti-perks b { font: 400 9.5px/1.3 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); white-space: nowrap; }
+.mbti-perks span { font: 400 10.5px/1.3 var(--sans); color: var(--body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* the perk whose score just landed */
+.mbti-perks li[data-hit] { background: color-mix(in srgb, var(--mc) 13%, transparent); transition-duration: 0.08s; }
+.mbti-perks li[data-hit] svg { scale: 1.25; }
+.mbti-perks li[data-hit] b { color: var(--mc); }
+
+/* the entrance, only once JS is here to start it: perks unlock in turn */
+.mbti[data-armed] .mbti-perks li { opacity: 0.22; }
+.mbti[data-armed] .mbti-perks svg { filter: grayscale(1); }
+.mbti[data-on] .mbti-perks li { opacity: 1; transition: opacity 0.25s calc(1.1s + var(--i) * 0.22s), background-color 0.5s; }
+.mbti[data-on] .mbti-perks svg { filter: none; transition: filter 0s calc(1.1s + var(--i) * 0.22s), scale 0.2s; }
+
+@keyframes mbti-flap { from { transform: scaleY(0.1); } to { transform: none; } }
+@keyframes mbti-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .mbti-flap, .mbti-slot, .mbti-perks li, .mbti-top i, .mbti-pct i { animation: none !important; }
+}
+
+/* the two drawings, under their dither (components/home/DitherVeil.tsx) */
+.art {
+  position: relative;
+  width: var(--art);
+  aspect-ratio: 1;
+  margin: 0;
+  padding: 3px;
+  background: var(--panel);
+  border: 1px solid var(--rule-soft);
+  transition: border-color 0.2s;
+}
+.art:hover { border-color: rgb(var(--accent-rgb) / 0.45); }
+.veil { position: relative; width: 100%; height: 100%; overflow: hidden; touch-action: pan-y; }
+.veil canvas { display: block; width: 100%; height: 100%; }
+.veil-plain { display: block; width: 100%; height: 100%; object-fit: cover; }
+.veil[data-gl] .veil-plain { display: none; }
+.art figcaption {
+  position: absolute;
+  left: 3px; bottom: 3px;
+  max-width: calc(100% - 6px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 3px 5px;
+  font: 400 8.5px/1.25 var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  border-left: 2px solid var(--accent);
+  pointer-events: none;
+}
+.art figcaption span { color: var(--faint); }
 
 @media (max-width: 760px) {
-  .shelf ul { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-  .answer:not([data-live]) .cel:nth-child(6n) .cel-name,
-  .answer:not([data-live]) .cel:nth-child(6n - 1) .cel-name,
-  .answer:not([data-live]) .cel:nth-child(6n - 2) .cel-name { left: auto; right: 3px; }
+  .about { --cover-h: 120px; }
+  .about-row { grid-template-columns: 1fr 1fr; }
+  .mbti { grid-column: 1 / -1; }
+  .art { width: auto; }
+  .mbti { padding: 13px 16px 14px; gap: 12px; }
+  .battle { height: 64px; }
+  /* the perk's line goes under its name, where there's room for all of it */
+  .mbti-perks { gap: 8px; }
+  .mbti-perks li { grid-template-columns: 14px minmax(0, 1fr); gap: 2px 8px; }
+  .mbti-perks span { grid-column: 2; white-space: normal; }
 }
 
 /* ── contact ───────────────────────────────────────────────────── */
@@ -1459,12 +1606,11 @@ a.card-link:focus-visible { outline: 1px solid var(--accent); outline-offset: 4p
   .arrival .hello { flex: 1 0 var(--hello-h); max-height: calc(var(--hello-h) * 1.5); }
   .arrival .sec { margin-top: 0; padding: 14px 0 12px; }
   .arrival .sec-head { margin-bottom: 10px; }
-  .arrival .shelves { gap: 8px; }
-  .arrival .shelf-label { margin-bottom: 5px; }
-  /* covers as wide as the column allows, or as tall as the screen allows */
-  .arrival .shelf ul {
-    --cel-w: calc(((100svh - var(--hello-h) - 352px) / 3 - 8px) / 1.5);
-    max-width: calc(12 * var(--cel-w) + 11 * 7px);
+  /* the row of covers and the drawings share what height is left */
+  .arrival .about {
+    --about-h: calc(100svh - var(--hello-h) - 352px);
+    --cover-h: clamp(100px, calc(var(--about-h) * 0.34), 150px);
+    --art: clamp(160px, calc(var(--about-h) - var(--cover-h) - 30px), 270px);
   }
   .arrival .seek { padding: 10px 14px; margin-bottom: 4px; }
   .arrival .seek-roles { margin: 7px 0 5px; }

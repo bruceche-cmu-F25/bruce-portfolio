@@ -66,8 +66,8 @@ const ZONES: { glyph: Glyph; sel: string }[] = [
   { glyph: 'hi', sel: '#contact, .foot' },
 ]
 const GLYPHS: Glyph[] = ['heart', 'thumb', 'star', 'hi', 'branch']
-const QUIET_TARGETS = '.sound, .like, .shots-nav, .shots-open, .shots-view, .shots-dialog, .deck-again'
-const READING_TARGETS = '.intro, .who, .role-body, .card-head, .card-meta, .card-blurb, .card-facts, .card-tags, .stack, .contact, .seek, .sec-head, .graph-foot'
+const QUIET_TARGETS = '.sound, .art, .like, .shots-nav, .shots-open, .shots-view, .shots-dialog, .deck-again'
+const READING_TARGETS = '.intro, .who, .mbti, .role-body, .card-head, .card-meta, .card-blurb, .card-facts, .card-tags, .stack, .contact, .seek, .sec-head, .graph-foot'
 
 interface Wave { x: number; y: number; startedAt: number; kind: WaveKind; reach: number }
 interface Press { x: number; y: number; startedAt: number; fired: boolean }

@@ -15,6 +15,7 @@ export const PLACE = { label: 'San Francisco', tz: 'America/Los_Angeles' } as co
 export const INTRO = {
   name: 'Bruce Cheng',
   role: 'Software Engineer · AI Agents',
+  languages: ['Mandarin', 'English'],
   /** Two short paragraphs. Links are marked with [text](href) and rendered as real anchors. */
   paragraphs: [
     `Hi, I'm Bruce — a software engineer finishing an MS in Software Engineering at [Carnegie Mellon](https://www.cmu.edu/silicon-valley/), Silicon Valley, in December 2026. I build agentic systems, and the backends that keep them fast. I'm a graduate researcher in CMU's AGAI group, on detecting and explaining LLM hallucinations.`,

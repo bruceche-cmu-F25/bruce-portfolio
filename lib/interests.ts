@@ -7,11 +7,6 @@ function onRadar(title: string, src: string, alt: string): ShelfPicture {
   return { src, alt, caption: title, suggested: true }
 }
 
-/** How many covers a shelf shows at once — one row of twelve. A shelf may hold
- *  more: the rest wait out of sight, and "deal again" draws a fresh hand,
- *  favouring the covers that weren’t in the last one (components/home/Answer.tsx). */
-export const HAND = 12
-
 export const SHELVES: readonly Shelf[] = [
   {
     label: 'films',
@@ -53,3 +48,37 @@ export const SHELVES: readonly Shelf[] = [
     ],
   },
 ]
+
+/** Every cover in one row, the shelves dealt in turn — a film, a game, a
+ *  book, and round again — so no kind bunches up. */
+export const COVERS: readonly ShelfPicture[] = (() => {
+  const out: ShelfPicture[] = []
+  const longest = Math.max(...SHELVES.map(s => s.pictures.length))
+  for (let i = 0; i < longest; i++) for (const s of SHELVES) if (s.pictures[i]) out.push(s.pictures[i])
+  return out
+})()
+
+/** 16Personalities, the latest result. Each trait is the side that won and by
+ *  how much; the four together spell the type. Each letter also carries the
+ *  strength it shows up as at work, with a line on what that looks like. */
+export const MBTI = {
+  type: 'ENFJ',
+  name: 'the Protagonist',
+  traits: [
+    { name: 'Extraverted', opposite: 'Introverted', won: 'E', lost: 'I', value: 57,
+      strength: 'Agency', line: 'I reach out, ask, and get things moving.' },
+    { name: 'Intuitive', opposite: 'Observant', won: 'N', lost: 'S', value: 68,
+      strength: 'Creative', line: 'I see the version that doesn’t exist yet.' },
+    { name: 'Feeling', opposite: 'Thinking', won: 'F', lost: 'T', value: 61,
+      strength: 'Product sense', line: 'I start from what the user feels.' },
+    { name: 'Judging', opposite: 'Prospecting', won: 'J', lost: 'P', value: 51,
+      strength: 'Ownership', line: 'Responsible end to end — I follow through.' },
+  ],
+} as const
+
+/** Two pieces I drew, shown under a dither that the pointer wipes away
+ *  (components/home/DitherVeil.tsx). */
+export const ART = [
+  { src: '/art/gwen.webp', alt: 'Gwen Stacy as Spider-Woman in her white hood, painted over orange and teal brushstrokes — drawn by Bruce', caption: 'Gwen · Spider-Woman', contrast: 1.7, brightness: -0.1 },
+  { src: '/art/sci-fi.webp', alt: 'Two figures on a lunar surface, with Earth filling the sky — drawn by Bruce', caption: 'Lucy & David', contrast: 1.3, brightness: 0.08 },
+] as const

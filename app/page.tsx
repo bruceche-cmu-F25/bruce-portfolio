@@ -3,10 +3,11 @@ import Scene from '@/components/home/Scene'
 import Graph from '@/components/home/Graph'
 import IsoArt from '@/components/home/Iso'
 import Shots from '@/components/home/Shots'
-import Answer from '@/components/home/Answer'
 import PixelFit from '@/components/home/PixelFit'
 import BlackHole from '@/components/home/BlackHole'
 import Ascii from '@/components/home/Ascii'
+import DitherVeil from '@/components/home/DitherVeil'
+import Mbti from '@/components/home/Mbti'
 import SoundToggle from '@/components/home/SoundToggle'
 import Trail from '@/components/home/Trail'
 import Like from '@/components/home/Like'
@@ -16,7 +17,7 @@ import { Glyph } from '@/components/home/Pixels'
 import BrandMark from '@/components/home/BrandMark'
 import { figures } from '@/components/home/Figures'
 import { INTRO, PROJECTS, ROLES, SCHOOLS, SEEKING, STACK, CORE } from '@/lib/home'
-import { HAND, SHELVES } from '@/lib/interests'
+import { ART, COVERS } from '@/lib/interests'
 import { HOUR_BOOT } from '@/lib/hours'
 import { SITE } from '@/lib/siteConfig'
 import './home.css'
@@ -72,6 +73,7 @@ const PERSON = {
     { '@type': 'CollegeOrUniversity', name: 'Carnegie Mellon University' },
     { '@type': 'CollegeOrUniversity', name: 'University of California, San Diego' },
   ],
+  knowsLanguage: INTRO.languages,
   knowsAbout: ['AI agents', 'LLM applications', 'Backend engineering', 'Full-stack development', 'Python', 'TypeScript', 'FastAPI', 'LangGraph'],
   sameAs: [SITE.linkedin, SITE.github, SITE.instagram],
 }
@@ -172,8 +174,10 @@ export default function Page() {
           <div className="who-name">
             <h1>{INTRO.name}</h1>
             <p>{INTRO.role}</p>
-            <ul className="who-details" aria-label="Location and work availability">
-              {SEEKING.where.map(detail => <li key={detail}>{detail}</li>)}
+            <ul className="who-details" aria-label="Location, languages and work availability">
+              {SEEKING.where.slice(0, -1).map(detail => <li key={detail}>{detail}</li>)}
+              <li>Speaks {INTRO.languages.join(' & ')}</li>
+              <li>{SEEKING.where.at(-1)}</li>
             </ul>
           </div>
           <p className="who-place"><i aria-hidden /> Open to work · {SEEKING.from}</p>
@@ -198,7 +202,7 @@ export default function Page() {
 
         <Graph />
 
-        <Section id="experience" title="Where I've Worked">
+        <Section id="experience" title="Where I've Worked" aside="industry &amp; research">
           <ol className="roles">
             {ROLES.map(r => (
               <li key={r.org}>
@@ -265,7 +269,7 @@ export default function Page() {
           </div>
         </Section>
 
-        <Section id="stack" title="Tech Stack">
+        <Section id="stack" title="Tech Stack" aside="what I reach for">
           <LogoLoop logos={TECH_LOGOS} ariaLabel="Selected tools in Bruce's technology stack" />
           <dl className="stack">
             {STACK.map(row => (
@@ -288,33 +292,41 @@ export default function Page() {
           <Ascii text={['Hello you!', "I'm Bruce"]} asciiFontSize={6} textScale={1.65} />
         </div>
 
-        <Section id="life" title="Life &amp; Interests" aside="favorites & things on my radar">
-          <Answer hand={HAND}>
-          <div className="shelves">
-            {SHELVES.map(s => (
-              <div key={s.label} className="shelf">
-                <p className="shelf-label">{s.label}</p>
-                <ul>
-                  {s.pictures.map((p, i) => (
-                    <li key={p.src} className="cel" data-out={i >= HAND || undefined}
-                        title={`${p.caption ?? p.alt}${p.suggested ? ' · on my radar' : ''}`}>
-                      <span className="cel-card">
+        <Section id="life" title="About Me" aside="off the clock">
+          <div className="about">
+            {/* every favourite in one row, drifting past like the stack's logos */}
+            <div className="covers" role="region" aria-label="Films, games and books I love" tabIndex={0}
+                 style={{ '--n': COVERS.length } as React.CSSProperties}>
+              <div className="covers-track">
+                {[false, true].map(copy => (
+                  <ul key={String(copy)} className="covers-list" aria-hidden={copy || undefined}>
+                    {COVERS.map(p => (
+                      <li key={p.src} className="cel" title={`${p.caption ?? p.alt}${p.suggested ? ' · on my radar' : ''}`}>
                         <span className="cel-front">
-                          <img src={p.src} alt={p.alt} width="280" height="420" loading="lazy" decoding="async" />
+                          <img src={p.src} alt={copy ? '' : p.alt} width="280" height="420" loading="lazy" decoding="async" draggable={false} />
                           <i className="cel-scan" aria-hidden />
                         </span>
-                      </span>
-                      <i className="cel-name">{(p.caption ?? '').split(' · ')[0]}{p.suggested ? ' · on my radar' : ''}</i>
-                    </li>
-                  ))}
-                </ul>
+                        <i className="cel-name">{(p.caption ?? '').split(' · ')[0]}{p.suggested ? ' · on my radar' : ''}</i>
+                      </li>
+                    ))}
+                  </ul>
+                ))}
               </div>
-            ))}
+            </div>
+
+            <div className="about-row">
+              <Mbti />
+              {ART.map(a => (
+                <figure key={a.src} className="art">
+                  <DitherVeil src={a.src} alt={a.alt} contrast={a.contrast} brightness={a.brightness} />
+                  <figcaption>{a.caption} <span>· my art</span></figcaption>
+                </figure>
+              ))}
+            </div>
           </div>
-          </Answer>
         </Section>
 
-        <Section id="contact" title="Let's Work Together">
+        <Section id="contact" title="Let's Work Together" aside="say hi">
           <div className="seek">
             <p className="seek-label">looking for · from {SEEKING.from}</p>
             <p className="seek-roles">{SEEKING.roles.map((r, i) => <span key={r} style={{ '--i': i } as React.CSSProperties}>{r}</span>)}</p>

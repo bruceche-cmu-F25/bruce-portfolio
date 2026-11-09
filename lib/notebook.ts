@@ -24,7 +24,7 @@ export const ALBUMS: Record<string, Picture[]> = {
   nighty: bentoDetails.nighty.shots!,
   art: [
     { src: '/art/sci-fi.webp', alt: 'Two figures on a lunar surface, with Earth filling the sky', caption: 'Two figures on the Moon, Earth overhead.' },
-    { src: '/art/gwen.webp', alt: 'Ghost-Spider in a white hood, painted over orange and teal brushstrokes', caption: 'Ghost-Spider, over orange and teal.' },
+    { src: '/art/gwen.webp', alt: 'Gwen Stacy as Spider-Woman in her white hood, painted over orange and teal brushstrokes', caption: 'Gwen as Spider-Woman, over orange and teal.' },
   ],
   // theatrical posters, via Wikipedia — the order they're stuck to the wall in, last on top
   posters: [
