@@ -12,6 +12,9 @@
  *                up as the light pours out, and fades — set by scroll like
  *                the picture is, so scrolling back plays it backwards
  *
+ *    tick(...)   any single click: a soft, short blip, a touch brighter on
+ *                something that does something (SoundToggle.tsx)
+ *
  *  The choice is remembered in localStorage. A browser only lets a page make
  *  sound after a click or key press, so a visitor who left it on last time
  *  hears it from their first click this time. A hidden tab goes quiet.
@@ -139,6 +142,30 @@ export function boom(neon: boolean) {
   // the run: C E G C up into neon, back down out of it
   const notes = [523.25, 659.25, 783.99, 1046.5]
   ;(neon ? notes : [...notes].reverse()).forEach((freq, i) => square(c, t + 0.16 + i * 0.065, freq, 0.12, 0.09))
+}
+
+/** A single click: a quiet triangle blip that dips as it dies, a little
+ *  brighter on a link or button. Its pitch wanders a hair each time so a run
+ *  of clicks doesn't sound like a machine. */
+export function tick(active = false) {
+  if (!enabled) return
+  const c = audio()
+  const t = c.currentTime + 0.005
+  const osc = c.createOscillator()
+  const gain = c.createGain()
+  const soft = c.createBiquadFilter()
+  const freq = (active ? 1180 : 780) * (1 + (Math.random() - 0.5) * 0.06)
+  osc.type = 'triangle'
+  osc.frequency.setValueAtTime(freq, t)
+  osc.frequency.exponentialRampToValueAtTime(freq * 0.62, t + 0.05)
+  soft.type = 'lowpass'
+  soft.frequency.value = 2400
+  gain.gain.setValueAtTime(0.0001, t)
+  gain.gain.exponentialRampToValueAtTime(active ? 0.075 : 0.055, t + 0.004)
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.075)
+  osc.connect(soft).connect(gain).connect(master!)
+  osc.start(t)
+  osc.stop(t + 0.09)
 }
 
 /** The passage's drone. `level` 0…1 is how loud; `pitch` multiplies its

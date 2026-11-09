@@ -2,10 +2,14 @@
 
 /** The speaker in the corner: sound is off until it's pressed (lib/sound.ts).
  *  A pixel speaker, crossed out when off and with two arcs of sound when on,
- *  drawn on the same 9×7 grid as the section bullets. */
+ *  drawn on the same 9×7 grid as the section bullets. While sound is on,
+ *  every click on the page ticks softly. */
+
+/** what counts as something that does something, for a brighter tick */
+const ACTIVE = 'a, button, [role="button"], summary, label, input, select, .cel, .art, .mbti-slot'
 
 import { useEffect, useState } from 'react'
-import { onSoundChange, restoreSound, setSound, soundOn } from '@/lib/sound'
+import { onSoundChange, restoreSound, setSound, soundOn, tick } from '@/lib/sound'
 
 const SPEAKER = 'M3 0h1v7H3V6H2V5H0V2h2V1h1Z'
 const WAVES = 'M5 2h1v3H5ZM7 1h1v1h1v3H8v1H7V5h1V2H7Z'
@@ -18,7 +22,12 @@ export default function SoundToggle() {
     const off = onSoundChange(setOn)
     const release = restoreSound()
     setOn(soundOn())
-    return () => { off(); release() }
+    const click = (e: PointerEvent) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      tick(e.target instanceof Element && !!e.target.closest(ACTIVE))
+    }
+    addEventListener('pointerdown', click, { passive: true })
+    return () => { off(); release(); removeEventListener('pointerdown', click) }
   }, [])
 
   return (
