@@ -158,9 +158,14 @@ export const STACK: { label: string; items: string[] }[] = [
   {
     label: 'Development & Cloud',
     items: ['Python', 'Java', 'C/C++', 'JavaScript', 'TypeScript', 'Go', 'FastAPI', 'Flask',
-            'Node.js', 'Express.js', 'MySQL', 'MongoDB', 'SQLite', 'RESTful APIs', 'OAuth', 'AWS',
+            'Node.js', 'Express.js', 'RESTful APIs', 'OAuth', 'AWS',
             'GCP', 'Docker', 'Kubernetes', 'Terraform', 'GKE', 'CI/CD', 'React', 'Next.js',
             'Streamlit', 'Figma', 'Git', 'Agile / Scrum'],
+  },
+  {
+    // the big-data tools aren't on the résumé's skills list yet; Bruce added them here
+    label: 'Data',
+    items: ['Spark', 'Hadoop', 'HDFS', 'Hive', 'Kafka', 'Databricks', 'MySQL', 'MongoDB', 'SQLite'],
   },
   {
     label: 'AI / ML & Frameworks',
